@@ -1,0 +1,170 @@
+html,body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	max-height: 1028px
+}
+
+* {
+	box-sizing: border-box
+}
+
+*:focus {
+	outline: 0
+}
+
+body {
+	font-family: Helvetica, Tahoma, Arial, "Microsoft YaHei", "微软雅黑", "宋体",
+		Arial, sans-serif;
+	z-index: 1
+}
+
+ul,li {
+	list-style: none;
+	margin: 0;
+	border: 0;
+	padding: 0
+}
+
+.header {
+	height: 140px
+}
+
+.header img.logo {
+	padding: 20px 0 20px 55px;
+}
+
+.main-bg {
+	position: relative;
+	background: url(../image/inspect/login/bg.jpg) center center no-repeat;
+	z-index: 99;
+	height:100%;
+	background-size:cover;
+}
+
+.link-item {
+	width: 100%;
+	padding-left: 300px;
+	background-color: #0066b3;
+	overflow: hidden
+}
+
+.link-item ul {
+	margin: 0 auto
+}
+
+.link-item ul li {
+	float: left;
+	padding: 10px 0;
+	width: 185px;
+	text-align: center
+}
+
+.link-item ul li a {
+	display: block;
+	margin: 0 15px;
+	padding: 0 10px;
+	height: 50px;
+	line-height: 50px;
+	color: #fff;
+	background-color: #0066b3;
+	border-radius: 10px;
+	background-clip: padding-box;
+	text-decoration: none;
+	-webkit-box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3), 0 2px 6px 0
+		rgba(0, 0, 0, 0.18);
+	-moz-box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3), 0 2px 6px 0
+		rgba(0, 0, 0, 0.18);
+	box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.3), 0 2px 6px 0
+		rgba(0, 0, 0, 0.18)
+}
+
+.link-item ul li a img {
+	width: 28px;
+	vertical-align: middle
+}
+
+.link-item ul li a span {
+	font-weight: bold;
+	font-size: 14px;
+	margin-left: 5px
+}
+
+@media ( max-width :1440px) {
+	.main-bg {
+		background: url(../image/inspect/login/bg.jpg) center center no-repeat;
+		background-size: cover;
+		z-index: 99
+	}
+}
+
+@media (max-width: 1366px){
+	.main-bg {
+    	background: url(../image/inspect/login/bg.small.jpg) center -22px no-repeat;
+    	background-size: cover;
+	}
+}
+
+.actions-group {
+	margin-bottom: 20px;
+	margin-top: 20px;
+	padding: 14px 20px 15px
+}
+
+.control-group {
+	margin-bottom: 20px
+}
+
+.add-icon {
+	background-color: #EEE;
+	border: 1px solid #CCC;
+	display: inline-block;
+	font-size: 12px;
+	font-weight: normal;
+	height: 40px;
+	line-height: 20px;
+	min-width: 16px;
+	padding: 4px 5px;
+	text-align: center;
+	text-shadow: 0 1px 0 #FFF;
+	width: auto;
+	border-radius: 4px 0 0 4px;
+	margin-right: -1px
+}
+
+[class ^="icon-"],[class *=" icon-"] {
+	background-image: url("../image/glyphicons.halflings.png");
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 14px;
+	line-height: 14px;
+	margin-left: 10px;
+	margin-top: 5px;
+	vertical-align: text-top;
+	width: 20px
+}
+
+.footer {
+	position: fixed;
+	bottom: 0;	
+    width: 100%;
+	padding-top: 12px;
+	height: 60px;
+	text-align: center;
+	color: #fff;
+	font-weight: bold;
+	font-size: 13px;
+    background: -moz-linear-gradient(top,rgba(0,90,171,0),rgba(0,90,171,0.7));
+    background: -webkit-gradient(linear,top,from(rgba(0,90,171,0)),to(rgba(0,90,171,0.7)));
+    background: -webkit-linear-gradient(top,rgba(0,90,171,0),rgba(0,90,171,0.7));
+    background: -o-linear-gradient(top,rgba(0,90,171,0),rgba(0,90,171,0.7));   
+    background: linear-gradient(to bottom,rgba(0,90,171,0),rgba(0,90,171,0.7));
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00005aab',endColorstr='#4C005aab',grandientType=0); 
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00005aab',endColorstr='#4C005aab',grandientType=0); 
+    z-index: 99;	
+}
+
+.footer p {
+	margin: 0;
+	line-height: 24px
+}

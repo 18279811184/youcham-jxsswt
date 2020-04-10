@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!-- saved from url=(0139)http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000000316154733&column_name=%E5%85%9A%E7%BA%AA%E6%B3%95%E8%A7%84&column_parent=null -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<title>首页</title>
+		 <#include "/header.html">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/inspect.bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/inspect.content.css">
+		<script type="text/javascript" src="${request.contextPath}/statics/plugins/jqPaginator-1.2.1/jqPaginator.js"></script>
+	</head>
+	<body>
+		<header class="navbar navbar-default" role="navigation">
+	        <nav id="nav-top">
+	            <div class="index_header">
+	                <div class="navbar-header">
+	                    <div class="container">
+	                        <img alt="Logo" src="${request.contextPath}/statics/css/login/logo.png" style="margin-top:10px;">
+	                    </div>
+	                </div>
+	                <div id="navbar" class="navbar-collapse collapse">
+	                    <div class="container">
+	                        <div class="row">
+	                            <ul class="nav navbar-nav">
+	                                   <li><a onclick="clickurl('index','index')" target="_blank">首页</a></li>                                
+	                                   <li><a href="javaScript:void(0)" onclick="clickurl('1000001778346481','组织机构')">组织机构</a></li>  
+	                                   <li><a href="javaScript:void(0)" onclick="clickurl('1000000316154733','党纪法规')"> 党纪法规</a></li>   
+	                                   <li><a href="javaScript:void(0)" onclick="clickurl('1000002030644410','警钟长鸣')">警钟长鸣</a></li>   
+	                                   <li><a href="javaScript:void(0)" onclick="clickurl('1000001585344164','工作动态')">工作动态</a></li>   
+	                                   <li><a href="javaScript:void(0)" onclick="clickurl('1000001861542884','学习园地')">学习园地</a></li>
+	                                   <li id="indexLi"><a href="${request.contextPath}/modules/loginindex/indexjy.html">意见建议</a></li> 
+	                            </ul>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </nav>
+	    </header>
+	    <div id="app-4" v-cloak>
+	    <div class="bread">
+	        <div class="container">
+	            <div class="row">
+	                <div class="col-xs-12 col-sm-12 col-md-12">
+	                    <div class="map">位置：<a onclick="clickurl('index','index')" target="_blank">网站首页</a> &gt; <a href="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000000316154733&amp;column_name=%E5%85%9A%E7%BA%AA%E6%B3%95%E8%A7%84&amp;column_parent=null#" onclick="return false;" id="columnName">党纪法规</a> </div>
+	                    <div class="search-wrap" style="display: inline-block; float: right">
+	                        <form class="mnone" action="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000000316154733&amp;column_name=%E5%85%9A%E7%BA%AA%E6%B3%95%E8%A7%84&amp;column_parent=null#" method="get">
+	                            <input v-model="q.title" @keyup.enter="query" class="form-input text" type="text" id="searchText" placeholder="搜索关键词">
+	                            <input type="button" value="" class="search_btn" @click="query">
+	                        </form> 
+	                    </div>
+	                </div>
+				</div>
+	        </div>
+	    </div>
+	    <main role="main" class="main-content mt15">
+	        <div class="pindao wrap1 jieshao" >
+	            <div class="container">
+	                <div class="row" >
+	                    <div class="col-md-12 sects lwrap">
+	                        <div class="fl w100 rwrap pl5 nopl">
+	                            <div class="wrap bord news-item">
+	                                <div class="title">
+	                                    <h5  id="stitle">党纪法规</h5>
+	                              
+	                                </div>
+	                               
+	                                <div class="news-piclist" >
+	                                     <div id="column-list" style="display:hidden">
+	                                        
+	                                     </div>
+	                                    <ul  class="news" id="news-list">
+	                                    <li v-for="todo in insInform" class="news-focus" style="height: 155px">
+	                                        <div :style="todo.informImage==+'000'?'display:none':'float:left'" :id="'img'+todo.informId" >
+	                                         <img alt="" :src="'/fileAction/downloadFileindex?bytearrayId='+todo.informImage">
+	                                        </div>
+		                                    <div class="news-items">
+		                                    <h6>
+		                                  <!--  <span style="display: none" :id="todo.informId">{{ todo.informId }}</span> -->
+		                                    <a style="height: 50px;" onclick="infonew(this)"   target="_blank" :id="todo.informId">
+		                                  
+		                                   	  {{ todo.informTitle }} </a>
+		                                    </h6> 
+		                                    <p style="height: 45px"> {{ todo.informSummary }} </p>
+		                                    <span>{{ todo.createTime }}</span>
+		                                    </div>
+	                                    </li>
+	                                   </ul>
+	                                </div>
+	                               
+	                                   
+								   <!-- 分页按钮 -->  
+									<div class="footer" style="margin-left:400px">  
+									  <ul class="pagination" id="pagination0"></ul>  
+									</div>  
+	                               
+	                            
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="intro-two news2">
+	            <div class="container">
+	                <div class="row"></div>
+	            </div>
+	        </div>
+	    </main>
+	
+	</div>
+	    
+	    <footer role="contentinfo" class="index-footer">
+	        <div class="copyright">
+	            <div class="container f-bg">
+	                <div class="row">
+	                    2018&nbsp;©&nbsp;版权所有：南昌海关
+	                    <span class="fr">技术支持：言臣科技</span>
+					</div>
+	            </div>
+	        </div>
+	    </footer>
+	    <div id="goto_top" style="display: none;">
+	        <a href="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000000316154733&amp;column_name=%E5%85%9A%E7%BA%AA%E6%B3%95%E8%A7%84&amp;column_parent=null#" onclick="toTop();return false;" title="返回顶部" class="goto_top_btn">↑</a>
+	    </div>
+
+	   <!--  <script type="text/javascript" src="${request.contextPath}/statics/css/login/page.top.js"></script> -->
+	     <script type="text/javascript" src="${request.contextPath}/statics/css/login/index.inform.js"></script>
+	  <script type="text/javascript">
+		function clickurl(getid,getname){
+			var url = "informdiscipline.html?columnid="+getid+"&content="+escape(getname)+"";
+			window.location.href=url;
+			if(getname == "index"){
+				var url = baseURL+"login.html";
+				window.location.href=url;
+			}
+			if(getid == "1000001778346481"){
+				var url = "informorganization.html?columnid="+getid+"";
+				window.location.href=url;
+			}
+		}
+		function infonew(thisa){
+			console.log(thisa.id);
+			
+			 var title = escape(T.p('content'));
+          /*  var ggid = $("#ggid").html(); */
+          /*  console.log(ggid); */
+           window.location.href="newsdetails.html?getid="+thisa.id+"&title="+title+"" ; 
+		}
+		
+	</script>
+	  
+	    <script>  
+	   
+	    var getid = T.p('columnid');
+		var title = unescape(T.p('content'));
+		console.log(title);
+		$("#columnName").html(title);
+		$("#stitle").html(title);
+	/* 	 var h1= document.getElementsById("stitle")[0];
+		    h1.innerHTML = "你想要改变的内容"; */
+		
+	    var param = {
+	    		columnid: getid,
+		};
+	    var totalp ;
+	    var vm = new Vue({
+  		  el: '#app-4',
+  		  data: {
+  			insInform: [],
+  			q:{
+  				title: null
+  			}
+  		  },
+  		  methods: {
+  			query: function () {
+  				vm.reload();
+  				console.log("收缩");
+  			},
+  			  
+  			  
+  			  getInfo: function(){
+  		
+  		          $.get(youchamapi+"/ins/insinform/listwechat",param,function(r){
+  					vm.insInform = r.page.list;
+  					totalp = r.page.currPage;
+  					 console.log(r.page);
+  					 //-----------
+  					 var gettotal = "0";
+  					 if(r.page.totalPage == "0"){
+  						gettotal = 1;
+  					 }else{
+  						gettotal = r.page.totalPage;
+  					 }
+  					  $('#pagination0').jqPaginator({
+  		  		        totalPages: gettotal,
+  		  		        visiblePages: 10,
+  		  		        currentPage: 1,
+
+  		  		        first: '<li class="first"><a href="javascript:void(0);">第一页</a></li>',
+  		  		        prev: '<li class="prev"><a href="javascript:void(0);">上一页</a></li>',
+  		  		        next: '<li class="next"><a href="javascript:void(0);">下一页</a></li>',
+  		  		        last: '<li class="last"><a href="javascript:void(0);">最后一页</a></li>',
+  		  		        page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+  		  		        onPageChange: function (num) {
+  		  		           console.log("输出获得页面0----"+num);
+  		  		           
+	  		  		        $.ajax({
+					    		url:youchamapi+"/ins/insinform/listwechat",
+					    		type:"get",
+					    		dataType:"json",
+					    		data:{limit:10,page:num,columnid:getid},
+					    		timeout:"10000",
+					    		success:function(data){
+					    			var contents = "";
+					    			console.log(data);
+					    			vm.insInform = data.page.list;
+					    			//$("#casepubbaseinfo").html(contents);
+					    		}
+					    	});
+  		  		           
+  		  		        	
+  		  	            $('#text').html('当前第' + num + '页');
+  		  		        }
+  		  		    }); 
+  					 
+  				})
+  				},
+  				
+  				reload: function (event) {
+  					var getd = vm.q.title;
+  					console.log("查询条件是---"+getd);
+  					var paramsearch = {
+  				    		columnid: getid,
+  				    		informtitle:getd
+  					};
+  					
+  					$.get(youchamapi+"/ins/insinform/listwechat",paramsearch,function(r){
+  	  					vm.insInform = r.page.list;
+  	  					totalp = r.page.currPage;
+  	  					 console.log(r.page);
+  	  					 //-----------
+  	  					 var gettotal ;
+  	  					 if(r.page.totalPage == "0"){
+  	  						gettotal = 1;
+  	  					 }
+  	  					  $('#pagination0').jqPaginator({
+  	  		  		        totalPages: gettotal,
+  	  		  		        visiblePages: 10,
+  	  		  		        currentPage: 1,
+
+  	  		  		        first: '<li class="first"><a href="javascript:void(0);">第一页</a></li>',
+  	  		  		        prev: '<li class="prev"><a href="javascript:void(0);">上一页</a></li>',
+  	  		  		        next: '<li class="next"><a href="javascript:void(0);">下一页</a></li>',
+  	  		  		        last: '<li class="last"><a href="javascript:void(0);">最后一页</a></li>',
+  	  		  		        page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+  	  		  		        onPageChange: function (num) {
+  	  		  		           console.log("输出获得页面0----"+num);
+  	  		  		           
+  		  		  		        $.ajax({
+  						    		url:youchamapi+"/ins/insinform/listwechat",
+  						    		type:"get",
+  						    		dataType:"json",
+  						    		data:{pageSize:10,page:num,columnid:getid,informtitle:getd},
+  						    		timeout:"10000",
+  						    		success:function(data){
+  						    			var contents = "";
+  						    			console.log(data);
+  						    			vm.insInform = data.page.list;
+  						    			//$("#casepubbaseinfo").html(contents);
+  						    		}
+  						    	});
+  	  		  		           
+  	  		  		        	
+  	  		  	            $('#text').html('当前第' + num + '页');
+  	  		  		        }
+  	  		  		    }); 
+  	  					 
+  	  				})
+  					
+  					
+  				}
+  				
+  		  },
+  		  created: function () {
+  			    // `this` 指向 vm 实例
+  			   this.getInfo();
+  	
+  			  
+  		     /* $('#pagination0').jqPaginator({
+  		        totalPages: 1,
+  		        visiblePages: 10,
+  		        currentPage: 1,
+
+  		        first: '<li class="first"><a href="javascript:void(0);">F11st</a></li>',
+  		        prev: '<li class="prev"><a href="javascript:void(0);">Previous</a></li>',
+  		        next: '<li class="next"><a href="javascript:void(0);">Next</a></li>',
+  		        last: '<li class="last"><a href="javascript:void(0);">Last</a></li>',
+  		        page: '<li class="page"><a href="javascript:void(0);">{{page}}</a></li>',
+  		        onPageChange: function (num) {
+  		       
+  		        	console.log(vm.getinfo);
+  	            $('#text').html('当前第' + num + '页');
+  		        }
+  		    });  */
+  			  
+  			  }
+  		  
+  		});
+	    
+	    
+	  
+	    
+	    
+			var if_firstime = true;                 //分页组件第一次加载为true，后面false  
+			  
+			/*  
+			    分页组件展示  
+			    total_pages: 总页数； 
+			    visible_pages： 让组件展示5页； 
+			    current_page: 当前页 
+			*/  
+			function display_pages(total_pages, visible_pages, current_page){  
+			    if(!visible_pages){  
+			        visible_pages = 5;  
+			    }  
+			    if(!current_page){  
+			        current_page = 1;  
+			    }  
+			  
+			   
+			}  
+			  
+		
+			
+
+			  
+			</script>  
+
+
+</body>
+
+
+
+
+
+</html>

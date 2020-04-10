@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>货运计划信息列表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("sd:sdcargoplan:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdcargoplan:update")>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdcargoplan:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">计划开始时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.planStartDate" name="planStartDate" placeholder="计划开始时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">计划结束时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.planEndDate" name="planEndDate" placeholder="计划结束时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">运输方式</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.transType" name="transType" placeholder="运输方式"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">港口名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.portName" name="portName" placeholder="港口名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">运行线路-起点</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.transLineOrigin" name="transLineOrigin" placeholder="运行线路-起点"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">运行线路-终点</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.transLineDestination" name="transLineDestination" placeholder="运行线路-终点"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">班期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.schedule" name="schedule" placeholder="班期"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">运营单位</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.operateUnit" name="operateUnit" placeholder="运营单位"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">联系人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.contectPserson" name="contectPserson" placeholder="联系人"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">电话</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.phoneNumber" name="phoneNumber" placeholder="电话"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.remark" name="remark" placeholder="备注"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.createId" name="createId" placeholder="创建人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.createName" name="createName" placeholder="创建人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.createTime" name="createTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.updateId" name="updateId" placeholder="更新人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.updateName" name="updateName" placeholder="更新人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.updateTime" name="updateTime" placeholder="更新时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">版本号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.version" name="version" placeholder="版本号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">逻辑删除字段 0：未删除 -1：已删除</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdCargoPlan.beDelete" name="beDelete" placeholder="逻辑删除字段 0：未删除 -1：已删除"/>
+                        </div>
+                    </div>
+							        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sd/sdcargoplan.js?_${.now?long}"></script>
+</body>
+</html>

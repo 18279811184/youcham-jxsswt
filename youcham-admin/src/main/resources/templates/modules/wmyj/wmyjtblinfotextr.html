@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>出口信息问题汇总</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn form-inline">
+            <div class="form-group">
+                <label for="queryDate">时间</label>
+                <input v-model="q.queryDate" name="queryDate" type="text" class="form-control" id="queryDate">
+            </div>
+            <div class="form-group">
+
+                <select id="firstLevelParent" v-select2="" class="form-control" v-model="q.city" style="width:100px"
+                        @change="getTwoLevelCitys">
+                    <option value="">请选择市</option>
+                    <option v-for="item in firstLevelCitys" :value="item">{{item}}</option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                <select id="twoLevelParent" v-select2="" class="form-control" v-model="q.area" style="width:250px">
+                    <option value="">请选择区</option>
+                    <option v-for="item in twoLevelCitys" :value="item">{{item}}</option>
+                </select>
+            </div>
+			<a class="btn btn-blue" @click="query">查询</a>
+
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+							                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.createId" name="createId" placeholder="创建人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.createName" name="createName" placeholder="创建人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.createTime" name="createTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">修改人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.updateId" name="updateId" placeholder="修改人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">修改人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.updateName" name="updateName" placeholder="修改人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">修改时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.updateTime" name="updateTime" placeholder="修改时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">版本号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.version" name="version" placeholder="版本号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">逻辑删除字段</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.beDelete" name="beDelete" placeholder="逻辑删除字段"/>
+                        </div>
+                    </div>
+																		                    <div class="form-group">
+                        <div class="col-sm-2 control-label">用户名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.userid" name="userid" placeholder="用户名"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">企业代码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.enterpriseCode" name="enterpriseCode" placeholder="企业代码"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">企业名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.enterpriseName" name="enterpriseName" placeholder="企业名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属单位代码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.unitCode" name="unitCode" placeholder="所属单位代码"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">报出日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.dateIn" name="dateIn" placeholder="报出日期"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">存在的问题</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.questions" name="questions" placeholder="存在的问题"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">有关建议和意见</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.suggest" name="suggest" placeholder="有关建议和意见"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">联系人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.contact" name="contact" placeholder="联系人"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">联系电话</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.telephone" name="telephone" placeholder="联系电话"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.remark" name="remark" placeholder="备注"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">审核是否通过</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.showFlag" name="showFlag" placeholder="审核是否通过"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否纳入统计</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.statisFlag" name="statisFlag" placeholder="是否纳入统计"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">审核用户</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfotextR.statisUserid" name="statisUserid" placeholder="审核用户"/>
+                        </div>
+                    </div>
+							        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/wmyj/wmyjtblinfotextr.js?_${.now?long}"></script>
+</body>
+</html>

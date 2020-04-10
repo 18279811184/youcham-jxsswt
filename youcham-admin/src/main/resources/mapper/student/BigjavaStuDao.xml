@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.student.dao.BigjavaStuDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.student.entity.BigjavaStuEntity" id="bigjavaStuMap">
+        <result property="id" column="id"/>
+        <result property="stuName" column="stu_name"/>
+        <result property="stuSex" column="stu_sex"/>
+        <result property="stuEmali" column="stu_emali"/>
+        <result property="stuPhone" column="stu_phone"/>
+        <result property="stuNumber" column="stu_number"/>
+        <result property="stuCourse" column="stu_course"/>
+        <result property="stuCredit" column="stu_credit"/>
+    </resultMap>
+
+
+</mapper>

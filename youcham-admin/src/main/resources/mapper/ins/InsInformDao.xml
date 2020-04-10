@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.ins.dao.InsInformDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.ins.entity.InsInformEntity" id="insInformMap">
+        <result property="informId" column="inform_id"/>
+        <result property="informTitle" column="inform_title"/>
+        <result property="informImage" column="inform_image"/>
+        <result property="informSummary" column="inform_summary"/>
+        <result property="informContent" column="inform_content"/>
+        <result property="informStatus" column="inform_status"/>
+        <result property="informRead" column="inform_read"/>
+        <result property="informStatic" column="inform_static"/>
+        <result property="informOrder" column="inform_order"/>
+        <result property="bePublish" column="be_publish"/>
+        <result property="beStick" column="be_stick"/>
+        <result property="beRed" column="be_red"/>
+        <result property="departId" column="depart_id"/>
+        <result property="columnId" column="column_id"/>
+        <result property="publishId" column="publish_id"/>
+        <result property="publishTime" column="publish_time"/>
+        <result property="createId" column="create_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="beDelete" column="be_delete"/>
+        <result property="dataVersion" column="data_version"/>
+        <result property="approveId" column="approve_id"/>
+        <result property="approveRemark" column="approve_remark"/>
+    </resultMap>
+	<!-- 查询出所有栏目为在线学习的数据 --> 
+	<select id="queryInformList"  resultType="io.youcham.modules.ins.entity.InsInformEntity">
+		select * from ins_inform  where column_id= 1 and be_delete=0
+	</select>
+
+	<select id="getMaxOrderNum" resultType="Integer">
+		select IFNULL(max(inform_order),0) from ins_inform where be_delete = 0 and column_id = #{columnId}
+	</select>
+
+</mapper>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>江西疫情防控“三保”物流信息云平台-货运计划信息录入</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet"
+	href="${request.contextPath}/statics/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="${request.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet"
+	href="${request.contextPath}/statics/plugins/select2/select2.min.css">
+<link rel="stylesheet"
+	href="${request.contextPath}/statics/plugins/webuploader/css/dropzone.min.css">
+<!-- 引入elementui样式 -->
+<link rel="stylesheet"
+	href="${request.contextPath}/statics/element/index.css">
+<link rel="stylesheet"
+	href="${request.contextPath}/statics/css/main.css">
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+
+<style>
+</style>
+</head>
+<body>
+	<div id="rrapp" class="margin-padding15" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<!--	<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("sd:sdCargoPlan:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdCargoPlan:update")>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdCargoPlan:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>-->
+			</div>
+			<!--<table id="jqGrid"></table>
+        <div id="jqGridPager"></div>-->
+		</div>
+
+		<el-form ref="form" :model="sdCargoPlan" label-position="top">
+		<el-form-item label="计划时间" :required="true"> <el-input
+			v-model="sdCargoPlan.planStartDate" id="selectPlanStartDate"
+			placeholder="起始时间" readonly="readonly" style="width:40%"></el-input>
+		— <el-input v-model="sdCargoPlan.planEndDate" id="selectPlanEndDate"
+			placeholder="结束时间" readonly="readonly" style="width:40%"></el-input>
+		</el-form-item> <el-form-item label="运输方式"> <el-select
+			v-model="sdCargoPlan.transType" placeholder="请选择" size="width:100%">
+		<el-option v-for="item in transTypeList" :key="item.value"
+			:label="item.label" :value="item.value"> </el-option> </el-select> </el-form-item> <el-form-item
+			label="港口名称"> <el-input v-model="sdCargoPlan.portName"
+			placeholder="港口名称"></el-input> </el-form-item> <el-form-item label="运行线路">
+		<el-form-item label="起点:"> <el-input
+			v-model="sdCargoPlan.transLineOrigin" placeholder="运行线路(起点)"></el-input>
+		</el-form-item> <el-form-item label="终点:"> <el-input
+			v-model="sdCargoPlan.transLineDestination" placeholder="运行线路(终点)"></el-input>
+		</el-form-item> </el-form-item> <el-form-item label="班期"> <el-input
+			v-model="sdCargoPlan.schedule" placeholder="班期"></el-input> </el-form-item> <el-form-item
+			label="运营单位"> <el-input
+			v-model="sdCargoPlan.operateUnit" placeholder="运营单位"></el-input> </el-form-item> <el-form-item
+			label="联系人"> <el-input
+			v-model="sdCargoPlan.contectPserson" placeholder="联系人"></el-input> </el-form-item> <el-form-item
+			label="电话"> <el-input
+			v-model="sdCargoPlan.phoneNumber" placeholder="电话"></el-input> </el-form-item> <el-form-item
+			label="备注"> <el-input type="textarea"
+			v-model="sdCargoPlan.remark" placeholder="备注 (最多100字)"
+			:autosize="{ minRows: 6, maxRows: 4}"></el-input> </el-form-item> <el-form-item>
+		<el-button type="primary" @click="saveOrUpdate">确认</el-button> <el-button>取消</el-button>
+		</el-form-item> </el-form>
+
+	</div>
+	<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+	<script src="${request.contextPath}/statics/plugins/ystep/ystep.js"></script>
+	<script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+	<!--<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>-->
+	<script
+		src="${request.contextPath}/statics/plugins/moment/moment.min.js"></script>
+	<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+	<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/jqgrid/grid.locale-cn.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/select2/select2.min.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/select2/i18n/zh-CN.js"></script>
+	<script src="${request.contextPath}/statics/plugins/laydate/laydate.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/validate/jquery.validate.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/validate/validate-methods.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/validate/messages_zh.js"></script>
+	<script
+		src="${request.contextPath}/statics/bootstrap/bootstrap-select.js"></script>
+	<script
+		src="${request.contextPath}/statics/plugins/webuploader/js/dropzone.min.js"></script>
+	<!-- 引入elementui组件库 -->
+	<script src="${request.contextPath}/statics/element/index.js"></script>
+	<script src="${request.contextPath}/statics/js/common.js"></script>
+	<!-- 引入组件库 -->
+	<script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+	<script>
+		var vm = new Vue({
+			el : '#rrapp',
+			data : {
+				showList : false,
+				sdCargoPlan : {
+					transType : 0,
+					city : null,
+				},
+				transTypeList : [ {
+					value : 0,
+					label : '水水联运'
+				}, {
+					value : 1,
+					label : '铁海联运'
+				}, {
+					value : 2,
+					label : '赣欧班列'
+				}, {
+					value : 3,
+					label : '国际航空货运'
+				} ],
+			},
+			methods : {
+				/* 保存或修改 */
+				saveOrUpdate : function(event) {
+					var url = vm.sdCargoPlan.id == null ? "sd/sdcargoplan/save"
+							: "sd/sdcargoplan/update";
+					$.ajax({
+						type : "POST",
+						url : baseURL + url,
+						contentType : "application/json",
+						data : JSON.stringify(vm.sdCargoPlan),
+						success : function(r) {
+							layer.closeAll("loading");
+							if (r.code === 0) {
+								layer.closeAll();
+								alert('操作成功', function(index) {
+									location.reload();
+								});
+							} else {
+								alert(r.msg);
+							}
+						}
+					});
+				}
+			},
+			mounted : function() {
+				laydate.render({
+					elem : '#selectPlanStartDate',
+					theme : '#3C8DBC',
+					type : 'date',
+					value : this.now,
+					done : function(value) {
+						vm.sdCargoPlan.planStartDate = value
+					}
+				});
+				laydate.render({
+					elem : '#selectPlanEndDate',
+					theme : '#3C8DBC',
+					type : 'date',
+					value : this.now,
+					done : function(value) {
+						vm.sdCargoPlan.planEndDate = value
+					}
+				});
+			}
+		})
+	</script>
+
+</body>
+</html>

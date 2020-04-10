@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.qrtz.dao.QrtzRunHistoryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.qrtz.entity.QrtzRunHistoryEntity" id="qrtzRunHistoryMap">
+        <result property="id" column="ID"/>
+        <result property="taskName" column="TASK_NAME"/>
+        <result property="status" column="STATUS"/>
+        <result property="dataNum" column="DATA_NUM"/>
+        <result property="remark" column="REMARK"/>
+        <result property="createId" column="CREATE_ID"/>
+        <result property="createName" column="CREATE_NAME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateId" column="UPDATE_ID"/>
+        <result property="updateName" column="UPDATE_NAME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="version" column="VERSION"/>
+        <result property="beDelete" column="BE_DELETE"/>
+    </resultMap>
+
+
+</mapper>

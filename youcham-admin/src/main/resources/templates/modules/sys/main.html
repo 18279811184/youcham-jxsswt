@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>欢迎页</title>
+    <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+        <style type="text/css">
+            .organ {
+                margin-bottom: 15px;
+                background-color: #fff;
+                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+            }
+
+            .organ img {
+                width: 70px;
+            }
+
+            .task .products-list .product-info {
+                margin-left: 10px;
+            }
+
+            .chart_list {
+                margin-top: 80px;
+            }
+
+            .title {
+                padding: 1px 0 1px 15px;
+                font-size: 18px;
+                border-left: 4px solid #48a9ef;
+                border-radius: 0 2px 2px 0;
+                margin: 0;
+            }
+
+            .chart-legend li {
+                color: #6c6868;
+                line-height: 30px;
+            }
+
+            .row {
+                border: none
+            }
+
+            .info-box-text {
+                font-size: 16px
+            }
+						
+						.info-box-content{
+							  padding: 0;
+						}
+
+            .box {
+                border: 1px solid #d2d6de;
+            }
+
+            .info-p-content {
+                margin: 30px 0 0;
+                font-size: 18px;
+                padding-left: 10px;
+            }
+
+            .info-p-content label {
+                color: #555;
+            }
+
+            .info-p-content span {
+                font-weight: bold;
+                font-size: 24px;
+                vertical-align: middle;
+            }
+
+            .products-list .product-description {
+                margin-top: 8px;
+            }
+            
+            .box-body{
+            	min-height: auto;
+            }
+        </style>
+</head>
+
+<body>
+    <div id="rrapp" class="main no-padding">
+        <!--  v-cloak -->
+       <!--  <div class="row organ">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon" style="background-color: #48a9ef">
+                        <img src="${request.contextPath}/statics/images/main/orga.png">
+                    </span>
+                    <div class="info-box-content">
+                        <p class="info-p-content">
+                            <label>机构：</label>
+                            <span id="unitCount" class="num-blue"></span>
+                        </p>
+                        <span class="info-box-text">机构</span>
+              <span class="info-box-number num-blue" id="unitCount"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon" style="background-color: #99d97c">
+                        <img src="${request.contextPath}/statics/images/main/person.png">
+                    </span>
+                    <div class="info-box-content">
+                        <p class="info-p-content">
+                            <label>人员：</label>
+                            <span id="personCount" class="num-green"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix visible-sm-block"></div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon" style="background-color: #ffd96e">
+                        <img src="${request.contextPath}/statics/images/main/cadre.png">
+                    </span>
+                    <div class="info-box-content">
+                        <p class="info-p-content">
+                            <label>处级干部：</label>
+                            <span id="chujiCount" class="num-yellow"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon" style="background-color: #f3857c">
+                        <img src="${request.contextPath}/statics/images/main/section.png">
+                    </span>
+                    <div class="info-box-content">
+                        <p class="info-p-content">
+                            <label>科级干部：</label>
+                            <span id="kejiCount" class="num-red"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- 待办事项 -->
+       
+        <!-- 监督执纪 -->
+        <div class="jdzj margin-padding15">
+            <h4 class="title">监督执纪</h4>
+            <div class="row">
+                <div class="col-sm-6 no-padding">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">处置结果四种形态占比情况</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="jdzjChart1" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 no-padding-right">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">检举控告违纪违法占比情况</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="jdzjChart2" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 政治生态评价 -->
+        <div class="jdzj margin-padding15">
+<!--             <h4 class="title">政治生态评价</h4> -->
+            <div class="form-group">  
+        		<div class="col-xs-6" style="width:200px;">
+                    <h4 class="title">政治生态评价</h4>
+                </div>    		
+         		<div class="col-xs-6" style="margin-bottom:10px;">   
+<!--          			<div class="col-xs-2" style="width:60px;font-size: 16px;padding-top: 5px">周期：</div>	 -->
+	         		<div class="col-xs-6" style="width:160px;margin-right: 10px">
+	         			<select v-select2="" v-model="cycleId" style="width: 100%" @change="changeCycle">
+	         				<option v-for="item in assessCycles" :value="item.id">{{item.name}}</option>
+	         			</select>
+	                </div>
+	                <div class="col-xs-6" style="width:160px;">
+	         			<select v-select2="" v-model="assessType" style="width: 100%" @change="changeCycle">
+	         				<option value="1">监督机构</option>
+	         				<option value="0">监督个人</option>
+	         			</select>
+	                </div>
+                </div>
+            </div>
+            
+            
+            <div class="row">
+                <div class="col-sm-6 no-padding">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">机构政治生态评价综合评分情况</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                           <div id="zzstChart1" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 no-padding-right">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" id="zzst2Title">xx局政治生态各项指标得分情况</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="zzstChart2" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 派驻纪检组工作绩效考核 -->
+        <div class="jdzj margin-padding15">  
+        	<div class="form-group">  
+        		<div class="col-xs-6" style="width:300px;">
+                    <h4 class="title">各派驻机构工作绩效考核情况</h4>
+                </div>    		
+         		<div class="col-xs-6" style="margin-bottom:10px;">        			
+	         		<div class="col-xs-6" style="width:150px;">
+	                    <input id="khBegin" type="text" readonly="readonly" class="form-control" placeholder="请选择时间（起）">
+	                </div>
+	                <div class="col-xs-6" style="width:150px;margin-left:20px;">
+	        			<input id="khEnd" type="text" readonly="readonly" class="form-control" placeholder="请选择时间（止）">
+	   				</div>	
+	   				<div class="col-xs-6" style="width:50px;margin-left:20px;">
+	   					<a class="btn btn-blue" href="JavaScript:;" onclick="queryKH()">查询</a>
+	   				</div>
+                </div>
+            </div>
+                      	
+            <div class="row">
+                <div class="col-sm-6 no-padding">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">各派驻机构工作绩效考核情况</h3>                           
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="box-body">
+                           <div id="gzkhChart1" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                        <!--  
+		            <div class="box-body">
+		              <div class="row">
+		                <div class="col-md-11">
+		                  <div id="jdzjChart2" class="chart-responsive" style="width: 100%; height: 400px"></div>
+		                </div>
+		              </div>
+		            </div> -->
+
+                    </div>
+                </div>
+                <div class="col-sm-6 no-padding-right">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" id="khqk"></h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="gzkhChart2" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 思想理论学习与考试测评价 -->
+        <div class="jdzj margin-padding15" style="margin-bottom: 0;">
+            <h4 class="title">思想理论学习与考试测评</h4>
+            <div class="row">
+                <div class="col-sm-6 no-padding">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">各机构思想理论学习平均每人时长排名情况</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="xxksChart1" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 no-padding-right">
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">各机构思想理论考试平均分排名情况</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="xxksChart2" class="chart-responsive" style="width: 100%; height: 300px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="${request.contextPath}/statics/plugins/echart/echarts.min.js"></script>
+    <script src="${request.contextPath}/statics/plugins/echart/macarons.js"></script>
+    <script type="text/javascript">
+    	var vm = new Vue({
+    		el:"#rrapp",
+    		data:{
+    			assessCycles:[],
+    			cycleId:null,
+    			assessType:"1"
+    		},
+    		methods:{
+    			getAssessCycles:function(){
+	    			$.get(baseURL+"ins/evaluatecycle/select",function(r){
+	    				vm.assessCycles = r;
+	    				$.each(r,function(i,v){
+	    					if(v.status == 1){
+	    						vm.cycleId = v.id;
+	    						return false;
+	    					}
+	    				});
+	    			});
+    			},
+    			changeCycle:function(){
+    				getZzst2AvgData();
+    			}
+    		},
+    		created:function(){
+    			this.getAssessCycles();
+    		}
+    		
+    	});
+    
+    
+    
+        //监督知己
+        var onext = "";
+        var twoxt = "";
+        var threext = "";
+        var fourxt = "";
+        $(function () {
+            onext = findczjg("1");
+            twoxt = findczjg("2");
+            threext = findczjg("3");
+            fourxt = findczjg("4");
+            //反映问题
+            findfywt();
+            //获得监督知己的三条数据
+            getjdzz();
+
+        });
+
+        function ckgdjd() {
+            window.location.href = baseURL + "modules/ins/inscluedisposal.html";
+        }
+
+        function getjdzz() {
+            $.ajax({
+                type: "POST",
+                url: baseURL + "ins/insclue/listindex",
+                success: function (r) {
+                   // console.log(r.page.list);
+                    for (var i = 0; i < r.page.list.length; i++) {
+                        var html = "";
+                        var time = "";
+                        //调到那个页面
+                        var ymindex = "";
+                        var handtype = "";
+                        //拼接标题展示
+                        var title = "【" + r.page.list[i].departIdName + "】的" + r.page.list[i].personcreateNmae +
+                            "提交关于【" + r.page.list[i].dataIdname + "】的线索待处置";
+                        if (i < 3) {
+                            console.log("提交状态--" + r.page.list[i].submitType);
+                            console.log("handtype--" + r.page.list[i].handleType);
+                            if (r.page.list[i].submitType == "1" && r.page.list[i].handleType == "1") {
+                                //线索办理
+                                console.log(r.page.list[i].handleType);
+                                time = r.page.list[i].submitTime;
+                                ymindex = "bl";
+                            } else if (r.page.list[i].submitType == "2" && r.page.list[i].handleType != "1") {
+                                //线索处置
+                                //第一次办理
+
+                                console.log(r.page.list[i].firstbjTime);
+                                time = r.page.list[i].operatorTime;
+
+                                ymindex = "cz";
+                                handtype = r.page.list[i].handleType;
+                            } else if (r.page.list[i].submitType == "3" && r.page.list[i].handleType != "1") {
+                                //线索处置
+                                //第二次办理
+                                //console.log(r.page.list[i].secondbjTime);
+                                time = r.page.list[i].firstbjTime;
+                                /* time = r.page.list[i].secondbjTime; */
+                                ymindex = "cz";
+                                handtype = r.page.list[i].handleType;
+                            }
+
+                            html = '<li onclick="infojd(\'' + r.page.list[i].clueId + '\',\'' + ymindex +
+                                '\',' + handtype + ')" class="item">' +
+                                '<div class="product-info">' +
+                                '<marquee><a href="javascript:void(0)" class="product-title">' + title + '' +
+                                '<span class="label label-warning pull-right"></span></a>' +
+                                '<span class="product-description">' +
+                                '' + time + '&nbsp;&nbsp;&nbsp;所属部门：' + r.page.list[i].departIdName + '' +
+                                '</span></marquee>' +
+                                '</div>' +
+                                '</li>';
+                        }
+                        $("#jdzj").append(html);
+
+                    }
+                }
+            });
+        }
+        //跳转到页面
+        function infojd(clueid, type, handtype) {
+            var url = "";
+            if (type == "bl") {
+                url = "modules/ins/insclue3.html?gclueId=" + clueid;
+            } else if (type == "cz") {
+                url = "modules/ins/inscluedisposal.html?gclueId=" + clueid + "&&type=" + handtype;
+            } else {
+
+            }
+
+            window.location.href = baseURL + url;
+        }
+
+
+        function findczjg(n) {
+            var s = "";
+            $.ajax({
+                type: "POST",
+                url: baseURL + "ins/insclue/gdlist",
+                //contentType: "application/json",
+                /*  data: JSON.stringify({""}), */
+                data: {
+                    "optionform": n
+                },
+                success: function (r) {
+                    console.log(r);
+                    if (r.code === 0) {
+                        /* s = r.clueList;
+                        if (n == "1") {
+                            onext = r.clueList;
+                        }
+                        if (n == "2") {
+                            twoxt = r.clueList;
+                        }
+                        if (n == "3") {
+                            threext = r.clueList;
+                        }
+                        if (n == "4") {
+                            fourxt = r.clueList;
+                        } */
+                        var one  = r.clueList.one;
+                        var two  = r.clueList.two;
+                        var three  = r.clueList.three;
+                        var four  = r.clueList.four;
+                        var xingtai=new Array;
+                        xingtai[0]="第一种形态 : "+one;
+                        xingtai[1]="第二种形态 : "+two;
+                        xingtai[2]="第三种形态 : "+three;
+                        xingtai[3]="第四种形态 : "+four;
+                        //监督执纪1
+                        jdzjOption1 = {
+                        		toolbox: {
+                            		feature: {
+                            		            //dataView: {show: true, readOnly: false},
+                            		            //magicType: {show: true, type: ['line', 'bar']},
+                            		            //restore: {show: true},
+                            		            saveAsImage: {show: true}
+                            		        }
+                            		    }, 
+                            		    tooltip: {
+                                            trigger: 'item',
+                                            formatter: "{b}   ({d}%)"
+                                        },
+                                        legend: {
+                                            orient: 'vertical',
+                                            left: 'left',
+                                            data: [xingtai[0],xingtai[1],xingtai[2],xingtai[3]]
+                                        },
+                            series: [{
+                            	name:'形态		数量',
+                                type: 'pie',
+                                radius: '55%',
+                                label: {
+                                    normal: {                       	
+                                        show: false,
+                                        formatter: '  {b|{b}}  {per|{d}%}  ',
+                                        rich: {
+                                            a: {
+                                                color: '#999',
+                                                lineHeight: 22,
+                                                align: 'center'
+                                            },
+                                            hr: {
+                                                borderColor: '#aaa',
+                                                width: '100%',
+                                                borderWidth: 0.5,
+                                                height: 0
+                                            },
+                                            b: {
+                                                fontSize: 16,
+                                                lineHeight: 33
+                                            },
+                                            per: {
+                                                color: '#eee',
+                                                backgroundColor: '#1E94ED',
+                                                padding: [2, 4],
+                                                borderRadius: 2
+                                            }
+                                        },
+                                    },
+                                    emphasis: {
+                                        show: true,
+                                        textStyle: {
+                                            fontSize: '12',
+                                            fontWeight: 'bold'
+                                        }
+                                    }
+                                },
+                                /* label: {
+                                    normal: {
+                                        formatter: '  {b|{b}：}{c}  {per|{d}%}  ',
+                                        backgroundColor: '#FFFFFF',
+                                        borderColor: '#aaa',
+                                        borderWidth: 1,
+                                        borderRadius: 4,
+                                        rich: {
+                                            a: {
+                                                color: '#999',
+                                                lineHeight: 22,
+                                                align: 'center'
+                                            },
+                                            hr: {
+                                                borderColor: '#aaa',
+                                                width: '100%',
+                                                borderWidth: 0.5,
+                                                height: 0
+                                            },
+                                            b: {
+                                                fontSize: 16,
+                                                lineHeight: 33
+                                            },
+                                            per: {
+                                                color: '#eee',
+                                                backgroundColor: '#1E94ED',
+                                                padding: [2, 4],
+                                                borderRadius: 2
+                                            }
+                                        }
+                                    }
+                                }, */
+                                data: [{
+                                        value: one,
+                                        name: xingtai[0]
+                                    },
+                                    {
+                                        value: two,
+                                        name: xingtai[1]
+                                    },
+                                    {
+                                        value: three,
+                                        name: xingtai[2]
+                                    },
+                                    {
+                                        value: four,
+                                        name: xingtai[3]
+                                    }
+                                ],
+//                                 roseType: 'angle',
+                            }],
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{b}  ({d}%)"
+                            },
+
+                        };             
+
+                        var jdzjChart1 = echarts.init(document.getElementById('jdzjChart1'), "macarons");
+                        jdzjChart1.setOption(jdzjOption1);
+                        jdzjChart1.on('click', function (params) {
+                        	console.log("结果=============="+params.name);
+                        	var endNum=params.name.indexOf(":");
+                        	console.log("下标=============="+endNum);
+                        	var str= params.name.substring(0,endNum-1);
+                        	console.log("结果下标=============="+str);
+                        	var b=1;
+                        	if(str=="第一种形态"){
+                        		b=1;
+                        	}else if(str=="第二种形态"){
+                        		b=2;
+                        	}else if(str=="第三种形态"){
+                        		b=3;
+                        	}else{
+                        		b=4;
+                        	}
+                        	parent.layer.open({
+                				type : 2,
+                				skin : 'layui-layer-molv',
+                				title : "数据详情",
+                				area : [ '1050px', '500px' ],
+                				shadeClose : false,
+                				content : baseURL + "modules/ins/inscluedisposal2.html?b="+b,
+                				btn : ['关闭'],
+                				btn1 : function(index) {
+                				},
+                				yes : function(index, layero) {
+                					parent.layer.closeAll();
+                				}
+                			});
+                        	//window.location.href = baseURL + "modules/ins/inscluedisposal2.html?b="+b;
+                        });
+
+                    } else {
+                        alert(r.msg);
+                    }
+                }
+            });
+            // console.log(s);
+            // return s;
+        }
+
+
+        function findfywt(n) {
+            var s = "";
+            $.ajax({
+                type: "POST",
+                url: baseURL + "ins/insclue/gdfywt",
+                //contentType: "application/json",
+                /*  data: JSON.stringify({""}), */
+                success: function (r) {
+                    var getmykey = Object.keys(r.nmnap);
+                    var getkey = "";
+                    var mydata = [];
+                    for (var key in r.nmnap) {
+                        //console.log(key); 	//Type, Height
+                        //console.log(r.nmnap[key]);	//Coding, 100
+                        if (getkey == "") {
+                            getkey = key;
+                        } else {
+                            getkey = getkey + "," + key;
+                        }
+                        mydata.push({
+                            value: r.nmnap[key],
+                            name: key
+                        });
+                    }
+                    mywenti(getkey, mydata);
+
+                }
+            });
+            console.log(s);
+            return s;
+        }
+
+        function mywenti(getkey, mydata) {
+            console.log("getkey======================"+getkey);  
+            var aaavar = mydata;
+            aaavar.forEach(function (val, index) {
+            	val.name=val.name+" : "+val.value;
+            });
+            console.log(aaavar);
+            var ss = [];
+            ss = getkey.split(",");
+
+            // 监督执纪2
+            jdzjOption2 = {
+            		toolbox: {
+                		feature: {
+                		            //dataView: {show: true, readOnly: false},
+                		            //magicType: {show: true, type: ['line', 'bar']},
+                		            //restore: {show: true},
+                		            saveAsImage: {show: true}
+                		        }
+                		    }, 
+       
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{b}   ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: aaavar
+                },
+                series: [{
+                	name:'		数量',
+                    type: 'pie',
+                    radius: [0, '50%'],
+                    //修改前
+                    label: {
+                        normal: {                       	
+                            show: false,
+                            formatter: '  {b|{b}}  {per|{d}%}  ',
+                            rich: {
+                                a: {
+                                    color: '#999',
+                                    lineHeight: 22,
+                                    align: 'center'
+                                },
+                                hr: {
+                                    borderColor: '#aaa',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                b: {
+                                    fontSize: 16,
+                                    lineHeight: 33
+                                },
+                                per: {
+                                    color: '#eee',
+                                    backgroundColor: '#1E94ED',
+                                    padding: [2, 4],
+                                    borderRadius: 2
+                                }
+                            },
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    //修改后
+                   /*  label: {
+                        normal: {
+                            formatter: '  {b|{b}：}{c}  {per|{d}%}  ',
+                            backgroundColor: '#FFFFFF',
+                            borderColor: '#aaa',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            rich: {
+                                a: {
+                                    color: '#999',
+                                    lineHeight: 22,
+                                    align: 'center'
+                                },
+                                hr: {
+                                    borderColor: '#aaa',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                b: {
+                                    fontSize: 16,
+                                    lineHeight: 33
+                                },
+                                per: {
+                                    color: '#eee',
+                                    backgroundColor: '#1E94ED',
+                                    padding: [2, 4],
+                                    borderRadius: 2
+                                }
+                            }
+                        }
+                    }, */     
+                    data: mydata,
+                }]
+            };
+
+            var jdzjChart2 = echarts.init(document.getElementById('jdzjChart2'), "macarons");
+            jdzjChart2.setOption(jdzjOption2);
+            jdzjChart2.on('click', function (params) {
+            	console.log("结果=============="+params.name);
+            	var endNum=params.name.indexOf(":");
+            	console.log("下标=============="+endNum);
+            	var str= params.name.substring(0,endNum-1);
+            	console.log("结果下标=============="+str);
+           		var c=0;
+            	if(str=="违反组织纪律"){
+            		c=13;
+            	}else if(str=="违反政治纪律"){
+            		c=16;
+            	}else if(str=="违反群众纪律"){
+            		c=55;
+            	}else if(str=="违反工作纪律"){
+            		c=56;
+            	}else if(str=="违反生活纪律"){
+            		c=57;
+            	}else if(str=="违反中央八项规定精神"){
+            		c=58;
+            	}else if(str=="违反廉洁纪律"){
+            		c=59;
+            	}else{
+            		c=1000001789087321;
+            	}
+            	parent.layer.open({
+    				type : 2,
+    				skin : 'layui-layer-molv',
+    				title : "数据详情",
+    				area : [ '1050px', '500px' ],
+    				shadeClose : false,
+    				content : baseURL + "modules/ins/inscluefile2.html?c="+c,
+    				btn : ['关闭'],
+    				btn1 : function(index) {
+    				},
+    				yes : function(index, layero) {
+    					parent.layer.closeAll();
+    				}
+    			});
+            });
+        }
+
+
+
+        // 政治生态1
+        zzstOption1 = {
+        		 dataZoom: [
+        			    {
+        		            type: 'slider',
+        		            xAxisIndex: 0,
+        		            start: 0,             //数据窗口范围的起始百分比,表示30%
+        		            end: 80,  
+        		            filterMode: 'empty'
+        		        },
+        		        {
+        		            type: 'inside',
+        		            xAxisIndex: 0,
+        		            filterMode: 'empty'
+        		        }],
+        		   tooltip : {
+        		        trigger: 'axis',
+        		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+        		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        		        }
+        		    },
+        		toolbox: {
+            		feature: {
+            		            dataView: {show: true, readOnly: false},
+            		            magicType: {show: true, type: ['line', 'bar']},
+            		            restore: {show: true},
+            		            saveAsImage: {show: true}
+            		        }
+            		    },
+            xAxis: {
+                type: 'category',
+                axisLabel: {
+                    interval:0,
+                    rotate:-30
+                 },
+                data: ['xxx', 'xxx', 'xxx', 'xxx', 'xxx', 'xxx', 'xxx']
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [{
+            	name:'	分值',
+                data: [220, 200, 180, 170, 150, 140, 130],
+                type: 'bar',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'inside'
+                    }
+                },
+            }]
+        };
+
+        var zzstChart1 = echarts.init(document.getElementById('zzstChart1'), "macarons");
+        zzstChart1.setOption(zzstOption1);
+
+        function getZzst1Data() {
+            // 政治生态1数据
+            $.ajax({
+                type: "get",
+                url: baseURL + 'ins/insassesscount/getRankAll',
+                data: {
+                    'limit': 99,
+                    'page': 1,
+                    'type': vm.assessType,
+                    'cycleId':vm.cycleId,
+                    'parentId': null
+                },
+                async: false,
+                error: function (request) {
+                    alert("Connection error");
+                },
+                success: function (r) {
+                    //console.log(r.page.list);
+
+                    zzstChart1.setOption({
+                        legend: {
+                            data: r.page.list.map(function (item) {
+                                return item.object_name;
+                            })
+                        },
+                        xAxis: {
+                            data: r.page.list.map(function (item) {
+                                return item.object_name;
+                            })
+                        },
+                        series: [{
+                            data: r.page.list.map(function (item) {
+                                return item.scoreCount;
+                            })
+                        }]
+                    });
+
+                    if (r.page.list != null) {
+                        $("#zzst2Title").html(r.page.list[0].object_name + "政治生态各项指标得分情况");
+                        getZzst2Data(r.page.list[0].object_name);
+                    }
+
+                    zzstChart1.on('click', function (params) {
+                        console.log(params.name);
+                        $("#zzst2Title").html(params.name + "政治生态各项指标得分情况");
+                        getZzst2Data(params.name);
+                    });
+                }
+            });
+        }
+
+        var zzst2RaderAvgData; // 政治生态2雷达均数据
+        // 政治生态2雷达均数据
+        function getZzst2AvgData() {
+            $.ajax({
+                type: "get",
+                url: baseURL + 'ins/insassesscount/getAvgScore',
+                data: {
+                    'type': vm.assessType,
+                    'cycleId':vm.cycleId
+                },
+                async: false,
+                error: function (request) {
+                    alert("Connection error");
+                },
+                success: function (r) {
+                    zzst2RaderAvgData = r.mapBean.map(function (item) {
+                        return item.avg_score;
+                    });
+
+                    zzstChart2.setOption({
+                        radar: {
+                            indicator: r.mapBean.map(function (item) {
+                                return {
+                                    "name": item.name,
+                                    "max": item.threshold
+                                };
+                            })
+                        },
+                        series: [{
+                            data: [{
+                                name: "平均分",
+                                value: r.mapBean.map(function (item) {
+                                    return item.avg_score;
+                                }),
+                                itemStyle: {
+                                    normal: {
+                                        color: '#00c1de'
+                                    }
+                                },
+                            }]
+                        }]
+                    });
+
+                    getZzst1Data(); // 初始化排名	
+                }
+
+            });
+        }
+
+        // 政治生态2数据
+        function getZzst2Data(objectName) {
+            $.ajax({
+                type: "get",
+                url: baseURL + 'ins/insassesscount/getScoreByObjectName',
+                data: {
+                	'type': vm.assessType,
+                	'cycleId':vm.cycleId,
+                    'objectName': objectName
+                },
+                async: false,
+                error: function (request) {
+                    alert("Connection error");
+                },
+                success: function (r) {
+                    zzstChart2.setOption({
+                        series: [{
+                            data: [{
+                                name: "平均分",
+                                value: zzst2RaderAvgData,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#00c1de'
+                                    }
+                                },
+                            }, {
+                                name: "对象得分",
+                                value: r.assessScore.map(function (item) {
+                                    return item.score;
+                                }),
+                                itemStyle: {
+                                    normal: {
+                                        color: '#F9713C'
+                                    }
+                                },
+                            }]
+                        }]
+                    });
+                }
+            });
+        }
+
+        // 政治生态2
+        zzstOption2 = {
+        	tooltip: {},
+            legend: {
+                data: ['平均分', '对象得分'],
+                orient: 'vertical',
+                x: 'right',
+                right: 0,
+                top: 50
+            },
+            radar: {
+                name: {
+                    textStyle: {
+                        color: '#fff',
+                        backgroundColor: '#999',
+                        borderRadius: 3,
+                        padding: [3, 5]
+                    }
+                },
+                indicator: [{
+                        name: '政治生态环境',
+                        max: 30
+                    },
+                    {
+                        name: '政治生态基础',
+                        max: 30
+                    },
+                    {
+                        name: '政治生态保障',
+                        max: 30
+                    },
+                    {
+                        name: '政治生态状况',
+                        max: 30
+                    },
+                    {
+                        name: '政治生态认可',
+                        max: 30
+                    }
+                ],
+                splitArea: {
+                    show: false
+                },
+            },
+            series: [{
+                type: 'radar',
+                lineStyle: {
+                    normal: {
+                        width: 1,
+                        opacity: 0.8
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: function (params) {
+                            return params.value;
+                        }
+                    }
+                },
+                data: [{
+                    value: [18, 14, 20, 10, 19],
+                }],
+                areaStyle: {
+                    normal: {
+                        opacity: 0.5
+                    }
+                }
+            }]
+        };
+
+        var zzstChart2 = echarts.init(document.getElementById('zzstChart2'));
+        zzstChart2.setOption(zzstOption2);
+
+
+        //查询出各派驻机构工作绩效考核情况
+        var kaohe;
+        //定义一个用于装部门的数组
+        var deptName = new Array();
+        //定义一个用于装分数的数组
+        var bscore = new Array();
+        //初始化
+        this.getkaohe();
+
+        function getkaohe() {
+            $.get("../../ins/insindsult/getKaoHe", function (r) {
+                kaohe = r.getKaoHe;
+                console.log(r)
+                kaohe.forEach(function (val, index) {
+                    //循环赋值部门
+                    deptName[index] = val.deptName;
+                    //循环赋值分数
+                    bscore[index] = val.bscore;
+                    //$("#pcjjz").append("<li ><i class='fa fa-circle-o text-red'></i>"+deptName[index]+"</li>");
+                });
+
+                // 工作考核1
+                gzkhOption1 = {
+                		 dataZoom: [
+             			    {
+             		            type: 'slider',
+             		            xAxisIndex: 0,
+             		            start: 0,             //数据窗口范围的起始百分比,表示30%
+             		            end: 80,  
+             		            filterMode: 'empty'
+             		        },
+             		        {
+             		            type: 'inside',
+             		            xAxisIndex: 0,
+             		            filterMode: 'empty'
+             		        }],
+                		   tooltip : {
+                		        trigger: 'axis',
+                		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                		        }
+                		    },
+                	toolbox: {
+                		feature: {
+                		            dataView: {show: true, readOnly: false},
+                		            magicType: {show: true, type: ['line', 'bar']},
+                		            restore: {show: true},
+                		            saveAsImage: {show: true}
+                		        }
+                		    },
+                    xAxis: {
+                        type: 'category',
+                        axisLabel: {
+                            interval:0,
+                            rotate:-30
+                         },
+                        data: deptName
+                    },
+                    yAxis: {
+                        type: 'value',
+                    }, 
+                    series: [
+                    	{
+                    	name:'	分值',
+                    	type: 'bar',
+                        data: bscore,                    
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'inside'
+                            }
+                        },
+                    },
+                    	]
+                };
+
+                var gzkhChart1 = echarts.init(document.getElementById('gzkhChart1'), "macarons");
+                gzkhChart1.setOption(gzkhOption1);
+
+                getkaohe1(deptName[0]);
+                gzkhChart1.on('click', function (params) {
+                    getkaohe1(params.name);
+                });
+            });
+        }
+
+
+        //查询出各派驻机构工作绩效考核情况
+        var kaohe1;
+        //定义一个用于装指标的数组
+        var indicatorProject = new Array();
+        //定义一个用于装分数的数组
+        var bscore1 = new Array();
+        //定义一个用于装部门的数组
+        var deptName1 = new Array();
+        //定义一个用于装平均分
+        var pingjunfen = new Array();
+
+        function getkaohe1(deptName) {
+            console.log(deptName)
+            $.get("../../ins/insindsult/getKaoHe1?deptName=" + deptName, function (r) {
+                kaohe1 = r.map;
+                console.log(r)
+                kaohe1.getKaoHe1.forEach(function (val, index) {
+                    //循环赋值部门
+                    deptName1[index] = val.deptName;
+                    //循环赋值分数
+                    if(isBlank(val.bscore)){
+                    	bscore1[index]=0;
+                    }else{
+                    	bscore1[index] = val.bscore;
+                    }                   
+                    //循环赋值指标
+                    indicatorProject[index] = val.indicatorProject;
+
+                });
+                kaohe1.pingjunfen.forEach(function (val, index) {
+                    //循环赋值平均分
+                	  if(isBlank(val.pingjunfen)){
+                		  pingjunfen[index]=0;
+                      }else{
+                    	  pingjunfen[index] = val.pingjunfen;
+                      }      
+                    //console.log("=========================");
+                    console.log(pingjunfen[index]);
+                    //console.log("========================="); 					  
+                });
+                $("#khqk").text(deptName1[0] + "绩效考核得分情况");
+
+                // 工作考核2
+                gzkhOption2 = {
+                	tooltip: {},
+                    legend: {
+                        data: ['平均分', '机构得分'],
+                        orient: 'vertical',
+                        x: 'right',
+                        right: 0,
+                        top: 50
+                    },
+                    radar: {
+                        name: {
+                            textStyle: {
+                                color: '#fff',
+                                backgroundColor: '#999',
+                                borderRadius: 3,
+                                padding: [3, 5]
+                            }
+                        },
+                        indicator: [{
+                                name: indicatorProject[0],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[1],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[2],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[3],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[4],
+                                max: 30
+                            },
+                        ],
+                        splitArea: {
+                            show: false
+                        },
+                    },
+                    series: [{
+                        type: 'radar',
+                        lineStyle: {
+                            normal: {
+                                width: 1,
+                                opacity: 0.8
+                            }
+                        },
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter: function (params) {
+                                    return params.value;
+                                }
+                            }
+                        },
+                        data: [{
+                            name: "机构得分",
+                            value: bscore1,
+                            itemStyle: {
+                                normal: {
+                                    color: '#F9713C'
+                                }
+                            },
+                        }, {
+                            name: "平均分",
+                            value: pingjunfen,
+                            itemStyle: {
+                                normal: {
+                                    color: '#00c1de'
+                                }
+                            },
+                        }],
+                        //data: [pingjunfen],
+                        itemStyle: {
+                            normal: {
+                                color: '#F9713C'
+                            }
+                        },
+                        areaStyle: {
+                            normal: {
+                                opacity: 0.5
+                            }
+                        }
+                    }]
+                };
+
+
+                var gzkhChart2 = echarts.init(document.getElementById('gzkhChart2'));
+                gzkhChart2.setOption(gzkhOption2);
+
+            });
+        }
+
+
+
+
+        // 考试学习1
+        xxksOption1 = {
+            // 			title: {
+            // 		        text: '各机构思想理论学习平均每人时长排名情况',
+            // 		        left: 'center',
+            // 		        top: 10,
+            // 		        textStyle: {
+            // 		            color: '#8d8484',
+            // 		            fontSize: 14
+            // 		        }
+            // 		    },
+            xAxis: {
+                type: 'category',
+                /*  axisLabel: {
+                 	interval: 0,
+                 	rotate: -30
+                 }, */
+                data: ['九江办', '南昌办', '鹰潭办', '萍乡办', '抚州办', '吉安局', '赣州局']
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [{
+                data: [220, 200, 180, 170, 150, 140, 130],
+                type: 'bar'
+            }]
+        };
+
+        var xxksChart1 = echarts.init(document.getElementById('xxksChart1'), "macarons");
+        xxksChart1.setOption(xxksOption1);
+
+        // 考试学习2
+        xxksOption2 = {
+            // 			title: {
+            // 		        text: '各机构思想理论考试平均分排名情况',
+            // 		        left: 'center',
+            // 		        top: 10,
+            // 		        textStyle: {
+            // 		            color: '#8d8484',
+            // 		            fontSize: 14
+            // 		        }
+            // 		    },
+            xAxis: {
+                type: 'category',
+                /*  axisLabel: {
+                 	interval: 0,
+                 	rotate: -30
+                 }, */
+                data: ['九江办', '南昌办', '鹰潭办', '萍乡办', '抚州办', '吉安局', '赣州局']
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [{
+                data: [220, 200, 180, 170, 150, 140, 130],
+                type: 'bar'
+            }]
+        };
+
+        var xxksChart2 = echarts.init(document.getElementById('xxksChart2'), "macarons");
+        xxksChart2.setOption(xxksOption2);
+
+        this.khpflb();
+
+        //考核评分列表
+        function khpflb() {
+            $.get("../../ins/insindsult/getkaohepf", function (r) {
+                var kaoheList = r.kaohepf;
+                kaoheList.forEach(function (val, index) {
+                    $("#khpflb").append(
+                        "<li class='item'><div class='product-info'><marquee><a href='../../modules/ins/assess2.html?id=" +
+                        val.id + "' class='product-title'>" + val.username + "【" + val.deptName +
+                        "】自评了《" + val.indetatlContent + "》【" + val.indicatorProject +
+                        "】<span class='label label-warning pull-right'></span></a> <span class='product-description'>" +
+                        val.time + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自评分值：" + val.bindesultTscore +
+                        "分 </span></marquee></div></li>");
+                });
+
+            });
+        }
+
+        // 获取政治生态待办事项 
+        function getZzstTaskList() {
+            $.get(baseURL + 'ins/insassessresult/list', {
+                'limit': 3,
+                'page': 1,
+                'status': 1
+            }, function (r) {
+                //console.log(r.page.list);
+                $.each(r.page.list, function (i, v) {
+                    $("#zzstTaskList").append(
+                        '<li class="item">' +
+                        '<div class="product-info">' +
+                        '<marquee><a href="modules/ins/ins_assess_result.html?status=1&id=' + v.id +
+                        '" class="product-title">' + v.createUser + ' 提交关于【' +
+                        (v.type == 0 ? v.supervisePerson.departName : v.superviseUnit.depaetName) +
+                        '】' +
+                        (v.type == 0 ? v.supervisePerson.name : v.superviseUnit.name) + '【' + v.assess
+                        .name + '】的评价内容' +
+                        '<span class="label label-warning pull-right"></span></a>' +
+                        '<span class="product-description">' +
+                        v.reportTime + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：' + v.remark +
+                        '</span></marquee>' +
+                        '</div>' +
+                        '</li>'
+                    );
+                });
+            });
+        }
+
+        // 获取人员组成
+        function getDeptComponent() {
+            $.get(baseURL + 'sys/supervisepersonage/getDeptComponent', function (r) {
+                $("#unitCount").html(r.mapBean.unit_count);
+                $("#personCount").html(r.mapBean.person_count);
+                $("#chujiCount").html(r.mapBean.chuji_count);
+                $("#kejiCount").html(r.mapBean.keji_count);
+            });
+        }
+
+        $(function () {       	
+        	
+            getDeptComponent(); // 人员组成
+            getZzst2AvgData(); // 政治生态1data
+            getZzstTaskList(); // 待办事项 
+        });
+        
+        laydate.render({
+			elem : '#khBegin',
+			theme : '#3C8DBC',
+			done : function(value) {
+				$("#khBegin").val(value);				
+			}
+		});
+        laydate.render({
+			elem : '#khEnd',
+			theme : '#3C8DBC',
+			done : function(value) {
+				$("#khEnd").val(value);				
+			}
+		});
+        function queryKH(){
+        	var begin=$("#khBegin").val();
+        	var end=$("#khEnd").val();
+        	if(isBlank(begin)||isBlank(end)){
+        		this.getkaohe();       		
+        	}else{       		
+        		 $.get("../../ins/insindsult/getKaoHeByTime?begin="+begin+"&end="+end, function (r) {
+                     kaohe = r.getKaoHe;
+                     console.log(r)
+                     kaohe.forEach(function (val, index) {
+                         //循环赋值部门
+                         deptName[index] = val.deptName;
+                         //循环赋值分数
+                         bscore[index] = val.bscore;                    
+                     });
+
+                     // 工作考核1
+                     gzkhOption1 = {
+                     		   tooltip : {
+                     		        trigger: 'axis',
+                     		        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                     		            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                     		        }
+                     		    },
+                     	toolbox: {
+                     		feature: {
+                     		            dataView: {show: true, readOnly: false},
+                     		            magicType: {show: true, type: ['line', 'bar']},
+                     		            restore: {show: true},
+                     		            saveAsImage: {show: true}
+                     		        }
+                     		    },
+                         xAxis: {
+                             type: 'category',
+                             axisLabel: {
+                                 interval:0,
+                                 rotate:-30
+                              },
+                             data: deptName
+                         },
+                         yAxis: {
+                             type: 'value',
+                         }, 
+                         series: [
+                         	{
+                         	name:'	分值',
+                         	type: 'bar',
+                             data: bscore,                    
+                             label: {
+                                 normal: {
+                                     show: true,
+                                     position: 'inside'
+                                 }
+                             },
+                         },
+                         	]
+                     };
+                     var gzkhChart1 = echarts.init(document.getElementById('gzkhChart1'), "macarons");
+                     gzkhChart1.setOption(gzkhOption1);
+
+                     queryKH1(deptName[0],begin,end);
+                     gzkhChart1.on('click', function (params) {
+                    	 queryKH1(params.name,begin,end);
+                     });
+                 });
+        	}      	
+        }
+        function queryKH1(deptName,begin,end) {
+            $.get("../../ins/insindsult/getKaoHe1ByTime?deptName=" + deptName+"&begin="+begin+"&end="+end, function (r) {
+                kaohe1 = r.map;
+                console.log(r)
+                kaohe1.getKaoHe1.forEach(function (val, index) {
+                    //循环赋值部门
+                    deptName1[index] = val.deptName;
+                    //循环赋值分数
+                    if(isBlank(val.bscore)){
+                    	bscore1[index]=0;
+                    }else{
+                    	bscore1[index] = val.bscore;
+                    }                   
+                    //循环赋值指标
+                    indicatorProject[index] = val.indicatorProject;
+
+                });
+                kaohe1.pingjunfen.forEach(function (val, index) {
+                    //循环赋值平均分
+                	  if(isBlank(val.pingjunfen)){
+                		  pingjunfen[index]=0;
+                      }else{
+                    	  pingjunfen[index] = val.pingjunfen;
+                      }      
+                    //console.log("=========================");
+                    console.log(pingjunfen[index]);
+                    //console.log("========================="); 					  
+                });
+                $("#khqk").text(deptName1[0] + "绩效考核得分情况");
+
+                // 工作考核2
+                gzkhOption2 = {
+                	tooltip: {},
+                    legend: {
+                        data: ['平均分', '机构得分'],
+                        orient: 'vertical',
+                        x: 'right',
+                        right: 0,
+                        top: 50
+                    },
+                    radar: {
+                        name: {
+                            textStyle: {
+                                color: '#fff',
+                                backgroundColor: '#999',
+                                borderRadius: 3,
+                                padding: [3, 5]
+                            }
+                        },
+                        indicator: [{
+                                name: indicatorProject[0],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[1],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[2],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[3],
+                                max: 30
+                            },
+                            {
+                                name: indicatorProject[4],
+                                max: 30
+                            },
+                        ],
+                        splitArea: {
+                            show: false
+                        },
+                    },
+                    series: [{
+                        type: 'radar',
+                        lineStyle: {
+                            normal: {
+                                width: 1,
+                                opacity: 0.8
+                            }
+                        },
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter: function (params) {
+                                    return params.value;
+                                }
+                            }
+                        },
+                        data: [{
+                            name: "机构得分",
+                            value: bscore1,
+                            itemStyle: {
+                                normal: {
+                                    color: '#F9713C'
+                                }
+                            },
+                        }, {
+                            name: "平均分",
+                            value: pingjunfen,
+                            itemStyle: {
+                                normal: {
+                                    color: '#00c1de'
+                                }
+                            },
+                        }],
+                        //data: [pingjunfen],
+                        itemStyle: {
+                            normal: {
+                                color: '#F9713C'
+                            }
+                        },
+                        areaStyle: {
+                            normal: {
+                                opacity: 0.5
+                            }
+                        }
+                    }]
+                };
+
+
+                var gzkhChart2 = echarts.init(document.getElementById('gzkhChart2'));
+                gzkhChart2.setOption(gzkhOption2);
+
+            });
+        }
+    </script>
+</body>
+
+</html>

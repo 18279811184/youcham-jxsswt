@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<title>通讯录</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div id="listbox">
+	<div id="letter" ></div>
+	<div id="ulist" class="sort_box">
+		
+	</div>
+	<div class="initials">
+		<ul>
+			<li><img src="image/068.png"></li>
+		</ul>
+	</div>
+	</div>
+	<script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+	<script>
+		$(function () {
+			$.ajax({
+				type: "GET",
+				url: "lu.json",
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				async:false,
+				success: function (res) {
+					for(var i=0;i<res.length;i++){
+							$("#ulist").append('<div class="sort_list">'
+									+'<div class="num_logo">'
+									+'<img src="image/'+res[i].img+'" alt="">'
+									+'</div>'
+									+'<div class="num_name">'+res[i].name+'</div>'
+									+'</div>')
+						}
+
+				}
+			});
+		})
+	</script>
+	<script type="text/javascript" src="js/jquery.charfirst.pinyin.js"></script>
+	<script type="text/javascript" src="js/sort.js"></script>
+</body>
+</html>

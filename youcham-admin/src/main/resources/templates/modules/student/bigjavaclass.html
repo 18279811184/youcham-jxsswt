@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("student:bigjavaclass:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("student:bigjavaclass:update")>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("student:bigjavaclass:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">课程名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.className" name="className" placeholder="课程名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">课程性质/属性</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.classNature" name="classNature" placeholder="课程性质/属性"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">课程学时</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.classTime" name="classTime" placeholder="课程学时"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">授课/在线学时</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.classOnlieTime" name="classOnlieTime" placeholder="授课/在线学时"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">线下实验学时</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.classOutlineTime" name="classOutlineTime" placeholder="线下实验学时"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">属于某个学期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.classInsemester" name="classInsemester" placeholder="属于某个学期"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">删除</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.beDelete" name="beDelete" placeholder="删除"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">学分</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaClass.classCredit" name="classCredit" placeholder="学分"/>
+                        </div>
+                    </div>
+							        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/student/bigjavaclass.js?_${.now?long}"></script>
+</body>
+</html>

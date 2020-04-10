@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sys.dao.SysMenuDao">
+
+	<select id="queryListParentId" resultType="io.youcham.modules.sys.entity.SysMenuEntity">
+		select * from sys_menu where parent_id = #{parentId} order by order_num asc 
+	</select>
+	
+	<select id="queryNotButtonList" resultType="io.youcham.modules.sys.entity.SysMenuEntity">
+		select * from sys_menu where type != 2 order by order_num asc 
+	</select>
+	
+	<select id="getPermison" resultType="io.youcham.modules.sys.entity.SysMenuEntity">
+		SELECT a.* from sys_menu a,sys_role_menu b,sys_role c
+		where a.menu_id = b.menu_id and b.role_id = c.role_id
+		and c.role_id in
+		<foreach collection="roleIdList" index="index" item="item" open="(" separator="," close=")">  
+             #{item} 
+        </foreach> 
+        and a.name = #{menuName}
+	</select>
+	
+</mapper>

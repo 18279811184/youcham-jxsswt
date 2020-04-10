@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>九江市以“直航”促“三同”扶持政策审核系统</title>
+    <#include "/header.html">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- <link rel="icon" type="image/x-icon" href="${request.contextPath}/statics/favicon.ico"> -->
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/login.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/register.css">
+
+    <style>
+
+
+    </style>
+</head>
+
+<body class="hold-transition login-page lg_bg">
+<div class="" id="rrapp" v-cloak style="margin-top: 2%;">
+    <form id="ajax_form" >
+        <div class="step1">
+            <div class="login-box-body-1">
+                <p class="login-box-msg" style="margin-top: 20px">用户注册</p>
+                <div v-if="error" class="alert alert-danger alert-dismissible">
+                    <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-triangle"></i> {{errorMsg}}</h4>
+                </div>
+                <div class="form-text-div">
+                    <div style="position: absolute;margin-left: 75px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-user-circle"></i>
+                    </div>
+                    <label>用户账号</label>
+                    <input type="text" class="form-text" required style="margin:0px 15px" name="username"
+                           v-model="user.username" @keyup.enter="login" placeholder="用户账号">
+                </div>
+                <div class="form-text-div ">
+                    <div style="position: absolute;margin-left: 77px;margin-top: 5px;font-size: 18px;">
+                        <i class="fa fa-lock"></i>
+                    </div>
+                    <label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                    <input type="password" class="form-text" style="margin:0px 15px" id="password"
+                           name="password" v-model="user.password" @keyup.enter="login" placeholder="密码">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-text-div">
+                    <div style="position: absolute;margin-left: 77px;margin-top: 5px;font-size: 18px;">
+                        <i class="fa fa-lock"></i>
+                    </div>
+                    <label>确认密码</label>
+                    <input type="password" class="form-text" style="margin:0px 15px" id="password1"
+                           name="password1" v-model="user.password1" @keyup.enter="login" placeholder="确认密码">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 75px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-at"></i>
+                    </div>
+                    <label>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
+                    <input type="text" class="form-text" required name="email" style="margin:0px 15px"
+                           v-model="user.email" @keyup.enter="login" placeholder="邮箱">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 79px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-building"></i>
+                    </div>
+                    <label>企业名称</label>
+                    <input type="text" class="form-text" required name="enterpriseName"
+                           style="margin:0px 15px" v-model="user.enterpriseName" @keyup.enter="login"
+                           placeholder="企业名称">
+                    <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
+                </div>
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 79px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-building"></i>
+                    </div>
+                    <label>企业简称</label>
+                    <input type="text" class="form-text" required name="abbreviation"
+                           style="margin:0px 15px" v-model="user.abbreviation" @keyup.enter="login"
+                           placeholder="企业简称">
+                    <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
+                </div>
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 75px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-user-plus"></i>
+                    </div>
+                    <label>&nbsp;联&nbsp;系&nbsp;人&nbsp;</label>
+                    <input type="text" class="form-text" required name="legalPerson" style="margin:0px 15px"
+                           v-model="user.legalPerson" @keyup.enter="login" placeholder="联系人">
+                    <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
+                </div>
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 77px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-id-card"></i>
+                    </div>
+                    <label>法人证件</label>
+                    <select v-select2 class="form-text" name="mainType"
+                            style="height: 35px;margin:0px 15px" v-model="user.mainType">
+                        <option value="" selected>请选择法人证件类型</option>
+                        <option value="01">身份证</option>
+                        <option value="02">护照</option>
+                        <option value="03">台湾同胞来往内地通行证</option>
+                        <option value="04">港澳居民来往内地通行证</option>
+                        <option value="05">外国人居留证</option>
+                    </select>
+                </div>
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 79px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                    <label>联系电话</label>
+                    <input type="text" class="form-text" required name="enterpriseTel" style="margin:0px 15px"
+                           v-model="user.enterpriseTel" @keyup.enter="login" placeholder="联系电话">
+                    <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                </div>
+                <div class="form-text-div ">
+                    <div style="position: absolute;margin-left: 87px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-id-badge"></i>
+                    </div>
+                    <label>法人证件号</label>
+                    <input type="text" class="form-text" name="mainCard" style="margin:0px 15px"
+                           v-model="user.mainCard" @keyup.enter="login" placeholder="法人证件号">
+                    <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
+                </div>
+                   <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 125px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-code-fork"></i>
+                    </div>
+                    <label>常用联系人</label>
+                    <input type="text" class="form-text" required name="creditCode" style="margin:0px 15px;"
+                           v-model="user.topContacts" @keyup.enter="login" placeholder="常用联系人">
+                    <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
+                </div>
+                <div class="form-text-div  ">
+                    <div style="position: absolute;margin-left: 125px;margin-top: 8px;font-size: 15px;">
+                        <i class="fa fa-code-fork"></i>
+                    </div>
+                    <label>统一社会信用代码</label>
+                    <input type="text" class="form-text" required name="creditCode" style="margin:0px 15px;width: 250px;"
+                           v-model="user.creditCode" @keyup.enter="login" placeholder="统一社会信用代码">
+                    <span class="glyphicon glyphicon-th-list form-control-feedback"></span>
+                </div>
+                
+                <div class="form-text-div  ">
+                    <label style="margin-right:20px">用户类型</label>
+                    <label class="check-list" v-for="role in userTypeList" style="margin-right:10px">
+						<input type="checkbox" :value="role.id" style="margin-right:5px"  name="userType" v-model="userTypeArr"><span>{{role.name}}</span>
+					</label>
+                    <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                </div>
+                
+               <!--  <div class="form-text-div">
+                    <div style="position: absolute;margin-left: 74px;margin-top: 5px;font-size: 17px;">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <label>用户类型</label>
+                    <div style="padding: 0px 2px 0 0px;">
+							<label class="check-list" v-for="role in userTypeList">
+								<input type="checkbox" :value="role.id" style="margin-right:4px"  name="userType" v-model="user.userType"><span>{{role.name}}</span>
+							</label>
+					</div>
+                </div> -->
+                <div >
+                	<button type="button" class="done-register" @click="register" style="">完成</button>
+                    <a href="login.html" style='color:red;font-size:14px;margin-left:50px '>返回登录</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="footer">
+
+    <!-- 	 <br>技术支持：<a href="http://www.youcham.com/" target="_blank" ><font style="font-color:#FFF">言臣科技</font></a> -->
+</div>
+
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+<script src="${request.contextPath}/statics/libs/jquery.validate.min.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/libs/jquery.slimscroll.min.js"></script>
+<script src="${request.contextPath}/statics/libs/fastclick.min.js"></script>
+<script src="${request.contextPath}/statics/libs/app.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/cipher-core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/mode-ecb.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/tripledes.js" charset="utf-8"></script>
+<script type="text/javascript">
+    function clickurl(getid, getname) {
+        var url = "modules/loginindex/informdiscipline.html?columnid=" + getid + "&content=" + escape(getname) + "";
+        window.location.href = url;
+        if (getid == "1000001778346481") {
+            var url = "modules/loginindex/informorganization.html?columnid=" + getid + "";
+            window.location.href = url;
+        }
+    }
+
+</script>
+
+<script type="text/javascript">
+    //加密的私钥
+    var key = '12345678';//自定义
+
+    // DES加密
+    function encryptByDES(message) {//传入加密的内容
+        //把私钥转换成16进制的字符串
+        var keyHex = CryptoJS.enc.Utf8.parse(key);
+        //模式为ECB padding为Pkcs7
+        var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7
+        });
+        //加密出来是一个16进制的字符串
+        return encrypted.ciphertext.toString();
+    }
+
+
+
+
+    var token;
+    var vm = new Vue({
+        el: '#rrapp',
+        data: {
+            userTypeArr:[],
+            user: {
+                username: '',
+                userType: '',
+                userCardType: '',
+                password: '',
+                password1: '',
+                email: '',
+                mobile: '',
+                userCard: '',
+                customsCode: '',
+                creditCode: '',
+                cmpCode: '',
+                enterpriseName: '',
+                mainCard: '',
+                enterpriseTel: '',
+                legalPerson: '',
+                mainType: ''
+            },
+            captcha: '',
+            userTypeList:[
+            	{name:'班轮经营公司',id:1},
+            	{name:'拖车运输公司',id:2},
+            	{name:'多式联运公司',id:3}
+            ],
+            error: false,
+            errorMsg: '',
+            src: 'captcha.jpg'
+        },
+        beforeCreate: function () {
+            if (self != top) {
+                top.location.href = self.location.href;
+            }
+        },
+        methods: {
+            refreshCode: function () {
+                this.src = "captcha.jpg?t=" + $.now();
+            },
+
+            register: function () {
+                layer.load();
+                // 进行校验
+                if(!$("#ajax_form").valid()){
+                    layer.closeAll("loading");
+                    return;
+                }
+
+
+				if(vm.userTypeArr.length<1){
+					alert("用户类型请至少勾选一项！！！");
+				}else{
+                    var str=vm.userTypeArr.join(",");
+                    vm.user.userType = str;
+
+                    vm.user.password=encryptByDES(vm.user.password);
+
+					$.ajax({
+	                    type: "POST",
+	                    url: "sys/user/register",
+	                    contentType: "application/json",
+	                    data: JSON.stringify(vm.user),
+	                    success: function (r) {
+                            layer.closeAll("loading");
+	                        if (r.code === 0) {
+	                            alert('操作成功', function () {
+	                                layer.closeAll();
+	                                // setTimeout(window.location.reload(),2000);
+	                                // window.location.reload();
+	                                window.location.href="login.html";
+	                            });
+	                        } else {
+	                            alert(r.msg);
+	                            // setTimeout(window.location.reload(),2000);
+	                            // window.location.reload();
+	                        }
+	                    }
+	                });
+				}	
+            }
+        }, created: function () {
+
+        }
+    });
+    $(function () {
+        //  默认提示语
+        jQuery.extend(jQuery.validator.messages, {
+            required: "请填写此字段",
+            remote: "请修正该字段"
+        });
+        //自定义手机号验证
+        jQuery.validator.addMethod("isPhoneNum", function (value, element) {
+            var length = value.length;
+            var mobile = /^1[3|5|8]{1}[0-9]{9}$/;
+            return this.optional(element) || (length === 11 && mobile.test(value));
+        }, "请正确填写您的手机号码");
+        jQuery.validator.addMethod("isMail", function (value, element) {
+            var mail = /^[a-zA-Z0-9._%-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,4}$/;
+            return this.optional(element) || (mail.test(value));
+        }, "邮箱格式不对");
+        jQuery.validator.addMethod("isPassword", function (value, element) {
+            /* var password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[1-9]).{6,}/; */
+            var password = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[1-9])(?=.*[\W]).{6,}$/;
+            return this.optional(element) || (password.test(value));
+        }, "密码须包含大小写字母、数字、符号");
+        //    第一部分
+        $("#ajax_form").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    isPassword : true
+                },
+                password1: {
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#password"
+                },
+                email: {
+                    required: true,
+                    isMail: true
+                }
+                
+            },
+            messages: {
+                username: {
+                    required: "请输入用户账号"
+                },
+                password: {
+                    required: "请输入密码",
+                    minlength: "密码长度不能小于 6 个字母"
+                },
+                password1: {
+                    required: "确认密码是必填的",
+                    minlength: "密码长度不能小于 6 个字母",
+                    equalTo: "两次密码输入不一致"
+                }
+            },
+
+            //重写showErrors
+            showErrors: function (errorMap, errorList) {
+                var msg = "";
+                $.each(errorList, function (i, v) {
+                    //在此处用了layer的方法,显示效果更美观
+                    // console.log(v.element);
+                    layer.tips(v.message, v.element, {
+                        tips: [1, '#f34239'],
+                        time: 1500,
+                        tipsMore: true
+                    });
+                });
+            },
+            //失去焦点时验证
+            onfocusout: function (element) {
+                $(element).valid();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

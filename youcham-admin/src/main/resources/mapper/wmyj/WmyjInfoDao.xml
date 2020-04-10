@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.wmyj.dao.WmyjInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.wmyj.entity.WmyjInfoEntity" id="wmyjInfoMap">
+        <result property="createId" column="CREATE_ID"/>
+        <result property="createName" column="CREATE_NAME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateId" column="UPDATE_ID"/>
+        <result property="updateName" column="UPDATE_NAME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="version" column="VERSION"/>
+        <result property="beDelete" column="BE_DELETE"/>
+        <result property="id" column="ID"/>
+        <result property="userid" column="USERID"/>
+        <result property="enterpriseCode" column="ENTERPRISE_CODE"/>
+        <result property="enterpriseName" column="ENTERPRISE_NAME"/>
+        <result property="unitCode" column="UNIT_CODE"/>
+        <result property="dateIn" column="DATE_IN"/>
+        <result property="monthAmount" column="MONTH_AMOUNT"/>
+        <result property="yearAmount" column="YEAR_AMOUNT"/>
+        <result property="newtelAmount" column="NEWTEL_AMOUNT"/>
+        <result property="elecAmount" column="ELEC_AMOUNT"/>
+        <result property="farmAmount" column="FARM_AMOUNT"/>
+        <result property="metalAmount" column="METAL_AMOUNT"/>
+        <result property="weaveAmount" column="WEAVE_AMOUNT"/>
+        <result property="lightinduAmount" column="LIGHTINDU_AMOUNT"/>
+        <result property="steelAmount" column="STEEL_AMOUNT"/>
+        <result property="medicineAmount" column="MEDICINE_AMOUNT"/>
+        <result property="materialsAmount" column="MATERIALS_AMOUNT"/>
+        <result property="otherAmount" column="OTHER_AMOUNT"/>
+        <result property="orderHigh" column="ORDER_HIGH"/>
+        <result property="orderMid" column="ORDER_MID"/>
+        <result property="orderLow" column="ORDER_LOW"/>
+        <result property="priceHigh" column="PRICE_HIGH"/>
+        <result property="priceMid" column="PRICE_MID"/>
+        <result property="priceLow" column="PRICE_LOW"/>
+        <result property="showFlag" column="SHOW_FLAG"/>
+        <result property="statisFlag" column="STATIS_FLAG"/>
+        <result property="statisUserid" column="STATIS_USERID"/>
+        <result property="remark" column="REMARK"/>
+        <result property="orderFlag" column="ORDER_FLAG"/>
+        <result property="priceFlag" column="PRICE_FLAG"/>
+        <result property="questions" column="QUESTIONS"/>
+        <result property="suggest" column="SUGGEST"/>
+        <result property="contact" column="CONTACT"/>
+        <result property="telephone" column="TELEPHONE"/>
+        <result property="cityCode" column="CITY_CODE"/>
+        <result property="areaCode" column="AREA_CODE"/>
+    </resultMap>
+
+
+
+    <!-- 汇总数据 全省-全省合计-->
+    <select id="countDataQSHJ" parameterType="java.util.Map"  resultType="map">
+select sum(month_amount) as month_amount, sum(year_amount) as YEAR_AMOUNT,sum(newtel_amount) as NEWTEL_AMOUNT,sum(elec_amount) as ELEC_AMOUNT,
+sum(FARM_AMOUNT) as FARM_AMOUNT,sum(METAL_AMOUNT) as METAL_AMOUNT,sum(WEAVE_AMOUNT) as WEAVE_AMOUNT,sum(LIGHTINDU_AMOUNT) as LIGHTINDU_AMOUNT,
+sum(STEEL_AMOUNT) as STEEL_AMOUNT,sum(MEDICINE_AMOUNT) as MEDICINE_AMOUNT,sum(MATERIALS_AMOUNT) as MATERIALS_AMOUNT,sum(OTHER_AMOUNT) as OTHER_AMOUNT,
+'全省合计' as CITY_AREA,
+COUNT(case when ORDER_FLAG =1 then 1 else null end) as ORDER_HIGH,
+COUNT(case when ORDER_FLAG =0 then 1 else null end) as ORDER_MID,
+COUNT(case when ORDER_FLAG =-1 then 1 else null end) as ORDER_LOW,
+COUNT(case when price_FLAG =1 then 1 else null end) as PRICE_HIGH,
+COUNT(case when price_FLAG =0 then 1 else null end) as PRICE_MID,
+COUNT(case when price_FLAG =-1 then 1 else null end) as PRICE_LOW
+from WMYJ_INFO
+where BE_DELETE = 0 and to_char(DATE_IN,'yyyy-MM') = #{queryDate} and USERID like #{userid}
+union
+   select sum(month_amount) as month_amount, sum(year_amount) as YEAR_AMOUNT,sum(newtel_amount) as NEWTEL_AMOUNT,sum(elec_amount) as ELEC_AMOUNT,
+sum(FARM_AMOUNT) as FARM_AMOUNT,sum(METAL_AMOUNT) as METAL_AMOUNT,sum(WEAVE_AMOUNT) as WEAVE_AMOUNT,sum(LIGHTINDU_AMOUNT) as LIGHTINDU_AMOUNT,
+sum(STEEL_AMOUNT) as STEEL_AMOUNT,sum(MEDICINE_AMOUNT) as MEDICINE_AMOUNT,sum(MATERIALS_AMOUNT) as MATERIALS_AMOUNT,sum(OTHER_AMOUNT) as OTHER_AMOUNT,
+CITY_CODE as CITY_AREA,
+COUNT(case when ORDER_FLAG =1 then 1 else null end) as ORDER_HIGH,
+COUNT(case when ORDER_FLAG =0 then 1 else null end) as ORDER_MID,
+COUNT(case when ORDER_FLAG =-1 then 1 else null end) as ORDER_LOW,
+COUNT(case when price_FLAG =1 then 1 else null end) as PRICE_HIGH,
+COUNT(case when price_FLAG =0 then 1 else null end) as PRICE_MID,
+COUNT(case when price_FLAG =-1 then 1 else null end) as PRICE_LOW
+from WMYJ_INFO
+where BE_DELETE = 0 and to_char(DATE_IN,'yyyy-MM') = #{queryDate} and USERID like #{userid} GROUP BY (CITY_CODE)  ORDER BY MONTH_AMOUNT DESC
+
+
+    </select>
+    <!-- 汇总数据 市级用户-市级用户汇总-->
+    <select id="countDataSJHZ" parameterType="java.util.Map"  resultType="map">
+select sum(month_amount) as month_amount, sum(year_amount) as YEAR_AMOUNT,sum(newtel_amount) as NEWTEL_AMOUNT,sum(elec_amount) as ELEC_AMOUNT,
+sum(FARM_AMOUNT) as FARM_AMOUNT,sum(METAL_AMOUNT) as METAL_AMOUNT,sum(WEAVE_AMOUNT) as WEAVE_AMOUNT,sum(LIGHTINDU_AMOUNT) as LIGHTINDU_AMOUNT,
+sum(STEEL_AMOUNT) as STEEL_AMOUNT,sum(MEDICINE_AMOUNT) as MEDICINE_AMOUNT,sum(MATERIALS_AMOUNT) as MATERIALS_AMOUNT,sum(OTHER_AMOUNT) as OTHER_AMOUNT,
+#{CITY_AREA} as CITY_AREA,
+COUNT(case when ORDER_FLAG =1 then 1 else null end) as ORDER_HIGH,
+COUNT(case when ORDER_FLAG =0 then 1 else null end) as ORDER_MID,
+COUNT(case when ORDER_FLAG =-1 then 1 else null end) as ORDER_LOW,
+COUNT(case when price_FLAG =1 then 1 else null end) as PRICE_HIGH,
+COUNT(case when price_FLAG =0 then 1 else null end) as PRICE_MID,
+COUNT(case when price_FLAG =-1 then 1 else null end) as PRICE_LOW
+from WMYJ_INFO
+where  BE_DELETE = 0 and to_char(DATE_IN,'yyyy-MM') = #{queryDate} and USERID like #{userid}
+union
+select sum(month_amount) as month_amount, sum(year_amount) as YEAR_AMOUNT,sum(newtel_amount) as NEWTEL_AMOUNT,sum(elec_amount) as ELEC_AMOUNT,
+sum(FARM_AMOUNT) as FARM_AMOUNT,sum(METAL_AMOUNT) as METAL_AMOUNT,sum(WEAVE_AMOUNT) as WEAVE_AMOUNT,sum(LIGHTINDU_AMOUNT) as LIGHTINDU_AMOUNT,
+sum(STEEL_AMOUNT) as STEEL_AMOUNT,sum(MEDICINE_AMOUNT) as MEDICINE_AMOUNT,sum(MATERIALS_AMOUNT) as MATERIALS_AMOUNT,sum(OTHER_AMOUNT) as OTHER_AMOUNT,
+AREA_CODE as CITY_AREA,
+COUNT(case when ORDER_FLAG =1 then 1 else null end) as ORDER_HIGH,
+COUNT(case when ORDER_FLAG =0 then 1 else null end) as ORDER_MID,
+COUNT(case when ORDER_FLAG =-1 then 1 else null end) as ORDER_LOW,
+COUNT(case when price_FLAG =1 then 1 else null end) as PRICE_HIGH,
+COUNT(case when price_FLAG =0 then 1 else null end) as PRICE_MID,
+COUNT(case when price_FLAG =-1 then 1 else null end) as PRICE_LOW
+from WMYJ_INFO
+where  BE_DELETE = 0 and to_char(DATE_IN,'yyyy-MM') = #{queryDate} and USERID like #{userid} GROUP BY (AREA_CODE) ORDER BY MONTH_AMOUNT DESC
+
+    </select>
+
+
+    <!-- 汇总数据 县级用户-县级用户汇总-->
+    <select id="countDataXJHZ" parameterType="java.util.Map"  resultType="map">
+select sum(month_amount) as month_amount, sum(year_amount) as YEAR_AMOUNT,sum(newtel_amount) as NEWTEL_AMOUNT,sum(elec_amount) as ELEC_AMOUNT,
+sum(FARM_AMOUNT) as FARM_AMOUNT,sum(METAL_AMOUNT) as METAL_AMOUNT,sum(WEAVE_AMOUNT) as WEAVE_AMOUNT,sum(LIGHTINDU_AMOUNT) as LIGHTINDU_AMOUNT,
+sum(STEEL_AMOUNT) as STEEL_AMOUNT,sum(MEDICINE_AMOUNT) as MEDICINE_AMOUNT,sum(MATERIALS_AMOUNT) as MATERIALS_AMOUNT,sum(OTHER_AMOUNT) as OTHER_AMOUNT,
+#{CITY_AREA} as CITY_AREA,
+COUNT(case when ORDER_FLAG =1 then 1 else null end) as ORDER_HIGH,
+COUNT(case when ORDER_FLAG =0 then 1 else null end) as ORDER_MID,
+COUNT(case when ORDER_FLAG =-1 then 1 else null end) as ORDER_LOW,
+COUNT(case when price_FLAG =1 then 1 else null end) as PRICE_HIGH,
+COUNT(case when price_FLAG =0 then 1 else null end) as PRICE_MID,
+COUNT(case when price_FLAG =-1 then 1 else null end) as PRICE_LOW
+from WMYJ_INFO
+where BE_DELETE = 0 and to_char(DATE_IN,'yyyy-MM') =  #{queryDate}  and USERID = #{userid}
+    </select>
+
+</mapper>

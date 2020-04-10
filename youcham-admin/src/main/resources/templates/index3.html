@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <title>江西疫情防控“三保”物流信息云平台</title>
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="${request.contextPath}/statics/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
+  <link rel="stylesheet" href="${request.contextPath}/statics/adminlte3/css/adminlte.min.css">
+
+  <style>
+
+    .content-header {
+      position: relative;
+      padding: 0 0 3px 15px;
+    }
+
+    .content-header>.breadcrumb {
+      position: relative;
+      top: 0;
+      right: 0;
+      float: none;
+      margin-top: 0px;
+      background: #fff;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+      padding: 5px 5px;
+      border-radius: 2px;
+      padding-left: 15px;
+    }
+
+    .content{
+      margin-left: 7px;
+      margin-top: 7px;
+    }
+
+    #menuTree .nav-link{
+      padding: 10px 16px;
+    }
+
+    .nav-sidebar .nav-link>.right, .nav-sidebar .nav-link>p>.right{
+      top:.9rem
+    }
+  </style>
+
+  <!-- 加载动画 -->
+  <style>
+    .chromeframe {
+      margin: 0.2em 0;
+      background: #ccc;
+      color: #000;
+      padding: 0.2em 0;}
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index:999999;}
+    #loader {
+      display: block;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      width: 150px;
+      height: 150px;
+      margin: -75px 0 0 -75px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      /* COLOR 1 */
+      border-top-color: #FFF;
+      -webkit-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -moz-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 2s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+      z-index:1001;}
+    #loader:before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      /* COLOR 2 */
+      border-top-color: #FFF;
+      -webkit-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -moz-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 3s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */}
+    #loader:after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: #FFF;
+      /* COLOR 3 */
+      -moz-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -o-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -ms-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      -webkit-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 1.5s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */}
+
+
+    @-webkit-keyframes spin {
+      0%{
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+      }100%{
+         -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+         -ms-transform: rotate(360deg);  /* IE 9 */
+         transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */}
+    }
+
+    @keyframes spin {
+      0%{
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+      }100%{
+         -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+         -ms-transform: rotate(360deg);  /* IE 9 */
+         transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */}
+    }
+
+
+    #loader-wrapper .loader-section {
+      position: fixed;
+      top: 0;
+      width: 51%;
+      height: 100%;
+      background: #007BFF; /* Old browsers */
+      z-index: 1000;
+      -webkit-transform: translateX(0);  /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(0);  /* IE 9 */
+      transform: translateX(0);  /* Firefox 16+, IE 10+, Opera */}
+    #loader-wrapper .loader-section.section-left {left: 0;}
+    #loader-wrapper .loader-section.section-right {right: 0;}
+
+    /* Loaded */
+    .loaded #loader-wrapper .loader-section.section-left {
+      -webkit-transform: translateX(-100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(-100%);  /* IE 9 */
+      transform: translateX(-100%);  /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);}
+    .loaded #loader-wrapper .loader-section.section-right {
+      -webkit-transform: translateX(100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateX(100%);  /* IE 9 */
+      transform: translateX(100%);  /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);}
+    .loaded #loader {
+      opacity: 0;
+      -webkit-transition: all 0.3s ease-out;
+      transition: all 0.3s ease-out;}
+    .loaded #loader-wrapper {
+      visibility: hidden;
+      -webkit-transform: translateY(-100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+      -ms-transform: translateY(-100%);  /* IE 9 */
+      transform: translateY(-100%);  /* Firefox 16+, IE 10+, Opera */
+      -webkit-transition: all 0.3s 1s ease-out;
+      transition: all 0.3s 1s ease-out;}
+    /* JavaScript Turned Off */
+    .no-js #loader-wrapper {display: none;}
+    .no-js h1 {color: #222222;}
+    #loader-wrapper .load_title {
+      font-family:'Open Sans';
+      color:#FFF; font-size:19px; width:100%; text-align:center; z-index:99999; position:absolute; top:60%; opacity:1; line-height:30px; }
+    #loader-wrapper .load_title span {  font-weight:normal; font-style:italic; font-size:13px; color:#FFF; opacity:0.5;}
+
+  </style>
+</head>
+
+<body class="sidebar-mini control-sidebar-open">
+
+<div id="loader-wrapper" >
+  <div id="loader"></div>
+  <div class="loader-section section-left"></div>
+  <div class="loader-section section-right"></div>
+  <div class="load_title">正在努力加载中<br/>
+    <span>如遇无法打开等情况, 请使用Chrome, Firefox浏览器</span>
+
+  </div>
+</div>
+<div class="wrapper" id="rrapp" v-cloak>
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="index3.html" class="nav-link">Home</a>
+      </li>
+    </ul>
+
+    <!-- SEARCH FORM -->
+    <form class="form-inline ml-3">
+      <div class="input-group input-group-sm">
+        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="${request.contextPath}/statics/adminlte3/img/user2-header.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="${request.contextPath}/statics/adminlte3/img/user2-header.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media">
+              <img src="${request.contextPath}/statics/adminlte3/img/user2-header.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Nora Silvester
+                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">The subject goes here</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-users mr-2"></i> 8 friend requests
+            <span class="float-right text-muted text-sm">12 hours</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-file mr-2"></i> 3 new reports
+            <span class="float-right text-muted text-sm">2 days</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" target="_blank" href="modules/mobile/newpage.html" >
+          决策支持</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" @click="updatePassword">
+          修改密码</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" @click="logout">
+          退出系统</a>
+
+      </li>
+
+
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar elevation-4 sidebar-light-primary">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link navbar-primary">
+      <img src="${request.contextPath}/statics/adminlte3/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light" style="color: #fff">学生选课系统</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar" style="overflow-x: hidden;overflow-y: scroll;height:calc(100vh - 50px)">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="${request.contextPath}/statics/adminlte3/img/user2-header.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">{{user.name}}</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2" style=" font-size: 14px">
+        <ul id="menuTree" class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+
+          <!-- vue生成的菜单 -->
+          <menu-item :item="item" v-for="item in menuList"></menu-item>
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <section class="content-header">
+      <ol class="breadcrumb" id="nav_title" style="position:static;float:none;font-size: 14px">
+        <li class="active">
+          <i class="fa fa-home" style="font-size:20px;position:relative;top:2px;left:-3px;"></i> &nbsp;
+          <a href="#" @click="$('#myIframe').attr('src','main.html')">首页</a> >
+        </li>
+        <li class="active">{{navTitle}}</li>
+      </ol>
+    </section>
+
+    <section class="content" style="background:#f1f4f5;">
+      <iframe id="myIframe" scrolling="yes" frameborder="0" style="width:100%;min-height:200px;overflow:visible;border-radius:3px;"
+              :src="main"></iframe>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+<!--  <footer class="main-footer">-->
+<!--&lt;!&ndash;    <strong>2020 &nbsp;&copy;&nbsp; 版权所有：江西省商务厅&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      <a href="http://adminlte.io"></a>.&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    </strong>&ndash;&gt;-->
+<!--      <div class="float-right d-none d-sm-inline-block">-->
+<!--      <b>Version</b> 1.0.0-->
+<!--    </div>-->
+<!--  </footer>-->
+
+
+  <!-- 修改密码 -->
+
+
+  <form class="form-horizontal" id="passwordLayer" style="display: none;">
+    <div class="card-body">
+      <div class="form-group row">
+        <label  class="col-sm-2 col-form-label">账号</label>
+        <div class="col-sm-10">
+          <span class="label label-success" style="vertical-align: bottom;">{{user.username}}</span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="password" class="col-sm-2 col-form-label">原密码</label>
+        <div class="col-sm-10">
+          <input id="password" type="password" class="form-control" v-model="password" placeholder="原密码" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="newPassword" class="col-sm-2 col-form-label">新密码</label>
+        <div class="col-sm-10">
+          <input id="newPassword" type="password" class="form-control" v-model="newPassword" placeholder="新密码" />
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+
+<!-- AdminLTE -->
+
+<script src="${request.contextPath}/statics/js/baber.min.js"></script>
+<script src="${request.contextPath}/statics/js/polyfill.js"></script>
+
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/adminlte3/js/bootstrap.bundle.min.js"></script>
+<script src="${request.contextPath}/statics/adminlte3/js/adminlte.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/libs/router.js"></script>
+<script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+<script src="${request.contextPath}/statics/js/index3.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/cipher-core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/mode-ecb.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/tripledes.js" charset="utf-8"></script>
+
+</body>
+</html>

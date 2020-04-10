@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>历史审核记录</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input  type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="任务名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+    <div id="addLayerinfo" style="display: none">
+        <div class="form-group">
+            <div class="col-xs-3 control-label"  style="text-align: right;">申述理由</div>
+            <div class="col-xs-8">
+            <textarea rows="5" type="text" class="form-control" style="width: 300px"
+                      id="reason"  placeholder="理由"  v-model="comReturnState.stateReason"/></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$(function () {
+    let declareId = T.p("declareId");
+    let declareType = T.p("declareType");
+    let createId = T.p("createId");
+    $("#jqGrid").jqGrid({
+        url: baseURL + 'activity/getHisTaskInstanceList',
+        postData:{'hisInstanceId':T.p("hisInstanceId"),'declareId' : declareId,'createId': createId},
+        datatype: "json",
+        colModel: [			
+			{ label: '任务ID', name: 'id',  width: 150, key: true,hidden:true},
+			{ label: '任务名称', name: 'name',  width: 180 }, 	
+			{ label: '执行人', name: 'assigneeName',  width: 180 ,formatter(value,options,row){
+				if(row.isMyAudit){
+					return '<span class="label label-info">'+value+'</span>';
+				}else{
+					return value;
+				}
+			}}, 	
+			{ label: '开始时间', name: 'startTime',  width: 180 }, 	
+			{ label: '结束时间', name: 'endTime',  width: 180 }, 	
+// 			{ label: '执行ID', name: 'isMyAudit',  width: 180 }, 	
+			{ label: '备注', name: 'comment',  width: 280 ,formatter(value,options,row){
+				if(row.status==1){
+					return '<span class="label label-success">'+value+'</span>';
+				}else if(row.status==2){
+					return '<span class="label label-danger">'+value+'</span>';
+				}else if(row.status==3){
+					return '<span class="label label-warning">'+value+'</span>';
+				}else if(row.status==0){
+					return '<span class="label label-info">'+value+'</span>';
+				}else{
+					return value;
+				}
+			}}	,
+            { label : '操作' ,width : 280, formatter (value,options,row) {
+                    if (row.status == 2 && row.isState == null && row.isCanStated) {
+                        // let params = {};
+                        // params.taskId = row.id;
+                        // params.declareId = declareId;
+                        return "<a href='javaScript:void(0)' onclick='vm.gobackState(\""+row.id+"\",\""+declareId+"\",\""+declareType+"\")'>退回申述</a>";
+                    } else {
+                        return '';
+                    }
+                }}
+        ],
+		viewrecords: true,
+        height: 230,
+        rowNum: 6,
+		rowList : [6,10,30,50],
+        rownumbers: true, 
+        rownumWidth: 25, 
+        autowidth:true,
+//         shrinkToFit:false,   
+		autoScroll: true,
+        multiselect: false,
+        pager: "#jqGridPager",
+        jsonReader : {
+            root: "page.list",
+            page: "page.currPage",
+            total: "page.totalPage",
+            records: "page.totalCount"
+        },
+        prmNames : {
+            page:"page", 
+            rows:"limit", 
+            order: "order"
+        },
+        gridComplete:function(){
+        	//隐藏grid底部滚动条
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        }
+    });
+    
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		q:{},
+        comReturnState : {},
+	},
+	methods: {
+		query: function () {
+			vm.reload(true);
+		},
+		reload: function (event) {
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                page:page,
+           		postData:{'name': vm.q.name}
+            }).trigger("reloadGrid");
+		},
+        gobackState : function (taskId,declareId,declareType) {
+            vm.comReturnState.taskId = taskId;
+            vm.comReturnState.declareId = declareId;
+            vm.comReturnState.declareType = declareType;
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: "申述理由",
+                area: ['500px', '300px'],
+                shade: 0.2,
+                shadeClose: false,
+                content: $("#addLayerinfo"),
+                btn: ['确定', '取消'],
+                btn1: function () {
+                   let index =  layer.load();
+                    $.ajax({
+                        type: "POST",
+                        url: baseURL + "com/comreturnstate/save",
+                        contentType: "application/json",
+                        data: JSON.stringify(vm.comReturnState),
+                        success: function(r){
+                            layer.closeAll("loading");
+                            if(r.code === 0){
+                                layer.closeAll();
+                                alert('操作成功', function(index){
+                                    $("#jqGrid").trigger("reloadGrid");
+                                });
+                            }else{
+                                alert(r.msg);
+                            }
+                        }
+                    });
+                    layer.close(index);
+                }
+            });
+        }
+		
+	},
+	mounted : function() {
+	},
+	created :function(){
+		
+	}
+});
+
+
+
+
+</script>
+
+</body>
+</html>

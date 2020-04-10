@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sys.dao.SysExportTemplateDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.sys.entity.SysExportTemplateEntity" id="sysExportTemplateMap">
+        <result property="id" column="ID"/>
+        <result property="createId" column="CREATE_ID"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateId" column="UPDATE_ID"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="version" column="VERSION"/>
+        <result property="delFlag" column="DEL_FLAG"/>
+        <result property="status" column="STATUS"/>
+        <result property="filepath" column="FILEPATH"/>
+        <result property="exportModuleId" column="EXPORT_MODULE_ID"/>
+        <result property="remark" column="REMARK"/>
+        <result property="name" column="NAME"/>
+    </resultMap>
+
+
+</mapper>

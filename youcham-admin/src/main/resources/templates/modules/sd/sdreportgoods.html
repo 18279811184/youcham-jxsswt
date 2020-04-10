@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>申报物资清单</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("sd:sdreportgoods:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdreportgoods:update")>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdreportgoods:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">物资名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.goodsName" name="goodsName" placeholder="物资名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">物资数量 （允许客户输入单位）</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.goodsNum" name="goodsNum" placeholder="物资数量 （允许客户输入单位）"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属申报数据id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.reportDataId" name="reportDataId" placeholder="所属申报数据id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">描述</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.remark" name="remark" placeholder="描述"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.createId" name="createId" placeholder="创建人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.createName" name="createName" placeholder="创建人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.createTime" name="createTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.updateId" name="updateId" placeholder="创建人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.updateName" name="updateName" placeholder="创建人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.updateTime" name="updateTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">版本号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.version" name="version" placeholder="版本号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">逻辑删除字段 0：未删除 -1：已删除</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sdReportGoods.beDelete" name="beDelete" placeholder="逻辑删除字段 0：未删除 -1：已删除"/>
+                        </div>
+                    </div>
+							        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sd/sdreportgoods.js?_${.now?long}"></script>
+</body>
+</html>

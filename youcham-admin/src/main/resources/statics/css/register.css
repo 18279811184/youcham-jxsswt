@@ -1,0 +1,114 @@
+.control-label {
+    border-style: none;
+    border-radius: 1px;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.control-label:active {
+    border-style: none;
+}
+
+.step1 {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.step2, .step3 {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    zoom: 1;
+    display: none;
+}
+
+.form-text-div {
+    /*width: 20px;*/
+    /*border: 1px solid red;*/
+    /*height: 100px;*/
+    margin-top: 20px;
+    margin-left: 6%;
+    /*display: inline-block;*/
+    float: left;
+}
+
+.form-text {
+    /*margin-right: 20px;*/
+    width: 200px;
+    height: 35px;
+    /*光标位置*/
+    text-indent: 30px;
+    border-radius: 5px;
+    border: 1px solid #CCCCCC;
+    /*position: relative;*/
+    /*padding-left: 10px;*/
+}
+
+.login-box-body-1 {
+    margin: 0 auto;
+    border-radius: 10px;
+    background: #fff;
+    padding-top: 0px;
+    /*border-top: 0;*/
+    color: #666;
+    height: 550px;
+    width: 700px;
+    overflow:hidden;
+}
+
+#step1_next {
+    border-radius: 5px;
+    width: 200px;
+    height: 40px;
+    margin-top: 80px;
+    margin-left: 35%;
+    background: #006bd6;
+    border: none;
+    color: #ffffff;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+
+#step1_next:hover {
+    background: rgba(0, 62, 125, 1);
+}
+
+/*上一步*/
+#step2_back {
+    width: 75px;
+    border-radius: 5px;
+    height: 30px;
+    background: #006bd6;
+    border: none;
+    color: #ffffff;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+
+#step2_back:hover {
+    background: #2C6CB2;
+}
+
+.done-register {
+    width: 150px;
+    border-radius: 5px;
+    height: 40px;
+    margin-top: 30px;
+    margin-left: 300px;
+    background: #006bd6;
+    border: none;
+    color: #ffffff;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+
+.done-register:hover {
+    background: rgba(0, 62, 125, 1);
+}

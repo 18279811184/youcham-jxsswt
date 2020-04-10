@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="youcham-admin:war">
+    <output-path>$PROJECT_DIR$/youcham-admin/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>youcham-admin</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="youcham-admin.war">
+      <element id="artifact" artifact-name="youcham-admin:war exploded" />
+    </root>
+  </artifact>
+</component>

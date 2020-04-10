@@ -1,0 +1,4 @@
+# Project exclude paths
+/youcham-admin/target/
+/youcham-common/target/
+/youcham-generator/target/

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>江西疫情防控“三保”物流信息云平台-申报列表</title>
+    <!-- 引入elementui样式 -->
+    <link rel="stylesheet" href="${request.contextPath}/statics/element/index.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/mobile-main.css">
+
+    <style>
+        .header_search{
+            padding: 10px 5px!important;
+            margin: 0px;
+        }
+        .sd_tab{
+            background: #f8f8f8;
+            color: #999;
+            text-align: center;
+            line-height: 40px;
+        }
+        .sd_tab .active{
+            background: dodgerblue!important;
+            color: #fff!important;
+        }
+
+        .sd_card_list{
+            margin-bottom: 50px;
+        }
+        .sd_card_list_item{
+            background: #fff;
+            padding: 10px;
+            font-size: 14px;
+            margin: 10px 0px;
+        }
+        .sd_card_list_item .header{
+            border-bottom: 1px solid #eee;padding-bottom: 5px;margin-bottom: 5px
+        }
+
+        .goods_item{
+            color: dodgerblue;
+            border: 1px solid dodgerblue;
+            text-align: center;
+            border-radius: 5px;
+            margin:5px 0px;
+        }
+        .goods_item div{
+            line-height: 27px;
+        }
+        .goods_item .good_name{
+            border-bottom: 1px solid dodgerblue;
+        }
+
+        .need_company_name{
+            color: red!important;
+        }
+        .need_item{
+            border: 1px solid red!important;
+            color: red!important;
+        }
+        .need_good_name{
+            border-bottom: 1px solid red!important;
+        }
+
+        .report_bottom{
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body class="no-padding no-margin" style="background: #eee;font-size: 12px;color: #666;overflow-x: hidden;">
+<div id="app" v-cloak class="app" >
+    <img src="${request.contextPath}/statics/images/mobile/feiyanBanner3.jpg" style="width:100%">
+
+    <el-row :gutter="10" class="header_search white-bg">
+        <el-col :span="18"><el-input v-model="q.searchword" placeholder="模糊搜索物资，多种物资用英文逗号隔开"></el-input></el-col>
+        <el-col :span="6"><el-button type="primary" style="width: 100%" @click="vm.querySearch();">查询</el-button></el-col>
+    </el-row>
+    <el-row class="sd_tab">
+        <el-col :span="12" :class="q.reportType==0?'active':''"><div @click="vm.q.reportType=0;vm.querySearch();">需求方</div></el-col>
+        <el-col :span="12" :class="q.reportType==1?'active':''"><div @click="vm.q.reportType=1;vm.querySearch();">提供方</div></el-col>
+    </el-row>
+
+    <div class="sd_card_list infinite-list" style="overflow:auto;height:calc(100vh - 150px);"
+         v-infinite-scroll="getPageData"
+         :infinite-scroll-disabled="!enableLoadMore">
+
+        <div v-for="item in dataList" class="sd_card_list_item infinite-list-item">
+            <el-row class="header">
+                <el-col :span="14" style="color: dodgerblue" :class="(item.reportType==0?' need_company_name':' support_company_name')">{{item.name}}</el-col>
+                <el-col :span="10" class="text-right">更新于{{item.createTime}}</el-col>
+            </el-row>
+
+            <el-row :gutter="17">
+                <el-col v-for="goodsitem in item.goodsList" :span="12">
+                    <div :class="'goods_item'+(item.reportType==0?' need_item':' support_item')">
+                        <div :class="'good_name'+(item.reportType==0?' need_good_name':' support_good_name')">{{goodsitem.goodsName}}</div>
+                        <div>{{item.reportType==0?'急需':'可供'}} {{goodsitem.goodsNum}}</div>
+                    </div>
+                </el-col>
+            </el-row>
+
+            <div style="font-size: 12px;margin: 5px 0px">
+                <i class="el-icon-location-outline"></i>&nbsp;{{item.reportType==0?'':'江西省'}} {{item.address}}
+            </div>
+            <div style="margin: 5px 0px">
+                <i class="el-icon-user"></i> <span style="font-size: 12px">{{item.contacts}}</span>&nbsp;
+                <i class="el-icon-phone"></i> <span style="font-size: 12px"><a :href="'tel://'+item.contactsTel" target="_blank">{{item.contactsTel}}</a></span>
+            </div>
+            <el-button v-show="!item.moreinfo" size="small" style="width: 100%;margin-top: 10px" @click="item.moreinfo=true">详细信息</el-button>
+
+            <div v-show="item.moreinfo" style="border-top: 1px solid #eee;padding-top: 5px;margin-top: 5px">
+                <el-row style="margin:10px 0px">
+                    <el-col :span="6"><div style="color: #999">类型</div></el-col>
+                    <el-col :span="16"> <div style="color:#333">{{item.customerTypeDesc}}</div></el-col>
+                </el-row>
+                <el-row style="margin:10px 0px">
+                    <el-col :span="6"><div style="color: #999">物资对接</div></el-col>
+                    <el-col :span="16"> <div style="color:#333">{{item.acceptTypesListDesc}}</div></el-col>
+                </el-row>
+                <el-row style="margin:10px 0px">
+                    <el-col :span="6"><div style="color: #999">备注说明</div></el-col>
+                    <el-col :span="16"> <div style="color:#333">{{item.remark}}</div></el-col>
+                </el-row>
+
+                <el-row :gutter="10" style="margin:10px 0px">
+                    <el-col :span="12">
+                        <a :href="'sdreportdata.html?id='+item.id">
+                             <el-button type="primary" plain size="small" style="width: 100%;" @click="item.moreinfo=true">修改信息</el-button>
+                        </a>
+                    </el-col>
+                    <el-col :span="12"><el-button size="small" style="width: 100%;" @click="item.moreinfo=false">关闭详细信息</el-button></el-col>
+                </el-row>
+            </div>
+        </div>
+
+        <p v-if="loading" class="text-center">加载中...</p>
+        <p v-if="noMore" class="text-center">没有更多了</p>
+
+    </div>
+
+    <el-row class="report_bottom">
+        <a href="map.html">
+            <el-col :span="12" style="color: #fff;background-color: royalblue;line-height: 40px;text-align: center">地图总览</el-col>
+        </a>
+        <a href="sdreportdata.html">
+            <el-col :span="12" style="color: #fff;background-color: dodgerblue;line-height: 40px;text-align: center">我要发布</el-col>
+        </a>
+    </el-row>
+
+</div>
+
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/element/index.js"></script>
+<script src="${request.contextPath}/statics/js/common.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            q:{
+                searchword:"",
+                reportType:0
+            },
+            moreinfo:false,
+            dataList:[],
+            page:{
+                currPage:0,
+                limit:15,
+                totalPage:1
+            },
+
+            noMore:false,
+            loading:false,
+            enableLoadMore: false
+        },
+        methods: {
+            getPageData: function(){
+                // 加载中关闭下拉加载
+                this.loading = true;
+                this.enableLoadMore = false;
+
+                if(this.page.currPage >= this.page.totalPage){// 无更多数据
+                    this.noMore = true;
+                    this.loading = false;
+                    this.enableLoadMore = false;
+                    return;
+                }
+
+                this.page.currPage++;
+                $.get( "../../api/sd/reportData/queryReportInfoPage",{"page":this.page.currPage,"limit":this.page.limit,
+                    "reportType":this.q.reportType,"searchword":this.q.searchword
+                }, (r)=>{
+                    this.page.totalPage = r.page.totalPage;
+                    this.dataList = this.dataList.concat(r.page.list);
+                    // 加载完毕启动下拉加载
+                    this.loading = false;
+                    this.enableLoadMore = true;
+
+                    if(this.page.currPage >= this.page.totalPage){// 无更多数据
+                        this.noMore = true;
+                        this.loading = false;
+                        this.enableLoadMore = false;
+                        return;
+                    }
+                });
+            },
+            querySearch: function(){
+                this.noMore = false;
+                this.page.currPage = 0;
+                this.page.totalPage = 1;
+                this.dataList = [];
+
+                this.getPageData();
+        }
+        },
+        mounted: function(){
+            var searchword = T.p('searchword');
+            if(searchword){
+                this.q.searchword = searchword;
+            }
+
+            this.querySearch();
+        }
+
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/youcham-admin/youcham-admin.iml" filepath="$PROJECT_DIR$/youcham-admin/youcham-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youcham-common/youcham-common.iml" filepath="$PROJECT_DIR$/youcham-common/youcham-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youcham-generator/youcham-generator.iml" filepath="$PROJECT_DIR$/youcham-generator/youcham-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youcham-jxsswt.iml" filepath="$PROJECT_DIR$/youcham-jxsswt.iml" />
+    </modules>
+  </component>
+</project>

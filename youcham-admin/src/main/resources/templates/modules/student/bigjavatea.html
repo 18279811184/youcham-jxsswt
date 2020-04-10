@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("student:bigjavatea:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("student:bigjavatea:update")>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("student:bigjavatea:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaTea.teaName" name="teaName" placeholder="名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">手机号码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaTea.teaPhone" name="teaPhone" placeholder="手机号码"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">教职工号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="bigjavaTea.teaNumber" name="teaNumber" placeholder="教职工号"/>
+                        </div>
+                    </div>
+
+							        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/student/bigjavatea.js?_${.now?long}"></script>
+</body>
+</html>

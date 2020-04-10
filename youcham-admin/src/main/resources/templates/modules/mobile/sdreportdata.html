@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>江西疫情防控“三保”物流信息云平台-申报/提供信息</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/font-awesome.min.css">
+<!--    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css">-->
+<!--    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/select2/select2.min.css">-->
+<!--    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/webuploader/css/dropzone.min.css">-->
+    <!-- 引入elementui样式 -->
+    <link rel="stylesheet" href="${request.contextPath}/statics/element/index.css">
+<!--    <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="${request.contextPath}/statics/element/index-mint.css">
+    <!--    <link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">-->
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .el-upload-list--picture-card .el-upload-list__item-thumbnail {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto
+        }
+        .el-upload-list--picture-card .el-upload-list__item {
+            overflow: hidden;
+            background-color: #fff;
+            border: 1px solid #c0ccda;
+            border-radius: 6px;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 30%;
+            height: 120px;
+            margin: 0 8px 8px 0;
+            display: inline-block;
+            text-align: center;
+        }
+        .el-upload--picture-card {
+            background-color: #fbfdff;
+            border: 1px dashed #c0ccda;
+            border-radius: 6px;
+            box-sizing: border-box;
+            width: 110px;
+            height: 120px;
+            line-height: 126px;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body style="margin: 0px">
+<img src="${request.contextPath}/statics/images/mobile/feiyanBanner3.jpg" style="width:100%">
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        <!--	<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("sd:sdreportdata:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdreportdata:update")>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sd:sdreportdata:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>-->
+        </div>
+        <!--<table id="jqGrid"></table>
+        <div id="jqGridPager"></div>-->
+    </div>
+
+        <el-form ref="form" :model="sdReportData" v-if="isShowForm" label-position="top" :rules="rules" style="margin: 10px">
+            <el-form-item label="供需方" :required="true" >
+                <el-select v-model="sdReportData.reportType" placeholder="请选择" style="width:100%" @change="clearAcceptList">
+                    <el-option
+                            v-for="item in reportTypeList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="名称" prop="name" >
+                <el-input v-model="sdReportData.name" placeholder="输入名称/公司名称" ></el-input>
+            </el-form-item>
+
+            <el-form-item label="所在地" prop="city" v-if="sdReportData.reportType == 1" key="city">
+                <el-select v-model="sdReportData.city" style="width:100%" placeholder="市" v-loading="cityLoading" filterable >
+                    <el-option
+                            v-for="item in cityList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="所在国家" prop="country" v-if="sdReportData.reportType == 0" key="country">
+                <el-select v-model="sdReportData.country" placeholder="国家" filterable
+                           style="width:100%" v-loading="countryLoading" @change="getProvince(sdReportData.country)">
+                    <el-option
+                            v-for="item in countryList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="所在省" prop="province" v-if="sdReportData.reportType == 0" key="province">
+                <el-select v-model="sdReportData.province" placeholder="省"  style="width:100%" v-loading="provinceLoading"
+                           filterable
+                >
+                    <el-option
+                            v-for="item in provinceList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="详细地址 (门牌号)"  prop="address">
+                <el-input v-model="sdReportData.address" placeholder="街道, 门牌号等"></el-input>
+            </el-form-item>
+
+            <el-form-item label="类型" prop="customerType" >
+                <el-select v-model="sdReportData.customerType" placeholder="请选择" style="width:100%" v-loading="typeLoading">
+                    <el-option
+                            v-for="item in customerTypeList"
+                            :key="item.id"
+                            :label="item.value"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <!-- 需求方 -->
+            <el-form-item label="物资对接方式" v-if="sdReportData.reportType == 0" prop="acceptTypes" key="need">
+                <el-checkbox-group v-model="sdReportData.acceptTypes" v-loading="acceptNeedLoading">
+                    <el-checkbox v-for="item in acceptTypesNeedList" :label="item.id" :value="item.id" name="type">{{item.value}}</el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>
+
+            <!-- 提供方 -->
+            <el-form-item label="物资对接方式" v-if="sdReportData.reportType == 1" prop="acceptTypes" key="provide">
+                <el-checkbox-group v-model="sdReportData.acceptTypes" v-loading="acceptProvideLoading">
+                    <el-checkbox v-for="item in acceptTypesProvideList" :label="item.id" :value="item.id"  name="type">{{item.value}}</el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>
+
+            <el-form-item label="是否需要物流" v-if="sdReportData.reportType == 1" key="needLogistics">
+                <el-select v-model="sdReportData.needLogistics" placeholder="请选择"  style="width:100%">
+                    <el-option
+                            v-for="item in needLogisticsList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="物资清单" required style="margin-bottom: 0px"></el-form-item>
+            <el-form-item label=""
+                          :rules="{ required: true, message: '物资清单不能为空', trigger: 'blur'}"
+                          v-for="(item, index) in sdReportData.goodsList"
+                          :prop="'goodsList.' + index + '.goodsName'"
+                          style="margin-bottom: 15px"
+                            >
+                    <el-select v-model="item.goodsName" placeholder="请选择"
+                               filterable
+                               @change="resourceOther(item.goodsName, index)"
+                               v-loading="resourceLoading"
+                               style="width: 35%"
+                                >
+                        <el-option
+                                v-for="item1 in resourceNameList"
+                                :key="item1.value"
+                                :label="item1.value"
+                                :value="item1.value">
+                        </el-option>
+                    </el-select>
+                    <el-input-number style="width: 40%" v-model="item.goodsNum"  :min="1" :max="10000000" label="描述文字"></el-input-number>
+                <el-button @click="remove(index, item.id)">删除</el-button>
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-button @click="addLogistics" >添加</el-button>
+            </el-form-item>
+
+
+
+
+            <el-form-item label="备注">
+                <el-input type="textarea" v-model="sdReportData.remark" placeholder="备注 (最多100字)" :autosize="{ minRows: 6, maxRows: 4}"></el-input>
+            </el-form-item>
+
+            <el-form-item label="联系人姓名" prop="contacts">
+                <el-input type="input" v-model="sdReportData.contacts" placeholder="联系人姓名" ></el-input>
+            </el-form-item>
+
+            <el-form-item label="联系人手机" prop="contactsTel">
+                <el-input type="input" v-model="sdReportData.contactsTel" placeholder="11位手机号" ></el-input>
+            </el-form-item>
+
+            <el-form-item label="需求来源" v-if="sdReportData.reportType == 0" prop="sourceType" key="sourceType">
+                <el-select v-model="sdReportData.sourceType" placeholder="需求来源" style="width:100%" v-loading="demandLoading">
+                    <el-option
+                            v-for="item in sourceTypeList"
+                            :key="item.id"
+                            :label="item.value"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="相关材料图片">
+                <el-upload
+                        action="${request.contextPath}/fileAction/webuploadfile"
+                        list-type="picture-card"
+                        ref="upload"
+                        :on-preview="handlePictureCardPreview"
+                        :auto-upload="false"
+                        :file-list="fileList"
+                        :on-success="onSuccess"
+                        :on-exceed="onExceed"
+                        :on-change="onChange"
+                        :on-remove="onRemove"
+                        :before-remove="beforeRemove"
+                        accept="image/jpeg,image/png"
+                        multiple
+                        :limit="5"
+                        >
+                    <i class="el-icon-plus"></i>
+
+                </el-upload>
+                <el-dialog :visible.sync="isShowImg">
+                    <img width="100%" :src="url" alt="">
+                </el-dialog>
+            </el-form-item>
+
+            <el-form-item label="修改密码" prop="password">
+                <el-input type="password" v-model="sdReportData.password" placeholder="设置修改订单的密码(重要)" ></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">确认</el-button>
+                <el-button @click="hrefHtml" >取消</el-button>
+            </el-form-item>
+        </el-form>
+
+</div>
+<script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/ystep/ystep.js"></script>
+<script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+<!--<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>-->
+<script src="${request.contextPath}/statics/plugins/moment/moment.min.js"></script>
+<script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="${request.contextPath}/statics/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/select2/select2.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/select2/i18n/zh-CN.js"></script>
+<script src="${request.contextPath}/statics/plugins/laydate/laydate.js"></script>
+<script src="${request.contextPath}/statics/plugins/validate/jquery.validate.js"></script>
+<script src="${request.contextPath}/statics/plugins/validate/validate-methods.js"></script>
+<script src="${request.contextPath}/statics/plugins/validate/messages_zh.js"></script>
+<script src="${request.contextPath}/statics/bootstrap/bootstrap-select.js"></script>
+<script src="${request.contextPath}/statics/plugins/webuploader/js/dropzone.min.js"></script>
+<!-- 引入elementui组件库 -->
+<script src="${request.contextPath}/statics/element/index.js"></script>
+<!-- 引入组件库 -->
+<script src="${request.contextPath}/statics/element/index-mint.js"></script>
+<script src="${request.contextPath}/statics/js/common.js"></script>
+<!--<script src="https://unpkg.com/mint-ui/lib/index.js"></script>-->
+<script>
+    var id = T.p("id");
+    var vm = new Vue({
+        el: '#rrapp',
+            data() {
+                var validcodePhone=(rule,value,callback)=>{
+                    let reg=/^([1][3,4,5,6,7,8,9])\d{9}$/
+                    if(!reg.test(value)){
+                        callback(new Error('手机号错误')
+                        )
+                    }else{
+                        callback()
+                    }
+                };
+                return {
+                    showList: false,
+                    sdReportData: {
+                        reportType: 0,
+                        acceptTypes: [],
+                        city: null,
+                        goodsList: [
+                            {goodsName: "", goodsNum: ""}
+                        ],
+                        sourceType: null,
+                        needLogistics: null,
+                        province: null,
+                    },
+                    reportTypeList:
+                        [
+                            { value: 0, label: '我是需求方'},
+                            {value: 1, label: '我是供应方' }
+                        ],
+                    customerTypeList: [],
+                    needLogisticsList: [
+                        {value: 0, label: "否"},
+                        {value: 1, label: "是"},
+                    ],
+                    fileList: [], // 文件上传绑定的list
+                    fileList1: [], // 中介作用
+                    sourceTypeList: [], // 需求来源
+                    resourceNameList: [], // 物资名称
+                    acceptTypesNeedList: [], // 物资对接方式 (需求方)
+                    acceptTypesProvideList: [], // 物资对接方式 (提供方)
+                    url: "",
+                    isShowImg: false,
+                    goodsList: [
+                        {goodsName: "", goodsNum: ""}
+                    ],
+                    provinceList: [],
+                    cityList: [],
+                    rules: {
+                        name: [
+                            {required: true, message: "名称不能为空", trigger: 'blur'}
+                        ],
+                        city: [
+                            {required: true, message: "地市不能为空", trigger: 'blur'}
+                        ],
+                        country: [
+                            {required: true, message: "国家不能为空", trigger: 'blur'}
+                        ],
+                        province: [
+                            {required: true, message: "省份不能为空", trigger: 'blur'}
+                        ],
+                        address: [
+                            {required: true, message: "地址不能为空", trigger: 'blur'}
+                        ],
+                        customerType: [
+                            {required: true, message: "类型不能为空", trigger: 'blur'}
+                        ],
+                        acceptTypes: [
+                            {required: true, message: "物资对接不能为空", trigger: 'blur'}
+                        ],
+                        contacts: [
+                            {required: true, message: "联系人不能为空", trigger: 'blur'}
+                        ],
+                        contactsTel: [
+                            {required: true, message: "联系人电话不能为空", trigger: 'blur'},
+                            {validator:validcodePhone,trigger:'blur'}
+                        ],
+                        sourceType: [
+                            {required: true, message: "需求来源不能为空", trigger: 'blur'}
+                        ],
+                        password: [
+                            {required: true, message: "密码不能为空", trigger: 'blur'}
+                        ]
+                    },
+                    countryList: [], // 国家
+                    provinceList: [], // 省
+                    fileIsExist: false,  // 是否存在文件
+                    isShowForm: false,
+                    deleteIds: [], // 物资删除ids
+                    typeLoading: true, // 加载动画
+                    resourceLoading: true, // 加载动画
+                    demandLoading: true, // 加载动画
+                    acceptNeedLoading: true, // 加载动画
+                    acceptProvideLoading: true, // 加载动画
+                    cityLoading: true, // 加载动画
+                    countryLoading: true, // 加载动画
+                    provinceLoading: false, // 加载动画
+                }
+            },
+        created() {
+            if (id) {
+                this.isShowForm = false;
+                this.confirmPas(id);
+                this.getInfo(id);
+            } else {
+                this.isShowForm = true;
+            }
+            this.getType();
+            this.getDemand();
+            this.getCountry();
+            this.getCity();
+
+            this.getResource();
+            this.getAcceptTypeNeed();
+            this.getAcceptTypeProvide();
+
+        },
+        methods: {
+            /* 修改确认密码 */
+            confirmPas(id) {
+                this.$messagebox.prompt('请输入修改密码', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    closeOnClickModal:false,   //点击model背景层不关闭MessageBox
+                    inputErrorMessage: '请输入修改密码'
+                }).then((value, action) => {
+                    this.isUpdate(id, value.value);
+                })
+                 .catch(() => {
+                         location.href = "report_list.html";
+                })
+            },
+            /* 是否可以修改 */
+            isUpdate(id, password) {
+                $.get(baseURL + "api/sd/reportData/isuUpdate",  {id : id, password: password}).then((data) => {
+                    if (data.code == 0) {
+                        vm.isShowForm = true;
+                    } else {
+                        this.$messagebox.alert("密码错误", "提示").then(() => {
+                            this.confirmPas(id);
+                        }) ;
+                    }
+                })
+            },
+            getInfo(id) {
+                $.get(baseURL + "api/sd/reportData/info/" + id, (data) => {
+                    vm.sdReportData = data.sdReportData;
+                }).then(() => {
+
+                    vm.sdReportData.acceptTypes = (vm.sdReportData.acceptTypes).split(",");
+
+                    $.get(baseURL + "api/sd/reportData/getCountryOrProvince", {"pid" : vm.sdReportData.country}, (data) => {
+                        vm.provinceList = data.list;
+                    }).then(() => {
+                        this.provinceLoading = false;
+                    });
+
+                    if (vm.sdReportData.fileIds) {
+                        var fileIds = (vm.sdReportData.fileIds).split(",");
+                        $.each(fileIds, (i, v) => {
+                            vm.fileList.push(
+                                { name: "", url:  baseURL + "fileAction/loadFile?bytearrayId="+ encodeURI(v),
+                                    fileId: v
+                                }
+                            );
+                            vm.fileList1.push(v);
+                        })
+                    }
+                })
+            },
+            onSuccess(data, file, fileList) {
+                /* 声明第三方, 否则无法加id */
+                vm.fileList1.push(data.gid);
+                vm.sdReportData.fileIds  = (vm.fileList1).join(",");
+                if (vm.fileList1.length == fileList.length) {
+                    vm.sdReportData.acceptTypes = (vm.sdReportData.acceptTypes).join(",");
+                    vm.saveOrUpdate();
+                }
+            },
+            /* 提交表单 */
+            onSubmit() {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        /* 没有文件 */
+                        if (!vm.fileIsExist) {
+                            vm.sdReportData.acceptTypes = (vm.sdReportData.acceptTypes).join(",");
+                            vm.saveOrUpdate();
+                        } else {
+                            this.$refs.upload.submit();
+                        }
+                    } else {
+                        this.$messagebox.alert("你有必填项未填..", "提示");
+                        return false;
+                    }
+                });
+            },
+            /* 跳转 */
+            hrefHtml() {
+              if (id) {
+                  location.href = "report_list.html";
+              } else {
+                  location.href = "report_list.html";
+              }
+            },
+            /* 保存或修改 */
+            saveOrUpdate() {
+                var url = vm.sdReportData.id == null ? baseURL + "api/sd/reportData/save" : baseURL + "api/sd/reportData/update";
+                $.postJSON(url,
+                    {
+                        "sdReportData" : JSON.stringify(vm.sdReportData),
+                        "goodsList" : JSON.stringify(vm.sdReportData.goodsList),
+                        "deleteIds" : JSON.stringify(vm.deleteIds),
+                    },
+                   ).then((data) => {
+                    this.$messagebox.alert(data.msg, "提示",
+                        {type: "success"}).then(() => {
+                            if (vm.sdReportData.id) {
+                                location.href = "report_list.html";
+                            } else {
+                                location.reload();
+                            }
+                    }).catch(() => {
+                        if (vm.sdReportData.id) {
+                            location.href = "report_list.html";
+                        } else {
+                            location.reload();
+                        }
+                    })
+                    vm.fileIsExist = false;
+                }, () => {
+                    this.$messagebox.alert("错误", "提示", {type: "error"});
+                });
+            },
+            handlePictureCardPreview(file) {
+                this.url = file.url;
+                this.isShowImg = true;
+            },
+            /* 图片超过限制钩子 */
+            onExceed(file, fileList) {
+                    this.$messagebox.alert("最多只能上传五个", "提示").catch(() => {});
+            },
+            /* 文件改变限制钩子 */
+            onChange(file, fileList) {
+                var isJPG = (file.raw.type === 'image/jpeg' || file.raw.type === 'image/png');
+                var isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$messagebox.alert('只能上传jpg/png图片!');
+                    vm.fileList.splice(fileList.length-1, 1);
+                }
+                if (!isLt2M) {
+                    this.$messagebox.alert('上传头像图片大小不能超过 2MB!');
+                    vm.fileList.splice(fileList.length-1, 1);
+                }
+                if (isJPG && isLt2M) {
+                    /* true */
+                    vm.fileIsExist = fileList.length > 0;
+                }
+                return isJPG && isLt2M;
+            },
+            /* 删除文件钩子 */
+            onRemove(file, fileList) {
+                console.warn( file);
+                console.warn( fileList);
+                $.each(vm.fileList1, (i, v) => {
+                    if (file.fileId == v) {
+                        vm.fileList1.splice(i, 1);
+                    }
+                })
+                vm.sdReportData.fileIds  = (vm.fileList1).join(",");
+                if (fileList.length == 0) {
+                    vm.fileIsExist = false;
+                }
+            },
+            /* 删除文件之前钩子 */
+            beforeRemove(file, fileList) {
+             return  this.$messagebox.confirm('是否删除该文件?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '我再想想',
+                    type: 'warning'
+                });
+            },
+            /* 动态添加物资清单 */
+            addLogistics() {
+                vm.sdReportData.goodsList.push({goodsName : "", goodsNum: "" })
+                console.warn(vm.sdReportData.goodsList);
+            },
+            /* 删除物资清单 */
+            remove(index, id) {
+                 vm.deleteIds.push(id);
+                if (vm.sdReportData.goodsList.length == 1) {
+                    alert("至少保留一项");
+                    return
+                }
+                vm.sdReportData.goodsList.splice(index, 1);
+            },
+            /* 获取类型 */
+            getType() {
+                $.get(baseURL + "api/sd/reportData/finddic", {"type" : "type"}, (data) => {
+                    vm.customerTypeList = data.templateList;
+                })
+                .then(() => {
+                    this.typeLoading = false;
+                })
+                ;
+            },
+            /* 获取需求来源 */
+            getDemand() {
+                $.get(baseURL + "api/sd/reportData/finddic", {"type": "demand"}, (data) => {
+                    vm.sourceTypeList = data.templateList;
+                }).then(() => {
+                        this.demandLoading = false;
+                    });
+            },
+            /* 获取物资清单 */
+            getResource() {
+                $.get(baseURL + "api/sd/reportData/finddic", {"type" : "resource"}, (data) => {
+                    vm.resourceNameList = data.templateList;
+                }).then(() => {
+                    this.resourceLoading = false;
+                });
+            },
+            /* 获取物资对接方式 (需求方) */
+            getAcceptTypeNeed() {
+                $.get(baseURL + "api/sd/reportData/finddic", {"type" : "acceptTypeNeed"}, (data) => {
+                    vm.acceptTypesNeedList = data.templateList;
+                }).then(() => {
+                    this.acceptNeedLoading = false;
+                });
+            },
+            /* 获取物资对接方式 (提供方) */
+            getAcceptTypeProvide() {
+                $.get(baseURL + "api/sd/reportData/finddic", {"type" : "acceptTypeProvide"}, (data) => {
+                    vm.acceptTypesProvideList = data.templateList;
+                }).then(() => {
+                    this.acceptProvideLoading = false;
+                });
+            },
+            /* 获取国家 */
+            getCountry() {
+                $.get(baseURL + "api/sd/reportData/getCountryOrProvince", {"level" : "2"}, (data) => {
+                    vm.countryList = data.list;
+                }).then(() => {
+                    this.countryLoading = false;
+                });
+            },
+            /* 获取省 */
+            getProvince(id) {
+                vm.provinceList = [];
+                vm.sdReportData.province = null;
+                $.get(baseURL + "api/sd/reportData/getCountryOrProvince", {"pid" : id}, (data) => {
+                    vm.provinceList = data.list;
+                }).then(() => {
+                    this.provinceLoading = false;
+                });
+            },
+            /* 获取市 */
+            getCity(id) {
+                $.get(baseURL + "api/sd/reportData/selectCityByJiangXi", (data) => {
+                    vm.cityList = data.list;
+                }).then(() => {
+                    this.cityLoading = false;
+                });
+            },
+            /* 清除一些字段 */
+            clearAcceptList() {
+                /* 对接方式 */
+                vm.sdReportData.acceptTypes = [];
+                /* 需求来源 */
+                vm.sdReportData.sourceType = null;
+                /* 是否需要物流 */
+                vm.sdReportData.needLogistics = null;
+                vm.sdReportData.country = null;
+                vm.sdReportData.province = null;
+                vm.sdReportData.city = null;
+                this.$refs.form.clearValidate();
+            },
+            /* 物资其他 */
+            resourceOther(goodsName, index) {
+                if (goodsName == "其他") {
+                    /* 移动端使用 */
+                    this.$messagebox.prompt('请输入物资名称', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        closeOnClickModal:false,   //点击model背景层不关闭MessageBox
+                        inputPattern: /([^\s])/g ,
+                        inputErrorMessage: '物资名称不能为空'
+                    }).then(({ value, action }) => {
+                        vm.sdReportData.goodsList[index].goodsName = value;
+                    }).catch(() => {
+
+                    })
+                    //自定义标题风格
+                  /*  layer.open({
+                        title: [
+                            '我是标题',
+                            'background-color: #FF4351; color:#fff;'
+                        ]
+                        ,content: $("#resourceName")
+                    });*/
+                   /* this.$prompt('请输入物资名称', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        closeOnClickModal:false,   //点击model背景层不关闭MessageBox
+                        inputPattern: /([^\s])/g ,
+                        inputErrorMessage: '物资名称不能为空'
+                    }).then(({ value }) => {
+                        vm.sdReportData.goodsList[index].goodsName = value;
+                    }).catch(() => {
+
+                    });*/
+                }
+
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

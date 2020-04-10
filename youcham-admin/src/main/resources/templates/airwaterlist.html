@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>空运进口口</title>
+		<#include "/header.html">
+		<style type="text/css">
+			.s-title {
+					margin-top: 25px;
+					margin-left: 25px;
+				}
+				
+				hr {
+					margin-top: 25px;
+				}
+				
+				.check-list {
+					display: inline-block;
+					margin-top: 5px;
+				}
+				
+				.check-list input {
+					margin: 1px 5px 1px 0;
+					vertical-align: middle;
+				}
+				
+				.check-list span {
+					display: inline-block;
+					width: 100px;
+					font-weight: normal;
+				}
+			input['name=getExl']:first{
+				border:1px solid red;
+			}
+		</style>
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<!-- <div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="托运人姓名及地址">
+			</div> -->
+			<div class="form-group col-sm-2" >
+				<input type="text" class="form-control" v-model="q.number" @keyup.enter="query" placeholder="业务编号">
+			</div>
+			<div class="form-group col-sm-2" >
+				<!-- <input type="text" class="form-control" v-model="q.type" @keyup.enter="query" placeholder="类型"> -->
+				<select v-select2="" v-model="q.type" class="form-control" style="width: 100%">
+			 		<option value="">请选择</option>   
+			 		<option value="1">水运进口</option>   
+                    <option value="0">水运出口</option>
+                    <option value="3">空运进口</option>
+                    <option value="2">空运出口</option> 
+				</select>
+				
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<#if shiro.hasPermission("hd:hdairimport:save")>
+            <!-- <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a> -->
+			</#if>
+<!-- 			<a class="btn btn-info" @click="addhw"><i class="fa fa-plus"></i>&nbsp;货物信息录入</a>
+			<a class="btn btn-info" @click="addhwinfo"><i class="fa fa-plus"></i>&nbsp;货物信息详情</a>
+ -->			<#if shiro.hasPermission("hd:hdairimport:update")>
+			</#if>
+			<#if shiro.hasPermission("hd:hdairimport:delete")>
+           <!--  <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a> -->
+			</#if>
+
+			<!-- <a class="btn btn-success" @click="downExlById"><i class="fa fa-download"></i>&nbsp;导出Exl</a> -->
+			<a class="btn btn-info" @click="downWod"><i class="fa fa-download"></i>&nbsp;导出单据</a>
+
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <div class="pull-left">
+	    <ul class="nav nav-pills " style="margin-top: 10px;margin-left: 15px">
+		  <!-- <li class="active"><a href="#">空运出口</a></li> -->
+		  <a class="btn btn-info" @click="add">&nbsp;空运进口</a>
+		    
+		 
+		</ul>
+		</div>
+		<div class="pull-right">
+		<a class="btn btn-info" @click="add">&nbsp;应收账款</a>
+		<a class="btn btn-info" @click="add">&nbsp;应付账款</a>
+		<a class="btn btn-info" @click="downDJ">&nbsp;导出单据</a>
+		<a class="btn btn-info" @click="baoguan">&nbsp;报关报检</a>
+		 <a class="btn btn-info" @click="saveOrUpdate">&nbsp;保存</a>
+		  <a class="btn btn-info" @click="saveOrUpdatereload">&nbsp;保存并刷新</a>
+		 <a class="btn btn-info" @click="delthis">&nbsp;删除</a>
+		 <a class="btn btn-info" v-show="showreturn" @click="returnlist">&nbsp;返回列表</a>
+		</div>
+    	<div class="clearfix"></div>
+    	<hr/>
+    	<h4>委托</h4>
+			
+    	
+        <form class="form-horizontal" style="width:100%">
+          <div class="form-group">
+					<div class="col-sm-1 control-label">业务编号</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.businessNumber" readonly placeholder="业务编号" />
+					</div>
+					<div class="col-sm-1 control-label">托运人姓名及地址</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.shipperInfo" placeholder="托运人姓名及地址" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1 control-label">收货人姓名及信息</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.consigneeInfo" placeholder="收货人姓名及信息" />
+					</div>
+					<div class="col-sm-1 control-label">通知方</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.notifyingpartyInfo" placeholder="通知方" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1 control-label">始发站</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.departureStation" placeholder="始发站" />
+					</div>
+					<div class="col-sm-1 control-label">到达站</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.arrivalStation" placeholder="到达站" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1 control-label">预定航班</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.scheduledFlight" placeholder="预定航班" />
+					</div>
+					<div class="col-sm-1 control-label">到货日期</div>
+					<div class="col-sm-5">
+						<!-- <input type="text" class="form-control"
+							v-model="hdAirImport.arrivalTime" placeholder="到货日期" /> -->
+							<input type="text" class="form-control" id="date1"
+							v-model="hdAirImport.arrivalTime" placeholder="到货日期" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1 control-label">支付方式</div>
+					<div class="col-sm-5">
+						<!-- <input type="text" class="form-control"
+							v-model="hdAirImport.paymentMethod" placeholder="支付方式" /> -->
+							<select v-select2="" v-model="hdAirImport.paymentMethod" class="form-control" style="width: 100%">
+						 		<option value="0">预付</option>   
+                        		<option value="1">到付</option> 
+						</select>
+					</div>
+					<div class="col-sm-1 control-label">实际毛重</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.actualGross" placeholder="实际毛重" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1 control-label">件数</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.packagesNumber" placeholder="件数" />
+					</div>
+					<div class="col-sm-1 control-label">处理情况</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.handlingSituation" placeholder="处理情况" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1 control-label">备注</div>
+					<div class="col-sm-5">
+						<input type="text" class="form-control"
+							v-model="hdAirImport.remarks" placeholder="备注" />
+					</div>
+				</div>
+				
+				
+			</form>
+			<hr />
+			<h4>货物信息</h4>
+			</ul>
+			<iframe id="iframe1" name="iframe1"  src="../../modules/hd/hdgoodsair.html?goodsType=3" style="width: 100%;height: 400px;border: none">
+			
+			</iframe>
+    </div>
+    <div id="downExl" style="display: none;padding: 10px 10px 0 10px;">
+				<div v-show="showExlorWod">
+					<label>
+						<input type="checkbox" id="getExlAll" name="getExlAll" @click="getExlAll" style="vertical-align: text-bottom;margin-right: 5px;"><span>全选/取消</span>
+					</label>
+					<div class="form-group" style="padding: 2px 8px 0 12px;">
+						<div class="check-list" v-for="role in hdAirExportEnumList">
+							<label>
+								<input type="checkbox" :value="role.value" name="getExl" v-model="hdAirExportEnum"><span>{{role.description}}</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group" v-show="!showExlorWod">
+					<div class="col-sm-2 control-label" style="line-height: 37px;">请选择一个模板</div>
+					<div class="col-sm-10">
+						<select v-select2="" id="deptId" v-model="template" required="required" class="form-control" style="width: 100%">
+							<option value="">请选择模板</option>
+							<option v-for="item in templateList" v-bind:value="item.id">{{item.name}}{{item.type==0?"(Excel)":"(Word)"}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+    <iframe id="aaa" src="" style="display: none;"></iframe>		
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/hd/airwaterlist.js?_${.now?long}"></script>
+</body>
+</html>

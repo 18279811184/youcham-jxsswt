@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>附件列表</title>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+	<!-- 引入weui -->
+	<link rel="stylesheet" href="${request.contextPath}/statics/weui/lib/weui.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/weui/css/jquery-weui.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/weui/css/demos.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/css/main-wx.css">
+	<!-- 引入mescroll add byxcg -->
+	<link rel="stylesheet" href="${request.contextPath}/statics/mescroll/mescroll.min.css">
+	<style type="text/css">
+		.mescroll{
+			position: fixed;
+			top: 0px;
+			bottom: 0px;
+			height: auto;
+		}
+		.weui-panel:after {
+   			 border-bottom: none;
+		}
+	</style>
+
+</head>
+
+<body ontouchstart>
+<div id="rrapp" v-cloak>
+	<div class="weui-search-bar" id="searchBar">
+		<form onsubmit="return checkForm()" class="weui-search-bar__form"
+			action="#">
+			<div class="weui-search-bar__box">
+				<i class="weui-icon-search"></i> <input type="search"
+					class="weui-search-bar__input" id="searchInput" placeholder="请输入备注搜索"
+					required=""> <a href="javascript:" class="weui-icon-clear"
+					id="searchClear"></a>
+			</div>
+			<label class="weui-search-bar__label" id="searchText"
+				style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+				<i class="weui-icon-search"></i> <span>搜索</span>
+			</label>
+		</form>
+		<a href="javascript:" class="weui-search-bar__cancel-btn"
+			id="searchCancel">取消</a>
+	</div>
+
+	<div class="page__bd list-container">
+		<div class="weui-panel weui-panel_access list-container-main active weui-panel__bd mescroll" id="mescroll">
+			<div class="weui-panel__bd " id="newlist">
+				<div v-for="item in pdlist" @click="downloadFile(item.id)" class="weui-media-box weui-media-box_text">
+			        <h4 class="weui-media-box__title">{{item.fileRealname}}</h4>
+			        <p class="weui-media-box__desc">备注：{{item.fileRemark}}</p>
+			        <p class="weui-media-box__desc" style="padding-top:5px">上传时间：{{item.fileCreatedate}} 上传人：{{item.createUser.name}}</p>
+		        </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${request.contextPath}/statics/weui/lib/jquery-2.1.4.js"></script>
+<script src="${request.contextPath}/statics/weui/lib/fastclick.js"></script>
+<script src="${request.contextPath}/statics/weui/js/jquery-weui.js"></script>
+<script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<!-- 引入mescroll add byxcg -->
+<script src="${request.contextPath}/statics/mescroll/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="${request.contextPath}/statics/js/common-wx.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+
+	var sta = T.p('getallid');
+		
+	function checkForm(){
+		vm.pdlist = [];
+		vm.mescroll.resetUpScroll(); 
+		return false;
+	}
+
+	//下载文件
+	function downloadFile(bytearrayId){
+		if(bytearrayId == "" || bytearrayId == null){
+			
+		}else{
+			window.location.href=baseURL +'fileAction/downloadFile?bytearrayId='+bytearrayId;	
+		}
+	}
+	
+	var vm = new Vue({
+		el:'#rrapp',
+		data:{
+			mescroll: null,
+			pdlist: []
+		},
+		methods: {
+			//上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
+			upCallback: function(page) {
+				//联网加载数据
+				var self = this;
+				getListDataFromNet(page.num, page.size, function(curPageData) {
+					//如果是第一页需手动制空列表 (代替clearId和clearEmptyId的配置)
+					if(page.num == 1) self.pdlist = [];
+					
+					//更新列表数据
+					self.pdlist = self.pdlist.concat(curPageData);
+					
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length+", self.pdlist.length==" + self.pdlist.length);
+					
+					self.mescroll.endSuccess(curPageData.length);
+				
+				}, function() {
+					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+					self.mescroll.endErr();
+				});
+			},
+		},
+		mounted: function() {
+			//创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
+			//解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
+			var self = this;
+			self.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+				up: {
+					callback: self.upCallback, //上拉回调
+					//以下参数可删除,不配置
+					isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+					//page:{size:8}, //可配置每页8条数据,默认10
+					toTop:{ //配置回到顶部按钮
+					},
+					empty:{ //配置列表无任何数据的提示
+						warpId:"newlist",
+					  	tip : "亲,暂无相关数据哦~" , 
+					},
+				}
+			});
+		}
+	});
+	
+	/*联网加载列表数据
+	 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+	 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+	 * */
+	function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
+		//延时一秒,模拟联网
+        setTimeout(function () {
+			$.ajax({
+       	        type: "get",
+       	        url: baseURL + 'ins/sysfiletable/list',
+       	        data:{'limit':pageSize,'page':pageNum,'fileRemark':$("#searchInput").val(),'getallid':sta},
+       	        async: false,
+       	        error: function(request) {
+       	            alert("Connection error");
+       	        },
+       	        success: function(data) {
+					successCallback&&successCallback(data.page.list);//成功回调
+       	        }
+       	    });
+        },100)
+	}
+	
+</script>
+</body>
+</html>

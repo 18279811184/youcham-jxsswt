@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>江西疫情防控“三保”物流信息云平台</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+    <style type="text/css">
+        body {
+            background: url(../../statics/images/background.png);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            -moz-background-size: 100% 100%;
+        }
+
+        .border {
+            border: 0px solid red;
+        }
+
+        .shengti {
+            width: 100%;
+            height: 100%;
+        }
+
+        #JXmap {
+            width: 100%;
+            margin-top: 10%;
+        }
+
+        /* 头部div */
+        #tou {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            z-index: 998;
+        }
+
+        /* 搜索的div */
+        #soushuo {
+            border: 2px solid #0657A6;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        /* 头部按钮 */
+        #anniut {
+            width: 40%;
+            height: 5%;
+            margin-left: 33.5%;
+            margin-top: 10px;
+        }
+
+        /* 底部按钮 */
+        #anniud {
+            width: 80%;
+            height: 5%;
+            position: absolute;
+            left: 13%;
+            top: 90%;
+        }
+
+        .butClasst {
+            width: 60px;
+            height: 50px;
+            border: 1px solid #0657A6;
+            border-radius: 25px;
+            background-color: transparent;
+            color: #ffffff;
+        }
+
+        .butClassd {
+            width: 140px;
+            height: 40px;
+            border: 1px solid #0657A6;
+            border-radius: 25px;
+            background-color: transparent;
+            color: #ffffff;
+        }
+
+        #zhezao {
+            width: 100%;
+            height: 40%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin-top: 0px;
+            z-index: 999;
+        }
+
+        #tanchu {
+            width: 100%;
+            height: 60%;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            margin-bottom: 0px;
+        }
+
+        .header_search {
+            padding: 10px 5px !important;
+            margin: 0px;
+        }
+
+        .sd_tab {
+            background: #f8f8f8;
+            color: #999;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .sd_tab .active {
+            background: dodgerblue !important;
+            color: #fff !important;
+        }
+
+        .sd_card_list {
+            margin-bottom: 50px;
+        }
+
+        .sd_card_list_item {
+            background: #fff;
+            padding: 10px;
+            font-size: 14px;
+            margin: 10px 0px;
+        }
+
+        .sd_card_list_item .header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 5px
+        }
+
+        .goods_item {
+            color: dodgerblue;
+            border: 1px solid dodgerblue;
+            text-align: center;
+            border-radius: 5px;
+            margin: 5px 0px;
+        }
+
+        .goods_item div {
+            line-height: 27px;
+        }
+
+        .goods_item .good_name {
+            border-bottom: 1px solid dodgerblue;
+        }
+
+        .need_company_name {
+            color: red !important;
+        }
+
+        .need_item {
+            border: 1px solid red !important;
+            color: red !important;
+        }
+
+        .need_good_name {
+            border-bottom: 1px solid red !important;
+        }
+
+        .report_bottom {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="shengti" id="rrapp" v-cloak>
+    <div id="tou">
+        <div id="soushuo" class="input-group">
+            <input v-model="q.searchword" type="text" style="background-color: transparent;border: none;color: #ffffff"
+                   class="form-control"
+                   placeholder="模糊搜索供需物质，多种物资用英文逗号隔开">
+            <span style="background-color: transparent;color:#00ffff;border: none;" class="input-group-addon"
+                  @click="window.location='report_list.html?searchword='+encodeURI(q.searchword)">搜索</span>
+        </div>
+        <div id="anniut">
+            <button class="butClasst label label-default" onclick="vm.showMap=false;">需求方</button>
+            <button class="butClasst label label-primary" onclick="vm.showMap=true;">提供方</button>
+        </div>
+    </div>
+    <div id="JXmap" class="border" v-show="showMap"></div>
+    <div id="SJmap" class="border" v-show="!showMap"></div>
+    <div id="anniud">
+        <a href="report_list.html">
+            <button class="butClassd label label-primary">完整供需信息</button>
+        </a>
+        <a href="sdreportdata.html">
+            <button class="butClassd label label-primary">我要发布</button>
+        </a>
+    </div>
+
+    <div id="zhezao" v-if="tanchu" onclick="vm.showOrOut()"></div>
+    <div id="tanchu" class="panel panel-default" v-show="tanchu">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span style="color: #1e90ff;">提供方-{{cityName}}</span>
+                <span style="color: #FF1000;margin-left: 45%" onclick="vm.tanchu=false;">返回</span>
+                <a href="report_list.html"><span style="color: #1e90ff;margin-left: 3%">详情</span></a>
+            </h3>
+        </div>
+        <div class="panel-body" style="height:90%;overflow-y:auto">
+            <div class="panel panel-default" v-for="item in listDate">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span>
+                            {{item.name}}
+                        </span>
+                        <span style="margin-left: 50px;">
+                            更新于{{item.createTime}}
+                        </span>
+
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <el-row :gutter="17">
+                        <el-col v-for="goodsitem in item.goodsList" :span="12">
+                            <div :class="'goods_item'+(item.reportType==0?' need_item':' support_item')">
+                                <div :class="'good_name'+(item.reportType==0?' need_good_name':' support_good_name')">
+                                    {{goodsitem.goodsName}}
+                                </div>
+                                <div>{{item.reportType==0?'急需':'可供'}} {{goodsitem.goodsNum}}</div>
+                            </div>
+                        </el-col>
+                    </el-row>
+
+                    <div style="font-size: 12px;margin: 5px 0px">
+                        <i class="el-icon-location-outline"></i>&nbsp;{{item.reportType==0?'':'江西省'}} {{item.address}}
+                    </div>
+                    <div style="margin: 5px 0px">
+                        <i class="el-icon-user"></i> <span style="font-size: 12px">{{item.contacts}}</span>&nbsp;
+                        <i class="el-icon-phone"></i> <span style="font-size: 12px"><a :href="'tel://'+item.contactsTel"
+                                                                                       target="_blank">{{item.contactsTel}}</a></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script src="${request.contextPath}/statics/plugins/echart/echarts.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/echart/macarons.js"></script>
+<script src="${request.contextPath}/statics/js/world.js"></script>
+
+
+<script type="text/javascript">
+    /* 中间地图部分 */
+    //地图的json数据
+    var jiangxi = "${request.contextPath}/statics/jiangxi.json";
+    var yingtan = "${request.contextPath}/statics/yingtan.json";
+    var yichun = "${request.contextPath}/statics/yichun.json";
+    var xinyu = "${request.contextPath}/statics/xinyu.json";
+    var shangrao = "${request.contextPath}/statics/shangrao.json";
+    var pingxiang = "${request.contextPath}/statics/pingxiang.json";
+    var nanchang = "${request.contextPath}/statics/nanchang.json";
+    var jiujiang = "${request.contextPath}/statics/jiujiang.json";
+    var jingdezhen = "${request.contextPath}/statics/jingdezhen.json";
+    var jian = "${request.contextPath}/statics/jian.json";
+    var ganzhou = "${request.contextPath}/statics/ganzhou.json";
+    var fuzhou = "${request.contextPath}/statics/fuzhou.json";
+
+    var geoCoordMap = {
+        '南昌': [115.89, 28.48],
+        '景德镇': [117.28, 29.09],
+        '萍乡': [113.93, 27.41],
+        '九江': [115.97, 29.51],
+        '新余': [114.81, 27.72],
+        '鹰潭': [117.12, 28.10],
+        '赣州': [115.04, 25.67],
+        '吉安': [115.05, 26.88],
+        '宜春': [114.41, 28.03],
+        '抚州': [116.45, 27.79],
+        '上饶': [117.92, 28.22]
+    };
+
+    var cityMap = {
+        "南昌": nanchang,
+        "景德镇": jingdezhen,
+        "萍乡": pingxiang,
+        "九江": jiujiang,
+        "新余": xinyu,
+        "鹰潭": yingtan,
+        "赣州": ganzhou,
+        "吉安": jian,
+        "宜春": yichun,
+        "抚州": fuzhou,
+        "上饶": shangrao
+    };
+
+    var max = 480, min = 9; // todo
+    var maxSize4Pin = 100, minSize4Pin = 20;
+
+    var convertData = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var geoCoord = geoCoordMap[data[i].name];
+            if (geoCoord) {
+                res.push({
+                    name: data[i].name,
+                    value: geoCoord.concat(data[i].value),
+                    num: data[i].value
+                });
+            }
+        }
+        return res;
+    };
+
+    var vm = new Vue({
+        el: '#rrapp',
+        data: {
+            tanchu: false,
+            cityName: "",
+            listDate: [],
+            showMap: true,//地图显示
+            q: {
+                searchword: ""
+            },
+        },
+        methods: {
+            showOrOut: function () {
+                console.log("vm.tanchu=============" + vm.tanchu);
+                if ($("#zhezao").length > 0) {
+                    //元素存在时执行的代码
+                    vm.tanchu = false;
+                } else {
+                    vm.tanchu = true;
+                }
+            },
+            getMapDatetg: function () {
+                $.get("../../api/sd/mapData/getMapDateForjx", function (r) {
+                    //地图数据
+                    var mapDate = r.listMapDate;
+
+                    console.log(mapDate);
+
+                    echarts.extendsMap = function (id, opt) {
+                        $("#JXmap").width($(window).width());
+                        $("#JXmap").height($(window).height() * 0.9);
+                        // 实例
+                        var chart = this.init(document.getElementById('JXmap'));
+
+                        var curGeoJson = {};
+
+                        var levelColorMap = {
+                            '1': 'rgba(241, 109, 115, .8)',
+                            '2': 'rgba(255, 235, 59, .7)',
+                            '3': 'rgba(147, 235, 248, 1)'
+                        };
+
+                        var defaultOpt = {
+                            mapName: 'china', // 地图展示
+                            goDown: false, // 是否下钻
+                            bgColor: '#404a59', // 画布背景色
+                            activeArea: [], // 区域高亮,同echarts配置项
+                            data: [],
+                            // 下钻回调(点击的地图名、实例对象option、实例对象)
+                            callback: function (name, option, instance) {
+                            }
+                        };
+                        if (opt)
+                            opt = this.util.extend(defaultOpt, opt);
+
+                        // 层级索引
+                        var name = [opt.mapName];
+                        var idx = 0;
+                        var pos = {
+                            leftPlus: 20,
+                            leftCur: 60,
+                            left: 20,
+                            top: 70
+                        };
+
+                        var line = [[0, 0], [8, 11], [0, 22]];
+                        // style
+                        var style = {
+                            font: '18px "Microsoft YaHei", sans-serif',
+                            textColor: '#eee',
+                            lineColor: 'rgba(147, 235, 248, .8)'
+                        };
+
+                        var handleEvents = {
+                            /**
+                             * i 实例对象
+                             * o option
+                             * n 地图名
+                             **/
+                            resetOption: function (i, o, n) {
+                                var breadcrumb = this.createBreadcrumb(n);
+
+                                var j = name.indexOf(n);
+                                var l = o.graphic.length;
+                                if (j < 0) {
+                                    o.graphic.push(breadcrumb);
+                                    o.graphic[0].children[0].shape.x2 = 145;
+                                    o.graphic[0].children[1].shape.x2 = 145;
+                                    if (o.graphic.length > 2) {
+                                        for (var x = 0; x < opt.data.length; x++) {
+                                            if (n === opt.data[x].name ) {
+                                                o.series[0].data = handleEvents
+                                                    .initSeriesData([opt.data[x]]);
+                                                break;
+                                            } else
+                                                o.series[0].data = [];
+                                        }
+                                    }
+                                    ;
+                                    name.push(n);
+                                    idx++;
+                                } else {
+                                    o.graphic.splice(j + 2, l);
+                                    if (o.graphic.length <= 2) {
+                                        o.graphic[0].children[0].shape.x2 = 60;
+                                        o.graphic[0].children[1].shape.x2 = 60;
+                                        o.series[0].data = handleEvents
+                                            .initSeriesData(opt.data);
+                                    }
+                                    ;
+                                    name.splice(j + 1, l);
+                                    idx = j;
+                                    pos.leftCur -= pos.leftPlus * (l - j - 1);
+                                }
+                                ;
+
+                                o.geo.map = n;
+                                o.geo.zoom = 0.4;
+                                i.clear();
+                                i.setOption(o);
+                                this.zoomAnimation();
+                                opt.callback(n, o, i);
+                            },
+
+                            /**
+                             * name 地图名
+                             **/
+                            createBreadcrumb: function (name) {
+                                var cityToPinyin = {
+                                    "南昌": "nanchang",
+                                    "景德镇": "jingdezhen",
+                                    "萍乡": "pingxiang",
+                                    "九江": "jiujiang",
+                                    "新余": "xinyu",
+                                    "鹰潭": "yingtan",
+                                    "赣州": "ganzhou",
+                                    "吉安": "jian",
+                                    "宜春": "yichun",
+                                    "抚州": "fuzhou",
+                                    "上饶": "shangrao"
+                                };
+                                var breadcrumb = {
+                                    type: 'group',
+                                    id: name,
+                                    left: pos.leftCur + pos.leftPlus,
+                                    top: pos.top + 3,
+                                    children: [
+                                        {
+                                            type: 'polyline',
+                                            left: -90,
+                                            top: -5,
+                                            shape: {
+                                                points: line
+                                            },
+                                            style: {
+                                                stroke: '#fff',
+                                                key: name
+                                                // lineWidth: 2,
+                                            },
+                                            onclick: function () {
+                                                var name = this.style.key;
+                                                handleEvents.resetOption(chart, option,
+                                                    name);
+                                            }
+                                        },
+                                        {
+                                            type: 'text',
+                                            left: -68,
+                                            top: 'middle',
+                                            style: {
+                                                text: name,
+                                                textAlign: 'center',
+                                                fill: style.textColor,
+                                                font: style.font
+                                            },
+                                            onclick: function () {
+                                                var name = this.style.text;
+                                                handleEvents.resetOption(chart, option,
+                                                    name);
+                                            }
+                                        },
+                                        {
+                                            type: 'text',
+                                            left: -68,
+                                            top: 10,
+                                            style: {
+
+                                                name: name,
+                                                text: cityToPinyin[name] ? cityToPinyin[name]
+                                                        .toUpperCase()
+                                                    : '',
+                                                textAlign: 'center',
+                                                fill: style.textColor,
+                                                font: '12px "Microsoft YaHei", sans-serif',
+                                            },
+                                            onclick: function () {
+                                                // console.log(this.style);
+                                                var name = this.style.name;
+                                                handleEvents.resetOption(chart, option,
+                                                    name);
+                                            }
+                                        }]
+                                }
+
+                                pos.leftCur += pos.leftPlus;
+
+                                return breadcrumb;
+                            },
+
+                            // 设置effectscattere
+                            initSeriesData: function (data) {
+                                var temp = [];
+                                for (var i = 0; i < data.length; i++) {
+                                    var geoCoord = geoCoordMap[data[i].name];
+                                    if (geoCoord) {
+                                        temp.push({
+                                            name: data[i].name,
+                                            value: geoCoord.concat(data[i].value,
+                                                data[i].level)
+                                        });
+                                    }
+                                }
+                                ;
+                                return temp;
+                            },
+
+                            zoomAnimation: function () {
+                                var count = null;
+                                var zoom = function (per) {
+                                    if (!count)
+                                        count = per;
+                                    count = count + per;
+                                    // console.log(per,count);
+                                    chart.setOption({
+                                        geo: {
+                                            zoom: count
+                                        }
+                                    });
+                                    if (count < 1)
+                                        window.requestAnimationFrame(function () {
+                                            zoom(0.2);
+                                        });
+                                };
+                                window.requestAnimationFrame(function () {
+                                    zoom(0.2);
+                                });
+                            }
+                        };
+
+                        var option = {
+                            graphic: [{
+                                type: 'group',
+                                left: pos.left,
+                                top: pos.top - 4,
+                                children: [/*{
+                            type: 'line',
+                            left: 0,
+                            top: -20,
+                            shape: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 60,
+                                y2: 0
+                            },
+                            style: {
+                                stroke: style.lineColor,
+                            }
+                        }*/, /*{
+                            type: 'line',
+                            left: 0,
+                            top: 20,
+                            shape: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 60,
+                                y2: 0
+                            },
+                            style: {
+                                stroke: style.lineColor,
+                            }
+                        }*/]
+                            },
+                                {
+                                    id: name[idx],
+                                    type: 'group',
+                                    left: pos.left + 2,
+                                    top: pos.top,
+                                    children: [{
+                                        type: 'polyline',
+                                        left: 90,
+                                        top: -12,
+                                        shape: {
+                                            points: line
+                                        },
+                                        style: {
+                                            stroke: 'transparent',
+                                            key: name[0]
+                                        },
+                                        onclick: function () {
+                                            var name = this.style.key;
+                                            handleEvents.resetOption(chart, option, name);
+                                        }
+                                    },
+                                        /*{
+                                        type: 'text',
+                                        left: 0,
+                                        top: 'middle',
+                                        style: {
+                                            text: name[0] === '江西' ? '江西省' : name[0],
+                                            textAlign: 'center',
+                                            fill: style.textColor,
+                                            font: style.font
+                                        },
+                                        onclick: function () {
+                                            handleEvents.resetOption(chart, option, '江西');
+                                        }
+                                    }*/, /*{
+                            type: 'text',
+                            left: 0,
+                            top: 10,
+                            style: {
+                                text: 'JIANGXI',
+                                textAlign: 'center',
+                                fill: style.textColor,
+                                font: '12px "Microsoft YaHei", sans-serif',
+                            },
+                            onclick: function () {
+                                handleEvents.resetOption(chart, option, '江西');
+                            }
+                        }*/]
+                                }],
+                            geo: {
+                                map: opt.mapName,
+                                // roam: true,
+                                zoom: 1,
+                                label: {
+                                    normal: {
+                                        show: false,//是否显示城市名称
+                                        textStyle: {
+                                            color: '#fff'
+                                        }
+                                    },
+                                    emphasis: {
+                                        textStyle: {
+                                            color: '#fff'
+                                        }
+                                    }
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        borderColor: 'rgba(147, 235, 248, 1)',
+                                        borderWidth: 1,
+                                        areaColor: {
+                                            type: 'radial',
+                                            x: 0.5,
+                                            y: 0.5,
+                                            r: 0.8,
+                                            colorStops: [{
+                                                offset: 0,
+                                                color: 'rgba(147, 235, 248, 0)' // 0% 处的颜色
+                                            }, {
+                                                offset: 1,
+                                                color: 'rgba(147, 235, 248, .2)' // 100% 处的颜色
+                                            }],
+                                            globalCoord: false
+                                            // 缺省为 false
+                                        },
+                                        shadowColor: 'rgba(128, 217, 248, 1)',
+                                        // shadowColor: 'rgba(255, 255, 255, 1)',
+                                        shadowOffsetX: -2,
+                                        shadowOffsetY: 2,
+                                        shadowBlur: 10
+                                    },
+                                    emphasis: {
+                                        areaColor: '#389BB7',
+                                        borderWidth: 0
+                                    }
+                                },
+                                regions: opt.activeArea.map(function (item) {
+                                    if (typeof item !== 'string') {
+                                        return {
+                                            name: item.name,
+                                            itemStyle: {
+                                                normal: {
+                                                    areaColor: item.areaColor || '#389BB7'
+                                                }
+                                            },
+                                            label: {
+                                                normal: {
+                                                    show: item.showLabel,
+                                                    textStyle: {
+                                                        color: '#fff'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        return {
+                                            name: item,
+                                            itemStyle: {
+                                                normal: {
+                                                    borderColor: '#91e6ff',
+                                                    areaColor: '#389BB7'
+                                                }
+                                            }
+                                        }
+                                    }
+                                })
+                            },
+                            series: [{
+                                type: 'effectScatter',
+                                coordinateSystem: 'geo',
+                                // symbol: 'diamond',
+                                showEffectOn: 'render',
+                                rippleEffect: {
+                                    period: 15,
+                                    scale: 6,
+                                    brushType: 'fill'
+                                },
+                                hoverAnimation: true,
+                                itemStyle: {
+                                    normal: {
+                                        color: function (params) {
+                                            return levelColorMap[params.value[3]];
+                                        },
+                                        shadowBlur: 10,
+                                        shadowColor: '#333'
+                                    }
+                                },
+                                data: handleEvents.initSeriesData(opt.data)
+                            }, {
+                                name: '点',
+                                type: 'scatter',
+                                coordinateSystem: 'geo',
+                                symbol: 'pin',
+                                symbolSize: function (val) {
+                                    var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                                    var b = maxSize4Pin - a * max;
+                                    return a * val[2] + b;
+                                },
+                                label: {
+                                    normal: {
+                                        formatter: '{@[2]}',
+                                        show: true,
+                                        textStyle: {
+                                            color: '#fff',
+                                            fontSize: 12,
+                                        }
+                                    }
+                                },
+                                itemStyle: {
+                                    normal: {
+                                        color: '#3457B9', //标志颜色
+                                    }
+                                },
+                                zlevel: 6,
+                                data: convertData(mapDate),
+                            },
+                                {
+                                    //name: 'Top 5',
+                                    type: 'effectScatter',
+                                    coordinateSystem: 'geo',
+                                    data: convertData(mapDate),
+                                    symbolSize: function (val) {
+                                        return val[2] / 10;
+                                    },
+                                    showEffectOn: 'render',
+                                    rippleEffect: {
+                                        brushType: 'stroke'
+                                    },
+                                    hoverAnimation: true,
+                                    label: {
+                                        normal: {
+                                            formatter: '{b}',
+                                            position: 'right',
+                                            show: true//是否显示点的城市名称
+                                        }
+                                    },
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#fff',
+                                            shadowBlur: 10,
+                                            shadowColor: '#05C3F9'
+                                        }
+                                    },
+                                    zlevel: 1
+                                },
+                            ]
+                        };
+
+                        chart.setOption(option);
+
+                        // 添加事件
+                        chart.on('click', function (params) {
+                            $.get("../../api/sd/reportData/queryReportInfoPage", {
+                                "limit": 99,
+                                "reportType": 1, "cityName": params.name
+                            }, (r) => {
+                                vm.listDate = r.page.list;
+                                console.log(vm.listDate);
+                            });
+                            setTimeout(function () {
+                                vm.tanchu = true;
+                                vm.cityName = params.name;
+                            }, 50);
+                            /*var _self = this;
+                            if (opt.goDown && params.name !== name[idx]) {
+                                if (cityMap[params.name]) {
+                                    var url = cityMap[params.name];
+                                    $.get(url, function (response) {
+                                        // console.log(response);
+                                        curGeoJson = response;
+                                        echarts.registerMap(params.name, response);
+                                        handleEvents
+                                            .resetOption(_self, option, params.name);
+                                    });
+                                }
+                            }*/
+                        });
+
+                        chart.setMap = function (mapName) {
+                            var _self = this;
+                           /* if (mapName.indexOf('市') < 0)
+                                mapName = mapName + '市';*/
+                            var citySource = cityMap[mapName];
+                            if (citySource) {
+                                var url = './map/' + citySource + '.json';
+                                $.get(url, function (response) {
+                                    // console.log(response);
+                                    curGeoJson = response;
+                                    echarts.registerMap(mapName, response);
+                                    handleEvents.resetOption(_self, option, mapName);
+                                });
+                            }
+                            // handleEvents.resetOption(this, option, mapName);
+                        };
+
+                        return chart;
+                    };
+                    $.getJSON(jiangxi, function (geoJson) {
+                        echarts.registerMap('江西', geoJson);
+                        var myChart = echarts.extendsMap('chart-panel', {
+                            bgColor: '#154e90', // 画布背景色
+                            mapName: '江西', // 地图名
+                            goDown: false, // 是否下钻
+                            // 下钻回调
+                            callback: function (name, option, instance) {
+                                console.log(name, option, instance);
+                            },
+                            // 数据展示
+                            data: mapDate
+                        });
+                    })
+
+                });
+            },
+        },
+        mounted: function () {
+            this.getMapDatetg();
+        }
+    });
+
+    var geoCoordMapSj = {
+        '九江': [116.00, 29.70],
+        '尼日利亚': [-4.388361, 11.186148],
+        '美国洛杉矶': [-118.24311, 34.052713],
+        '香港邦泰': [114.195466, 22.282751],
+        '美国芝加哥': [-87.801833, 41.870975],
+        '加纳库马西': [-4.62829, 7.72415],
+        '英国曼彻斯特': [-1.657222, 51.886863],
+        '德国汉堡': [10.01959, 54.38474],
+        '哈萨克斯坦阿拉木图': [45.326912, 41.101891],
+        '俄罗斯伊尔库茨克': [89.116876, 67.757906],
+        '巴西': [-48.678945, -10.493623],
+        '埃及达米埃塔': [31.815593, 31.418032],
+        '西班牙巴塞罗纳': [2.175129, 41.385064],
+        '柬埔寨金边': [104.88659, 11.545469],
+        '意大利米兰': [9.189948, 45.46623],
+        '乌拉圭蒙得维的亚': [-56.162231, -34.901113],
+        '莫桑比克马普托': [32.608571, -25.893473],
+        '阿尔及利亚阿尔及尔': [3.054275, 36.753027],
+        '阿联酋迪拜': [55.269441, 25.204514],
+        '匈牙利布达佩斯': [17.108519, 48.179162],
+        '澳大利亚悉尼': [150.993137, -33.675509],
+        '美国加州': [-121.910642, 41.38028],
+        '澳大利亚墨尔本': [144.999416, -37.781726],
+        '墨西哥': [-99.094092, 19.365711],
+        '加拿大温哥华': [-123.023921, 49.311753]
+    };
+
+    var AData = [
+        [{
+            name: '九江'
+        }, {
+            name: '九江',
+            value: 100
+        }],
+        [{
+            name: '九江'
+        }, {
+            name: '加拿大温哥华',
+            value: 100
+        }],
+        [{
+            name: '九江'
+        }, {
+            name: '美国加州',
+            value: 100
+        }],
+        [{
+            name: '九江'
+        }, {
+            name: '巴西',
+            value: 100
+        }],
+        [{
+            name: '九江'
+        }, {
+            name: '澳大利亚悉尼',
+            value: 100
+        }],
+        [{
+            name: '九江'
+        }, {
+            name: '哈萨克斯坦阿拉木图',
+            value: 100
+        }],
+    ];
+
+    var planePath = 'path://M.6,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705';
+
+    var convertDataSj = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var dataItem = data[i];
+            var fromCoord = geoCoordMapSj[dataItem[0].name];
+            var toCoord = geoCoordMapSj[dataItem[1].name];
+            if (fromCoord && toCoord) {
+                res.push([{
+                    coord: fromCoord
+                }, {
+                    coord: toCoord
+                }]);
+            }
+        }
+        return res;
+    };
+
+    var color = ['#3ed4ff', '#ffa022', '#a6c84c'];
+    var Yearseries = [];
+    [
+        ['A类型', AData],
+    ].forEach(function (item, i) {
+        Yearseries.push({
+                name: item[0],
+                type: 'lines',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: 6, //箭头指向速度，值越小速度越快
+                    trailLength: 0.07, //特效尾迹长度[0,1]值越大，尾迹越长重
+                    symbol: 'arrow', //箭头图标
+                    symbolSize: 4, //图标大小
+                    color: '#fff',//颜色
+                },
+                lineStyle: {
+                    normal: {
+                        width: 0, //尾迹线条宽度
+                        opacity: 1, //尾迹线条透明度
+                        curveness: 0.2, //尾迹线条曲直度
+                        color: color[i],//颜色
+
+                    }
+                },
+                data: convertDataSj(item[1])
+            }, {
+                name: item[0],
+                type: 'lines',
+                zlevel: 2,
+                effect: {
+                    show: true,
+                    period: 6,
+                    trailLength: 0,
+                    symbol: planePath,
+                    symbolSize: 15
+                },
+                lineStyle: {
+                    normal: {
+                        color: color[i],
+                        width: 1,
+                        opacity: 0.4,
+                        curveness: 0.2
+                    }
+                },
+                data: convertDataSj(item[1])
+            }, {
+                name: item[0],
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                rippleEffect: { //涟漪特效
+                    period: 5, //动画时间，值越小速度越快
+                    brushType: 'stroke', //波纹绘制方式 stroke, fill
+                    scale: 3 //波纹圆环最大限制，值越大波纹越大
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right', //显示位置
+                        offset: [0, 0], //偏移设置
+                        formatter: function (params) {//圆环显示文字
+                            return params.data.name;
+                        },
+                        fontSize: 12
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                symbolSize: function (val) {
+                    return val[2] / 8;//圆环大小
+                },
+                itemStyle: {
+                    normal: {
+                        color: color[i]
+                    }
+                },
+                data: item[1].map(function (dataItem) {
+                    return {
+                        name: dataItem[1].name,
+                        value: geoCoordMapSj[dataItem[1].name].concat([dataItem[1].value])
+                    };
+                })
+            }, {
+                name: '点',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                symbol: 'pin',
+                symbolSize: function (val) {
+                    var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                    var b = maxSize4Pin - a * max;
+                    return a * val[2] + b;
+                },
+                label: {
+                    normal: {
+                        //formatter: '{@[2]}',
+                        show: true,
+                        textStyle: {
+                            color: '#fff',
+                            fontSize: 12,
+                        }
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#3457B9', //标志颜色
+                    }
+                },
+                zlevel: 6,
+                data: convertData(AData),
+            },
+        );
+    });
+
+    optionSj = {
+        legend: {
+            orient: 'vertical',
+            top: 'bottom',
+            left: 'right',
+            data: ['北京 Top10', '上海 Top10', '广州 Top10'],
+            textStyle: {
+                color: '#fff'
+            },
+            selectedMode: 'single'
+        },
+        geo: {
+            map: 'world',
+            label: {
+                emphasis: {
+                    show: false
+                }
+            },
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#132937',
+                    borderColor: '#0692a4'
+                },
+                emphasis: {
+                    areaColor: '#0b1c2d'
+                }
+            }
+        },
+        series: Yearseries
+    };
+
+
+    $("#SJmap").width($(window).width());
+    $("#SJmap").height($(window).height() * 0.9);
+    // 实例
+    var chartSj = echarts.init(document.getElementById('SJmap'));
+    chartSj.setOption(optionSj);
+
+    // 添加事件
+    chartSj.on('click', function (params) {
+        console.log(params);
+    })
+
+</script>
+</body>
+</html>
+
+

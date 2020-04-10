@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>出口信息金额汇总</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+                <input v-model="q.queryDate" name="queryDate" type="text" class="form-control" id="queryDate">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<a class="btn btn-info" @click="exportExcel"><i class="fa fa-download"></i>导出</a>
+
+
+            <!--<a class="btn btn-info" ><i class="fa fa-download"></i> 数据汇总导出</a>-->
+
+
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div id="addLayer" v-show="!showList" class="">
+        <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+							                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.createId" name="createId" placeholder="创建人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.createName" name="createName" placeholder="创建人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.createTime" name="createTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">修改人id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.updateId" name="updateId" placeholder="修改人id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">修改人名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.updateName" name="updateName" placeholder="修改人名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">修改时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.updateTime" name="updateTime" placeholder="修改时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">版本号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.version" name="version" placeholder="版本号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">逻辑删除</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.beDelete" name="beDelete" placeholder="逻辑删除"/>
+                        </div>
+                    </div>
+																		                    <div class="form-group">
+                        <div class="col-sm-2 control-label">用户名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.userid" name="userid" placeholder="用户名"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">企业代码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.enterpriseCode" name="enterpriseCode" placeholder="企业代码"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">企业名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.enterpriseName" name="enterpriseName" placeholder="企业名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">所属单位代码</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.unitCode" name="unitCode" placeholder="所属单位代码"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">报出日期</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.dateIn" name="dateIn" placeholder="报出日期"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">本月预计出口额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.monthAmount" name="monthAmount" placeholder="本月预计出口额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">上年本月出口额</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.yearAmount" name="yearAmount" placeholder="上年本月出口额"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">高新技术产品</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.newtelAmount" name="newtelAmount" placeholder="高新技术产品"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">机电产品</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.elecAmount" name="elecAmount" placeholder="机电产品"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">农产品及其深加工产品</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.farmAmount" name="farmAmount" placeholder="农产品及其深加工产品"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">有色金属</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.metalAmount" name="metalAmount" placeholder="有色金属"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">纺织服装</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.weaveAmount" name="weaveAmount" placeholder="纺织服装"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">轻工产品</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.lightinduAmount" name="lightinduAmount" placeholder="轻工产品"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">钢材和铁合金</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.steelAmount" name="steelAmount" placeholder="钢材和铁合金"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">医药化工</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.medicineAmount" name="medicineAmount" placeholder="医药化工"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">建材</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.materialsAmount" name="materialsAmount" placeholder="建材"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">其他产品</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.otherAmount" name="otherAmount" placeholder="其他产品"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">订单情况(增加)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.orderHigh" name="orderHigh" placeholder="订单情况(增加)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">订单情况(持平)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.orderMid" name="orderMid" placeholder="订单情况(持平)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">订单情况(减少)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.orderLow" name="orderLow" placeholder="订单情况(减少)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">价格走势(上涨)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.priceHigh" name="priceHigh" placeholder="价格走势(上涨)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">价格走势(持平)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.priceMid" name="priceMid" placeholder="价格走势(持平)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">价格走势(减少)</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.priceLow" name="priceLow" placeholder="价格走势(减少)"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">审核是否通过</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.showFlag" name="showFlag" placeholder="审核是否通过"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否纳入统计</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.statisFlag" name="statisFlag" placeholder="是否纳入统计"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">审核用户</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.statisUserid" name="statisUserid" placeholder="审核用户"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.remark" name="remark" placeholder="备注"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">订单情况</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.orderFlag" name="orderFlag" placeholder="订单情况"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">价格走势</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="wmyjTblInfoamountR.priceFlag" name="priceFlag" placeholder="价格走势"/>
+                        </div>
+                    </div>
+							        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/wmyj/wmyjtblinfoamountr.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>申报/提供信息</title>
+    <#include "/header.html">
+    <style>
+        .abow_dialog {
+            display: flex;
+            justify-content: center;
+            align-items: Center;
+            overflow: hidden;
+        }
+        .abow_dialog .el-dialog{
+            margin: 0 auto !important;
+            height: 90%;
+            overflow: hidden;
+        }
+        .el-dialog__body {
+            position: absolute;
+            left: 5%;
+            top: 80px;
+            bottom: 70px;
+            right: 0;
+            padding: 0;
+            z-index: 1;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+        .el-dialog__footer{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .el-form-item__label {
+            font-size: 13px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+
+    <!-- element 图片样式 -->
+    <style>
+        .el-upload-list--picture-card .el-upload-list__item-thumbnail {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto
+        }
+        .el-upload-list--picture-card .el-upload-list__item {
+            overflow: hidden;
+            background-color: #fff;
+            border: 1px solid #c0ccda;
+            border-radius: 6px;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 30%;
+            height: 120px;
+            margin: 0 8px 8px 0;
+            display: inline-block;
+            text-align: center;
+        }
+        .el-upload--picture-card {
+            background-color: #fbfdff;
+            border: 1px dashed #c0ccda;
+            border-radius: 6px;
+            box-sizing: border-box;
+            width: 110px;
+            height: 120px;
+            line-height: 126px;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div >
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+<!--                <input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">-->
+                <select class="selectpicker show-tick" title="请选择" v-model="q.needProvide" data-width="100%">
+                    <option value=" ">请选择</option>
+                    <option :value="0">需求方</option>
+                    <option :value="1">提供方</option>
+                </select>
+            </div>
+            <a class="btn btn-blue" @click="query">查询</a>
+            <#if shiro.hasPermission("sd:sdreportdata:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+        </#if>
+        <#if shiro.hasPermission("sd:sdreportdata:update")>
+        <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+    </#if>
+    <#if shiro.hasPermission("sd:sdreportdata:delete")>
+    <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+</#if>
+</div>
+
+</div>
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+<el-dialog :title="sdReportData.id ? '修改' : '新增'" :visible.sync="isShowForm"   :close-on-click-modal="false"  class="abow_dialog"  width="60%">
+<el-form ref="form" :model="sdReportData"  label-position="top" :rules="rules" style="margin: 10px">
+    <el-form-item label="供需方" :required="true" >
+        <el-select v-model="sdReportData.reportType" placeholder="请选择" style="width:100%" @change="clearAcceptList">
+            <el-option
+                    v-for="item in reportTypeList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
+    </el-form-item>
+
+    <el-form-item label="名称" prop="name" key="name">
+        <el-input v-model="sdReportData.name" placeholder="输入名称/公司名称"></el-input>
+    </el-form-item>
+
+    <el-form-item label="所在地" prop="city" v-if="sdReportData.reportType == 1" key="city">
+        <el-select v-model="sdReportData.city" style="width:100%" placeholder="市" v-loading="cityLoading" filterable >
+            <el-option
+                    v-for="item in cityList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+            </el-option>
+        </el-select>
+    </el-form-item>
+
+    <el-form-item label="所在国家" prop="country" v-if="sdReportData.reportType == 0" key="country">
+        <el-select v-model="sdReportData.country" placeholder="国家" filterable
+                   style="width:100%" v-loading="countryLoading" @change="getProvince(sdReportData.country)">
+            <el-option
+                    v-for="item in countryList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+            </el-option>
+        </el-select>
+    </el-form-item>
+    <el-form-item label="所在省" prop="province" v-if="sdReportData.reportType == 0" key="province">
+        <el-select v-model="sdReportData.province" placeholder="省"  style="width:100%" v-loading="provinceLoading"
+                   filterable
+        >
+            <el-option
+                    v-for="item in provinceList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+            </el-option>
+        </el-select>
+    </el-form-item>
+    <el-form-item label="详细地址 (门牌号)"  prop="address" key="address">
+        <el-input v-model="sdReportData.address" placeholder="街道, 门牌号等"></el-input>
+    </el-form-item>
+
+    <el-form-item label="类型" prop="customerType" key="customerType">
+        <el-select v-model="sdReportData.customerType" placeholder="请选择" style="width:100%" v-loading="typeLoading">
+            <el-option
+                    v-for="item in customerTypeList"
+                    :key="item.id"
+                    :label="item.value"
+                    :value="item.id">
+            </el-option>
+        </el-select>
+    </el-form-item>
+
+    <!-- 需求方 -->
+    <el-form-item label="物资对接方式" v-if="sdReportData.reportType == 0" prop="acceptTypes" key="need">
+        <el-checkbox-group v-model="sdReportData.acceptTypes" v-loading="acceptNeedLoading">
+            <el-checkbox v-for="item in acceptTypesNeedList" :label="item.id" :value="item.id" name="type">{{item.value}}</el-checkbox>
+        </el-checkbox-group>
+    </el-form-item>
+
+    <!-- 提供方 -->
+    <el-form-item label="物资对接方式" v-if="sdReportData.reportType == 1" prop="acceptTypes" key="provide">
+        <el-checkbox-group v-model="sdReportData.acceptTypes" v-loading="acceptProvideLoading">
+            <el-checkbox v-for="item in acceptTypesProvideList" :label="item.id" :value="item.id"  name="type">{{item.value}}</el-checkbox>
+        </el-checkbox-group>
+    </el-form-item>
+
+    <el-form-item label="是否需要物流" v-if="sdReportData.reportType == 1" key="needLogistics">
+        <el-select v-model="sdReportData.needLogistics" placeholder="请选择"  style="width:100%">
+            <el-option
+                    v-for="item in needLogisticsList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
+    </el-form-item>
+
+    <el-form-item label="物资清单" required style="margin-bottom: 0px"></el-form-item>
+    <el-form-item label=""
+                  :rules="{ required: true, message: '物资清单不能为空', trigger: 'blur'}"
+                  v-for="(item, index) in sdReportData.goodsList"
+                  :prop="'goodsList.' + index + '.goodsName'"
+                  style="margin-bottom: 15px"
+    >
+        <el-select v-model="item.goodsName" placeholder="请选择"
+                   filterable
+                   @change="resourceOther(item.goodsName, index)"
+                   v-loading="resourceLoading"
+                   style="width: 35%" >
+            <el-option
+                    v-for="item1 in resourceNameList"
+                    :key="item1.value"
+                    :label="item1.value"
+                    :value="item1.value">
+            </el-option>
+        </el-select>
+        <el-input-number style="width: 40%" v-model="item.goodsNum"  :min="1" :max="10000000" label="描述文字"></el-input-number>
+        <el-button @click="remove(index, item.id)">删除</el-button>
+    </el-form-item>
+
+
+    <el-form-item>
+        <el-button @click="addLogistics" >添加</el-button>
+    </el-form-item>
+
+
+
+
+    <el-form-item label="备注">
+        <el-input type="textarea" v-model="sdReportData.remark" placeholder="备注 (最多100字)" :autosize="{ minRows: 6, maxRows: 4}"></el-input>
+    </el-form-item>
+
+    <el-form-item label="联系人姓名" prop="contacts" key="contacts">
+        <el-input type="input" v-model="sdReportData.contacts" placeholder="联系人姓名" ></el-input>
+    </el-form-item>
+
+    <el-form-item label="联系人手机" prop="contactsTel" key="contactsTel">
+        <el-input type="input" v-model="sdReportData.contactsTel" placeholder="11位手机号" ></el-input>
+    </el-form-item>
+
+    <el-form-item label="需求来源" v-if="sdReportData.reportType == 0" prop="sourceType" key="sourceType">
+        <el-select v-model="sdReportData.sourceType" placeholder="需求来源" style="width:100%" v-loading="demandLoading">
+            <el-option
+                    v-for="item in sourceTypeList"
+                    :key="item.id"
+                    :label="item.value"
+                    :value="item.id">
+            </el-option>
+        </el-select>
+    </el-form-item>
+
+    <el-form-item label="相关材料图片">
+        <el-upload
+                action="${request.contextPath}/fileAction/webuploadfile"
+                list-type="picture-card"
+                ref="upload"
+                :on-preview="handlePictureCardPreview"
+                :auto-upload="false"
+                :file-list="fileList"
+                :on-success="onSuccess"
+                :on-exceed="onExceed"
+                :on-change="onChange"
+                :on-remove="onRemove"
+                :before-remove="beforeRemove"
+                accept="image/jpeg,image/png"
+                multiple
+                :limit="5"
+        >
+            <i class="el-icon-plus"></i>
+
+        </el-upload>
+        <el-dialog :visible.sync="isShowImg">
+            <img width="100%" :src="url" alt="">
+        </el-dialog>
+    </el-form-item>
+
+    <el-form-item label="修改密码" prop="password" key="password">
+        <el-input type="password" v-model="sdReportData.password" placeholder="设置修改订单的密码(重要)" ></el-input>
+    </el-form-item>
+
+</el-form>
+
+    <div slot="footer" class="dialog-footer" style="text-align: center" >
+        <el-button @click="isShowForm = false;">取 消</el-button>
+        <el-button type="primary" @click="onSubmit">确 定</el-button>
+    </div>
+</el-dialog>
+
+<!--<div id="addLayer" v-show="!showList" class="">
+    <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">供需方</div>
+            <div class="col-sm-10">
+                <select class="selectpicker show-tick" v-model="sdReportData.reportType" title="请选择" @change="clearAcceptList">
+                    <option :value="0">我是需求方</option>
+                    <option :value="1">我是提供方</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">名称/公司名称</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.name" name="name" placeholder="名称/公司名称"/>
+            </div>
+        </div>
+        <div class="form-group" v-if="sdReportData.reportType ==  0" key="country">
+            <div class="col-sm-2 control-label">所在地（国家）</div>
+            <div class="col-sm-10">
+                <select class="selectpicker show-tick" v-model="sdReportData.country" title="所在地（国家）"
+                        data-size="5" data-live-search="true"
+                        @change="getProvince(sdReportData.country)">
+                    <option v-for="item in countryList" :value="item.id">{{ item.name }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" v-if="sdReportData.reportType ==  0" key="province">
+            <div class="col-sm-2 control-label">所在地（省）</div>
+            <div class="col-sm-10">
+                <select class="selectpicker show-tick" v-model="sdReportData.province"
+                        data-size="5" data-live-search="true"
+                        title="所在地（省" >
+                    <option v-for="item in provinceList" :value="item.id">{{ item.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" v-if="sdReportData.reportType == 1" key="city">
+            <div class="col-sm-2 control-label">所在地（市）</div>
+            <div class="col-sm-10">
+                <select class="selectpicker show-tick" v-model="sdReportData.city"
+                        data-size="5" data-live-search="true"
+                        title="所在地（市）">
+                    <option v-for="item in cityList" :value="item.id">{{ item.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细地址（门牌号）</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.address" name="address"
+                       placeholder="详细地址（门牌号）"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">客户类型</div>
+            <div class="col-sm-10">
+                <select class="selectpicker show-tick" v-model="sdReportData.customerType"
+                        data-size="5" data-live-search="true"
+                        title="客户类型">
+                    <option v-for="item in customerTypeList" :value="item.id">{{ item.value }}</option>
+                </select>
+            </div>
+        </div>
+
+        &lt;!&ndash; 需求方 &ndash;&gt;
+        <div class="form-group" v-if="sdReportData.reportType == 0" prop="acceptTypes" key="need">
+            <div class="col-sm-2 control-label">物资对接方式</div>
+            <div class="col-sm-10">
+                <el-checkbox-group v-model="sdReportData.acceptTypes" >
+                    <el-checkbox v-for="item in acceptTypesNeedList" :label="item.id" :value="item.id" name="type">
+                        {{item.value}}
+                    </el-checkbox>
+                </el-checkbox-group>
+            </div>
+        </div>
+
+        &lt;!&ndash; 提供方 &ndash;&gt;
+        <div class="form-group" v-if="sdReportData.reportType == 1" prop="acceptTypes" key="provide">
+            <div class="col-sm-2 control-label">物资对接方式</div>
+            <div class="col-sm-10">
+                <el-checkbox-group v-model="sdReportData.acceptTypes" >
+                    <el-checkbox v-for="item in acceptTypesProvideList" :label="item.id" :value="item.id" name="type">
+                        {{item.value}}
+                    </el-checkbox>
+                </el-checkbox-group>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">备注（最多100字）</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.remark" name="remark"
+                       placeholder="备注（最多100字）"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">联系人</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.contacts" name="contacts"
+                       placeholder="联系人"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">联系人手机号</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.contactsTel" name="contactsTel"
+                       placeholder="联系人手机号"/>
+            </div>
+        </div>
+        <div class="form-group" v-if="sdReportData.reportType ==  0" key="sourceType">
+            <div class="col-sm-2 control-label">需求来源</div>
+            <div class="col-sm-10">
+                <select class="selectpicker show-tick" v-model="sdReportData.sourceType"
+                        data-live-search="true" data-size="5"
+                        title="需求来源">
+                    <option v-for="item in sourceTypeList" :value="item.id">{{ item.value }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">密码</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.password" name="password"
+                       placeholder="密码"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">定位经纬度</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.latLng" name="latLng"
+                       placeholder="定位经纬度"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">定位地址</div>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" v-model="sdReportData.locationAddress" name="locationAddress"
+                       placeholder="定位地址"/>
+            </div>
+        </div>
+
+    </form>
+</div>-->
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sd/sdreportdata.js?_${.now?long}"></script>
+</body>
+</html>

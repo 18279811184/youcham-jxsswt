@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sd.dao.SdReportDataDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.sd.entity.SdReportDataEntity" id="sdReportDataMap">
+        <result property="id" column="ID"/>
+        <result property="reportType" column="REPORT_TYPE"/>
+        <result property="name" column="NAME"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="city" column="CITY"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="customerType" column="CUSTOMER_TYPE"/>
+        <result property="acceptTypes" column="ACCEPT_TYPES"/>
+        <result property="remark" column="REMARK"/>
+        <result property="contacts" column="CONTACTS"/>
+        <result property="contactsTel" column="CONTACTS_TEL"/>
+        <result property="sourceType" column="SOURCE_TYPE"/>
+        <result property="fileIds" column="FILE_IDS"/>
+        <result property="salt" column="SALT"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="latLng" column="LAT_LNG"/>
+        <result property="locationAddress" column="LOCATION_ADDRESS"/>
+        <result property="createId" column="CREATE_ID"/>
+        <result property="createName" column="CREATE_NAME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateId" column="UPDATE_ID"/>
+        <result property="updateName" column="UPDATE_NAME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="version" column="VERSION"/>
+        <result property="beDelete" column="BE_DELETE"/>
+    </resultMap>
+
+    <select id="getMapDateForjx" resultType="map">
+        SELECT
+        tt.name "name",
+        tt.value "value",
+        (CASE
+        WHEN tt.value &lt; 5 THEN '1'
+        WHEN tt.value &lt; 10 THEN '2'
+        ELSE '3'
+        END ) "level"
+        FROM
+        (
+        SELECT
+        ct.name name,
+        ( SELECT count( 0 ) FROM SD_REPORT_DATA WHERE CITY = t.CITY and  REPORT_TYPE = 1 and BE_DELETE = 0 ) value
+        FROM
+        (
+        SELECT
+        sc.id city
+        FROM
+        SD_REPORT_DATA srd LEFT JOIN SWZJ_COUNTY sc ON srd.CITY = sc.id
+        WHERE
+        1 = 1
+        AND sc.FIRST_LEVEL_PARENT = 'LF360000'
+        GROUP BY
+        sc.id
+        ) t LEFT JOIN SWZJ_COUNTY ct ON t.CITY = ct.id
+        ) tt
+
+    </select>
+
+    <!-- 获取世界各国需求分布  -->
+    <select id="queryDemandDistributionByCountry" resultType="map">
+        select a.ID,A.NAME,a.lng,a.lat,b.data_total from SD_INTERNATIONAL_LOCATION a
+            inner join(
+            select COUNTRY,count(1) data_total from SD_REPORT_DATA
+            where BE_DELETE = 0 and report_type = 0
+            GROUP BY COUNTRY
+        )b on a.id = b.COUNTRY
+    </select>
+
+    <!-- 最近一周供需分布  -->
+    <select id="querySupplyDemandDistribution" resultType="map">
+       select day,
+        (select count(1) from SD_REPORT_DATA where BE_DELETE = 0 and to_char(CREATE_TIME,'yyyy-mm-dd') = day and REPORT_TYPE = 0) demand_count,
+        (select count(1) from SD_REPORT_DATA where BE_DELETE = 0 and to_char(CREATE_TIME,'yyyy-mm-dd') = day and REPORT_TYPE = 1) supply_count
+		from(
+			select to_char(CREATE_TIME,'yyyy-mm-dd') day from SD_REPORT_DATA
+			where BE_DELETE = 0 and CREATE_TIME is not null
+			GROUP BY to_char(CREATE_TIME,'yyyy-mm-dd')
+            ORDER BY day desc
+		) day_list
+        where rownum &lt;=7
+    </select>
+
+    <!-- 获取需求物资总数前十国家  -->
+    <select id="queryDemandGoodsTotalTop10ByCountry" resultType="map">
+        select * from(
+            select a.ID,A.NAME,a.lng,a.lat,b.data_total from SD_INTERNATIONAL_LOCATION a
+            inner join (
+                select COUNTRY,sum(GOODS_NUM) data_total from SD_REPORT_GOODS a
+                inner join SD_REPORT_DATA b on a.REPORT_DATA_ID=b.ID and b.BE_DELETE = 0 and a.BE_DELETE = 0
+                where report_type = 0
+                GROUP BY COUNTRY
+            ) b on a.id = b.COUNTRY
+            order by b.data_total desc
+        ) a
+        where rownum &lt;=10
+
+    </select>
+
+    <!-- 获取需求单总数前十国家  -->
+    <select id="queryDemandReportTotalTop10ByCountry" resultType="map">
+         select * from(
+            select a.ID,A.NAME,a.lng,a.lat,b.data_total from SD_INTERNATIONAL_LOCATION a
+            inner join (
+                select COUNTRY,count(1) data_total from SD_REPORT_GOODS a
+                inner join SD_REPORT_DATA b on a.REPORT_DATA_ID=b.ID and b.BE_DELETE = 0 and a.BE_DELETE = 0
+                where report_type = 0
+                GROUP BY COUNTRY
+            ) b
+        on a.id = b.COUNTRY
+        order by b.data_total desc) a
+        where rownum &lt;=10
+
+    </select>
+
+    <!-- 获取提供物资总数前十城市  -->
+    <select id="querySupplyGoodsTotalTop10ByCity">
+        select * from(
+            select a.ID,A.NAME,b.data_total from SWZJ_COUNTY a
+            inner join (
+                select city,sum(GOODS_NUM) data_total from SD_REPORT_GOODS a inner join SD_REPORT_DATA b on a.REPORT_DATA_ID=b.ID and b.BE_DELETE = 0 and a.BE_DELETE = 0
+
+                where report_type = 1
+                GROUP BY city
+            ) b
+            on a.id = b.city
+            where a.id is not null
+            order by b.data_total desc
+        )
+        where rownum &lt;=10
+    </select>
+
+    <!-- 获取物资总数前十的物资  -->
+    <select id="querySupplyGoodsTotalTop10">
+       select * from(
+            select GOODS_NAME,sum(GOODS_NUM) data_total from SD_REPORT_GOODS a
+                inner join SD_REPORT_DATA b on a.REPORT_DATA_ID=b.ID and b.BE_DELETE = 0 and a.BE_DELETE = 0
+            where report_type = 1
+            GROUP BY a.GOODS_NAME
+            order by sum(GOODS_NUM) desc
+        ) b
+         where rownum &lt;=10
+    </select>
+
+</mapper>

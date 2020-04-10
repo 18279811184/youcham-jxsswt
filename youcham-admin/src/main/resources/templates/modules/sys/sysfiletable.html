@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文件表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+	    <div class="grid-btn" style="margin-bottom: 15px">
+        	<div class="form-group col-sm-2" style="min-width: 250px">
+				<input type="text" class="form-control" v-model="q.filebz" @keyup.enter="query" placeholder="备注">
+			</div>
+		    <a class="btn btn-blue" @click="query">查询</a>
+          	<a v-show="!nodel" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<!-- <#if shiro.hasPermission("ins:sysfiletable:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("ins:sysfiletable:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("ins:sysfiletable:delete")>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if> -->
+<!-- 			<#if shiro.hasPermission("ins:sysfiletable:delete")> -->
+<!--             <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a> -->
+<!-- 			</#if> -->
+		</div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">文件序号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.fileXh" placeholder="文件序号"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">文件名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.fileName" placeholder="文件名称"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">文件类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.fileType" placeholder="文件类型"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">文件备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.fileRemark" placeholder="文件备注"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">创建人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.fileCreatid" placeholder="创建人"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.fileCreatedate" placeholder="创建时间"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">删除标识</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="sysFiletable.beDelete" placeholder="删除标识"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/ins/sysfiletable.js?_${.now?long}"></script>
+</body>
+</html>

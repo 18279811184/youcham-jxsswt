@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>流程任务列表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input  type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<div class="form-group col-sm-2">
+				<select class="form-control" v-model="q.assignee" >
+					<option>请选择</option>
+					<option>张三</option>
+					<option>李四</option>
+					<option>王五</option>
+				</select>
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<a class="btn btn-blue" @click="completeTask">完成任务</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$(function () {
+    $("#jqGrid").jqGrid({
+        url: baseURL + 'activity/getTasks',
+        datatype: "json",
+        colModel: [			
+			{ label: '任务ID', name: 'taskId',  width: 150, key: true},
+			{ label: '流程定义ID', name: 'processDefinitionId',  width: 180 }, 	
+			{ label: '流程实例ID', name: 'processInstanceId',  width: 120 }, 	
+			{ label: '名称', name: 'name',  width: 180 }, 	
+			{ label: '执行者', name: 'assignee',  width: 180 }, 	
+// 			{ label: '标识', name: 'description',  width: 180 }, 	
+			{ label: '开始时间', name: 'createTime',  width: 180 }, 	
+			{ label: '执行ID', name: 'executionId',  width: 180 }, 	
+			{ label: '定义Key', name: 'definitionKey',  width: 180 }	
+        ],
+		viewrecords: true,
+        height: 385,
+        rowNum: 10,
+		rowList : [10,30,50],
+        rownumbers: true, 
+        rownumWidth: 25, 
+        autowidth:true,
+//         shrinkToFit:false,   
+		autoScroll: true,
+        multiselect: true,
+        pager: "#jqGridPager",
+        jsonReader : {
+            root: "page.list",
+            page: "page.currPage",
+            total: "page.totalPage",
+            records: "page.totalCount"
+        },
+        prmNames : {
+            page:"page", 
+            rows:"limit", 
+            order: "order"
+        },
+        gridComplete:function(){
+        	//隐藏grid底部滚动条
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        }
+    });
+    
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		q:{}
+	},
+	methods: {
+		query: function () {
+			vm.reload(true);
+		},
+		reload: function (event) {
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                page:page,
+           		postData:{'name': vm.q.name,'assignee':vm.q.assignee}
+            }).trigger("reloadGrid");
+		},
+		completeTask: function(){
+			var id = getSelectedRow();
+			if(id == null){
+				return ;
+			}
+			
+			$.get(baseURL+ "/activity/completeTask",{taskId:id},function(r){
+				if(r.code==0){
+					layer.alert("操作成功",{ icon: 1});
+					vm.reload();
+				}else{
+					alert("操作失败",{ icon: 2});
+				}
+			});
+		}
+		
+	},
+	mounted : function() {
+	},
+	created :function(){
+		
+	}
+});
+
+
+
+
+</script>
+
+</body>
+</html>

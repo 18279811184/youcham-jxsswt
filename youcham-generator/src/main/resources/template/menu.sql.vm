@@ -1,0 +1,21 @@
+DECLARE parentId VARCHAR2(100) := sys_guid();
+
+BEGIN
+-- 按钮父菜单ID
+-- SELECT us.LAST_NUMBER INTO parentId FROM USER_SEQUENCES us WHERE us.SEQUENCE_NAME = UPPER('sys_menu_seq');
+-- parentId := parentId + 1;
+-- 菜单SQL
+INSERT INTO sys_menu (menu_id,parent_id, name, url, perms, type, icon, order_num)
+VALUES (parentId,'1', '${comments}', 'modules/${moduleName}/${pathName}.html', NULL, '1', 'fa fa-file-code-o', '6');
+
+
+-- 菜单对应按钮SQL
+INSERT INTO sys_menu (menu_id,parent_id, name, url, perms, type, icon, order_num)
+VALUES (sys_guid(),parentId, '查看', null, '${moduleName}:${pathName}:list,${moduleName}:${pathName}:info', '2', null, '6');
+INSERT INTO sys_menu (menu_id,parent_id, name, url, perms, type, icon, order_num)
+VALUES (sys_guid(),parentId, '新增', null, '${moduleName}:${pathName}:save', '2', null, '6');
+INSERT INTO sys_menu (menu_id,parent_id, name, url, perms, type, icon, order_num)
+VALUES (sys_guid(),parentId, '修改', null, '${moduleName}:${pathName}:update', '2', null, '6');
+INSERT INTO sys_menu (menu_id,parent_id, name, url, perms, type, icon, order_num)
+VALUES (sys_guid(),parentId, '删除', null, '${moduleName}:${pathName}:delete', '2', null, '6');
+END;

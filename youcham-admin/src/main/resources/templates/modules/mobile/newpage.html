@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>江西疫情防控“三保”航空物流信息云平台</title>
+    <#include "/header.html">
+    <link rel="stylesheet"
+          href="${request.contextPath}/statics/css/AdminLTE.min.css">
+    <link rel="stylesheet"
+          href="${request.contextPath}/statics/css/all-skins.min.css">
+    <!--    <link rel="stylesheet" href="${request.contextPath}/statics/css/indexT/indexn2.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/indexT/indexn3.css">-->
+
+
+    <!--    <script src="${request.contextPath}/statics/js/modules/summary/showdata.js"></script>-->
+    <style type="text/css">
+        body {
+            background: url(../../statics/images/background.png);
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .border {
+            border: 0px solid red;
+        }
+
+        .float_left {
+            float: left;
+        }
+
+        .biaoti {
+            width: 100%;
+            height: 10%;
+        }
+
+        #biaoti {
+            /* 	width: 310px; */
+            height: 45px;
+            text-align: center;
+            line-height: 45px;
+            color: #FFF;
+            font-size: 30px;
+            /* 	margin-left: 510px; */
+            margin-top: 1.5%;
+            width: 100%;
+        }
+
+        #showTime {
+            width: 280px;
+            height: 30px;
+            font-size: 17px;
+            color: #2749FF;
+            text-align: center;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #biaotiImg {
+            width: 100%;
+            height: 40px;
+            /* background-image: url(../../statics/images/biaotiImg.gif); */
+            background-size: 50%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin-top: 10px;
+        }
+
+        .shengti {
+            width: 100%;
+            height: 90%;
+            /*margin-top: 10px;*/
+        }
+
+        .shengti_left {
+            width: 24.5%;
+            height: 100%;
+            margin-top: 10px;
+            margin-left: 5px;
+
+            /*border:1px solid blue;*/
+        }
+
+        .shengti_middle {
+            width: 49.5%;
+            height: 100%;
+            margin-top: 10px;
+            margin-left: 5px;
+            /* background: url(../../statics/images/sc1.png); */
+            background-size: 100% 100%;
+            /*border:1px solid red;*/
+        }
+
+        .wenzi {
+            color: #FFFFFF;
+            text-align: center;
+            width: 130px;
+            margin-top: 5px;
+            /* background: url(../../statics/images/sc1.png); */
+            cursor: pointer
+        }
+
+        #JXmap {
+            width: 100%;
+            margin-top: 15px;
+            height: 520px;
+        }
+
+        #JXmap1 {
+            width: 100%;
+            margin-top: 15px;
+            height: 520px;
+        }
+
+        .shengti_right {
+            width: 24.5%;
+            height: 100%;
+            margin-top: 10px;
+            margin-right: 5px;
+            float: right;
+            /*border:1px solid darkmagenta;*/
+        }
+
+        .shengti_left_top {
+            width: 99%;
+            height: 24.5%;
+            margin-top: 2px;
+            margin-left: 5px;
+            /* background: url(../../statics/images/sc1.png); */
+            background-size: 100% 100%;
+            /*border:1px solid blue;*/
+        }
+
+        .shengti_middle_top {
+            width: 99%;
+            height: 42.5%;
+            margin-top: 10px;
+            margin-left: 2px;
+            /* background: url(../../statics/images/sc1.png); */
+            background-size: 100% 100%;
+            /*border:1px solid aquamarine;*/
+        }
+
+
+        .shengti_middle_top2 {
+            width: 70%;
+            height: 49.5%;
+            margin-top: 2px;
+            margin-left: 2px;
+            /* background: url(../../statics/images/sc1.png); */
+            background-size: 100% 100%;
+            /*border:1px solid aquamarine;*/
+        }
+
+        .shengti_middle_top3 {
+            width: 29%;
+            height: 100%;
+            margin-top: 2px;
+            margin-left: 2px;
+            /* background: url(../../statics/images/sc1.png); */
+            background-size: 100% 100%;
+            /*border:1px solid aquamarine;*/
+        }
+
+        .shengti_right_top {
+            width: 99%;
+            height: 24.5%;
+            margin-top: 2px;
+            margin-right: 5px;
+            float: right;
+            /*border:1px solid darkmagenta;*/
+        }
+
+        .display_none {
+            display: none;
+        }
+
+        .clear {
+            clear: both;
+            height: 0;
+            line-height: 0;
+            font-size: 0;
+            /*border:1px solid red;*/
+        }
+
+    </style>
+    <style type="text/css">
+        #allmap {
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        .btn-alert-close {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .btn-alert-close:hover {
+            color: #dd4b39;
+        }
+
+        .anchorBL {
+            display: none;
+        }
+
+        body {
+            background-color: transparent;
+        }
+
+        .vw {
+            margin-left: 40px;
+            width: 250px;
+            height: 112px;
+            border: 1px solid #d2d6de;
+            float: left;
+            font-size: 15px;
+            padding: 15px;
+        }
+
+        .text_view .text p:last-child,
+        .rounded_rect .text p:last-child,
+        .circle_rect .text p:last-child,
+        .mtooltip .text p:last-child {
+            text-align: left;
+        }
+
+        .info-list p {
+            line-height: 25px;
+        }
+
+        .info-list label {
+            width: 90px;
+            text-align: right;
+        }
+
+        .icon_button .icon {
+            color: #999;
+        }
+
+        .text {
+            width: 70px;
+            height: 30px;
+            /*  border:2px solid rgb(16, 142, 233); */
+            text-align: center;
+            float: left;
+            margin-left: 20px;
+        }
+
+        .box-bodyc {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+            padding: 10px;
+
+            /* min-height: 260px; */
+        }
+
+        .bdblue {
+            border: 1px solid #ccc;;
+            margin-left: 15px;
+            width: 98%;
+        }
+
+        .hscolor {
+            color: #B0B0B0;
+            font-weight: bolder;
+        }
+
+        .ziti {
+
+            font-weight: bold;
+        }
+
+        .bj {
+            margin-left: 30px;
+        }
+
+        .organ img {
+            width: 70px
+        }
+
+        .task .products-list .product-info {
+            margin-left: 10px;
+        }
+
+        .chart_list {
+            margin-top: 80px;
+        }
+
+        .center {
+            display: -webkit-flex;
+            -webkit-justify-content: center;
+            -webkit-align-items: center;
+        }
+
+        .title {
+            border-left: 4px solid #dd4b39;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+
+        .chart-legend li {
+            color: #6c6868;
+            line-height: 30px;
+        }
+
+        .row {
+            border: none
+        }
+
+        .info-box-text {
+            font-size: 16px
+        }
+
+        .box {
+            border: 1px solid #d2d6de;
+        }
+
+        .right {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            /*border:1px solid blue;
+            */
+        }
+
+        .arrow_box {
+            width: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .right-arrow1,
+        .right-arrow2 {
+            width: 0;
+            height: 0;
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-top: 10px transparent dashed;
+            border-right: 10px transparent dashed;
+            border-bottom: 10px transparent dashed;
+            border-left: 10px #fff solid;
+            overflow: hidden;
+        }
+
+        .right-arrow1 {
+            left: 1px;
+            /*重要*/
+            border-left: 10px #333 solid;
+        }
+
+        .widget rounded_rect hcenter vmiddle {
+        }
+
+        .xxqiu {
+            border: 1px solid #dd4b39;
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            float: left;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50px;
+            border: solid #dd4b39 3px;
+            background-color: #dd4b39;
+        }
+
+        @media screen and (min-width: 1000px) {
+            .tztsize {
+                width: 300px;
+            }
+        }
+
+        @media screen and (min-width: 300px) {
+            .tztsize {
+                width: 190px;
+            }
+        }
+
+        .modal {
+
+            overflow: hidden;
+            outline: 0;
+            -webkit-overflow-scrolling: touch;
+            background-color: rgb(0, 0, 0);
+            filter: alpha(opacity=60);
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+
+            text-align: center;
+            /*让div内部文字居中*/
+            width: 100%;
+            height: 100%;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .chartdt {
+            text-align: center;
+            /*让div内部文字居中*/
+            width: 33%;
+            height: 300px;
+            display: inline;
+            float: left;
+        }
+
+
+        .loading {
+
+            width: 8em;
+            height: 8em;
+            position: relative;
+            margin-top: -6px;
+            margin-left: -20px;
+        }
+
+        .loading .progress {
+            position: absolute;
+            width: 6em;
+            height: 6em;
+            background-color: white;
+            border-radius: 50%;
+            left: 1em;
+            top: 1em;
+            line-height: 6em;
+            text-align: center;
+        }
+
+        .left,
+        .right {
+            width: 4em;
+            height: 8em;
+            overflow: hidden;
+            position: relative;
+            float: left;
+            background-color: #ccc;
+        }
+
+        .left {
+            border-radius: 8em 0 0 8em;
+        }
+
+        .right {
+            border-radius: 0 8em 8em 0;
+        }
+
+        .left:after,
+        .right:after {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 4em;
+            height: 8em;
+            background-color: white;
+            border-radius: 8em 0 0 8em;
+            background-color: #48a9ef;
+        }
+
+        .right:after {
+            content: "";
+            position: absolute;
+            display: block;
+            border-radius: 0 8em 8em 0;
+        }
+
+        .left:after {
+            transform-origin: right center;
+        }
+
+        .right:after {
+            transform-origin: left center;
+            transform: rotateZ(300deg);
+        }
+    </style>
+</head>
+<body>
+<!-- 标题部分 -->
+<div class="biaoti border">
+    <div id="biaoti" class="float_left border">江西疫情防控“三保”航空物流信息云平台newpage.html</div>
+    <div id="showTime" class="float_left border"></div>
+    <div class="clearfix"></div>
+    <!-- <div id="biaotiImg" class="border"></div> -->
+</div>
+
+
+<!-- 标题以下身体部分 -->
+<div class="shengti">
+    <!-- 上 -->
+    <div  class="shengti_left float_left">
+        <div id="chart1" class="shengti_left_top"></div>
+        <div id="chart2" class="shengti_left_top"></div>
+        <div id="chart3"  class="shengti_left_top"></div>
+        <div id="chart4" class="shengti_left_top"></div>
+    </div>
+    <!--中上-->
+    <div class="shengti_middle float_left">
+        <div id="121" style="text-align:center;padding-bottom: 20px;height:4%;width:50%; margin-left:25%; border:1px solid rgba(7, 207, 239, 0.3);border-radius: 5px;" >
+            <div style="font-size:18px;color:#51ffae;font-weight: bold;padding-left:5%;" >
+                <span style="font-size:12px;">全球共需防疫物资(件)&nbsp;&emsp;</span>
+                <span style="">295,460,981</span>
+            </div>
+        </div>
+        <div id="chart5" class="shengti_middle_top"></div>
+        <div style="width:99%;height:50%; display: flex">
+            <div id="chart6" class="shengti_middle_top2" style="height: 100%"></div>
+            <div id="chart6info" class="shengti_middle_top3" style="flex: 1">
+                <div class="panel panel-info" style="color: #ccc; background: transparent;border-color: #438be4;margin-bottom:12px;">
+                    <div class="panel-heading" style="color: #409eff;background-color: transparent; border-color: #438be4;">
+                        <span style="font-size:14px;" class="panel-title">全省防疫物资库存统计</span>
+                    </div>
+                    <div id="dvmq" class="panel-body" style="height: 8.5vh;font-size: 12px;padding-top: 0; padding-bottom: 0;">
+                        <ul style="list-style: none;padding:0; height: 100%;overflow-y:scroll;overflow-y:hidden;">
+                            <li style="margin-top:5px;">
+                                <div>
+                                    <div style="width:50%;float: left"> N95口罩</div>
+                                    <div style="flex: 1;height:20px;"> <span class="" >1046430</span> 个</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 防护服：</div>
+                                <div style="flex: 1;height:20px;"> <span class="" >6430</span> 件</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 医用酒精：</div>
+                                <div style="flex: 1;height:20px;">  <span class="" >10464300</span> 瓶</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 84消毒液：</div>
+                                <div style="flex: 1;height:20px;">  <span class="" >10464345</span> 瓶</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 呼吸面罩：</div>
+                                <div style="flex: 1;height:20px;"> <span class="" >10466</span> 个</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 检测试剂盒：</div>
+                                <div style="flex: 1;height:20px;"> <span class="" >1052345</span> 盒</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-info" style="color: #ccc; background: transparent;border-color: #438be4;margin-bottom:12px;">
+                    <div class="panel-heading" style="color: #409eff;background-color: transparent; border-color: #438be4;">
+                        <span style="font-size:14px;" class="panel-title">全省各类物资累计供应统计</span>
+                    </div>
+                    <div id="dvmq1" class="panel-body" style="height: 8.5vh;font-size: 12px;padding-top: 0; padding-bottom: 0;">
+                        <ul style="list-style: none;padding:0; height: 100%;overflow-y:scroll;overflow-y:hidden;">
+                            <li style="margin-top:5px;">
+                                <div>
+                                    <div style="width:50%;float: left"> N95口罩：</div>
+                                    <div style="flex: 1;height:20px;"> <span >10430</span> 个</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 防护服：</div>
+                                <div style="flex: 1;height:20px;"> <span>643550</span> 件</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 医用酒精： </div>
+                                <div style="flex: 1;height:20px;"> <span>104550</span> 瓶</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 84消毒液：</div>
+                                <div style="flex: 1;height:20px;"> <span>10464555</span> 瓶</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 呼吸面罩：</div>
+                                <div style="flex: 1;height:20px;"> <span>10466</span> 个</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left">检测试剂盒：</div>
+                                <div style="flex: 1;height:20px;" > <span>252245</span> 盒</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-info" style= "color: #ccc; background: transparent;border-color: #438be4;margin-bottom:12px;">
+                    <div class="panel-heading" style="color: #409eff;background-color: transparent; border-color: #438be4;">
+                        <span style="font-size:14px;" class="panel-title">向全球供应物流方式统计</span>
+                    </div>
+                    <div id="dvmq2" class="panel-body" style="height: 8.5vh;font-size: 12px;padding-top: 0; padding-bottom: 0;">
+                        <ul style="list-style: none;padding:0; height: 100%;overflow-y:scroll;overflow-y:hidden;">
+                            <li style="margin-top:5px;">
+                                <div>
+                                    <div style="width:50%;float: left"> 航&nbsp;线：</div>
+                                    <div style="flex: 1;height:20px;"><span class="" >20</span> 次</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 水&nbsp;运：</div>
+                                <div style="flex: 1;height:20px;"><span class="" >6350</span> 次</div>
+                            </li>
+                            <li>
+                                <div style="width:50%;float: left"> 铁&nbsp;路： </div>
+                                <div style="flex: 1;height:20px;">  <span class="" >1050</span> 次</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--下-->
+    <div  class="shengti_right">
+        <div id="chart7" class="shengti_right_top"></div>
+        <div id="chart8" class="shengti_right_top"></div>
+        <div id="chart9"  class="shengti_right_top"></div>
+        <div id="chart10" class="shengti_right_top"></div>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/plugins/echart/echarts.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/echart/macarons.js"></script>
+<script src="${request.contextPath}/statics/js/world.js"></script>
+
+<script>
+    //左边div初始化宽度
+    var shengti_left_top_width=$(parent.window).width()*0.35*0.65;
+    //左边div初始化高度
+    var shengti_left_top_height=$(parent.window).height()*0.88*0.25;
+
+
+    //中间下方div初始化宽度
+    var shengti_mid_top_width=$(parent.window).width()*0.35*0.364;
+    //中间下方div初始化高度
+    var shengti_mid_top_height=$(parent.window).height()*0.86*0.24;
+
+
+    //右边div初始化宽度
+    var shengti_right_top_width=$(parent.window).width()*0.35*0.65;
+
+    //右边div初始化高度
+    var shengti_right_top_height=$(parent.window).height()*0.86*0.25;
+
+
+    $("#chart1").width(shengti_left_top_width);
+    $("#chart1").height(shengti_left_top_height);
+
+    $("#chart2").width(shengti_left_top_width);
+    $("#chart2").height(shengti_left_top_height);
+
+    $("#chart3").width(shengti_left_top_width);
+    $("#chart3").height(shengti_left_top_height);
+
+    $("#chart4").width(shengti_left_top_width);
+    $("#chart4").height(shengti_left_top_height);
+
+
+
+
+    $("#chart7").width(shengti_right_top_width);
+    $("#chart7").height(shengti_right_top_height);
+
+    $("#chart8").width(shengti_right_top_width);
+    $("#chart8").height(shengti_right_top_height);
+
+    $("#chart9").width(shengti_right_top_width);
+    $("#chart9").height(shengti_right_top_height);
+
+    $("#chart10").width(shengti_right_top_width);
+    $("#chart10").height(shengti_right_top_height);
+
+
+    option1 = {
+        // backgroundColor: '#00265f',
+        title: {
+            top: '1%',
+            left: 'center',
+            text: '全球防疫物资需求国别分布',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            top: '21%',
+            right: '5%',
+            left: '15%',
+            bottom: '15%'
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['美国', '意大利', '德国', '法国', '澳大利亚', '日本', '泰国'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        }],
+        yAxis: [{
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+        }],
+        series: [{
+            type: 'bar',
+            data: [130000, 65000, 37700, 25300, 22500, 18800, 15600],
+            barWidth: '10px',
+            itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(0,244,255,1)' // 0% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: 'rgba(0,77,167,1)' // 100% 处的颜色
+                    }], false),
+                    barBorderRadius: [30, 30, 30, 30],
+                    shadowColor: 'rgba(0,160,221,1)',
+                    shadowBlur: 4,
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    lineHeight: 20,
+                    width: 60,
+                    height: 20,
+                    backgroundColor: 'rgba(0,160,221,0.1)',
+                    borderRadius: 200,
+                    position: ['-15', '-30'],
+                    distance: 1,
+                    formatter: [
+                        '    {d|●}',
+                        ' {a|{c}}     \n',
+                        '    {b|}'
+                    ].join(','),
+                    rich: {
+                        d: {
+                            color: '#3CDDCF',
+                        },
+                        a: {
+                            color: '#fff',
+                            align: 'center',
+                        },
+                        b: {
+                            width: 1,
+                            height: 30,
+                            borderWidth: 1,
+                            borderColor: '#234e6c',
+                            align: 'left'
+                        },
+                    }
+                }
+            }
+        }]
+    };
+
+    option2 = {
+        // backgroundColor: '#00265f',
+        title: {
+            top: '1%',
+            left: 'center',
+            text: '全省累计供应防疫物资情况',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            top: '21%',
+            right: '5%',
+            left: '15%',
+            bottom: '15%'
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['南昌市', '九江市', '宜春市', '赣州市', '抚州市', '鹰潭市', '新余市'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        }],
+        yAxis: [{
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+        }],
+        series: [{
+            type: 'bar',
+            data: [222300, 211450, 170070, 150203, 125500, 100188, 91560],
+            barWidth: '10px',
+            itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(0,244,255,1)' // 0% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: 'rgba(0,77,167,1)' // 100% 处的颜色
+                    }], false),
+                    barBorderRadius: [30, 30, 30, 30],
+                    shadowColor: 'rgba(0,160,221,1)',
+                    shadowBlur: 4,
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    lineHeight: 20,
+                    width: 60,
+                    height: 20,
+                    backgroundColor: 'rgba(0,160,221,0.1)',
+                    borderRadius: 200,
+                    position: ['-15', '-30'],
+                    distance: 1,
+                    formatter: [
+                        '    {d|●}',
+                        ' {a|{c}}     \n',
+                        '    {b|}'
+                    ].join(','),
+                    rich: {
+                        d: {
+                            color: '#3CDDCF',
+                        },
+                        a: {
+                            color: '#fff',
+                            align: 'center',
+                        },
+                        b: {
+                            width: 1,
+                            height: 30,
+                            borderWidth: 1,
+                            borderColor: '#234e6c',
+                            align: 'left'
+                        },
+                    }
+                }
+            }
+        }]
+    };
+
+    option3 = {
+        // backgroundColor: '#00265f',
+        title: {
+            top: '1%',
+            left: 'center',
+            text: '各国防疫物资需求分类情况',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            top: '21%',
+            right: '5%',
+            left: '15%',
+            bottom: '15%'
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['N95口罩', '酒精', '防护服', '氧气罐', '84消毒液', '呼吸面罩', '检测试剂盒'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        }],
+        yAxis: [{
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+        }],
+        series: [{
+            type: 'bar',
+            data: [260450, 145000, 74770, 57203, 44255, 42288, 41356],
+            barWidth: '10px',
+            itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(0,244,255,1)' // 0% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: 'rgba(0,77,167,1)' // 100% 处的颜色
+                    }], false),
+                    barBorderRadius: [30, 30, 30, 30],
+                    shadowColor: 'rgba(0,160,221,1)',
+                    shadowBlur: 4,
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    lineHeight: 20,
+                    width: 60,
+                    height: 20,
+                    backgroundColor: 'rgba(0,160,221,0.1)',
+                    borderRadius: 200,
+                    position: ['-15', '-30'],
+                    distance: 1,
+                    formatter: [
+                        '    {d|●}',
+                        ' {a|{c}}     \n',
+                        '    {b|}'
+                    ].join(','),
+                    rich: {
+                        d: {
+                            color: '#3CDDCF',
+                        },
+                        a: {
+                            color: '#fff',
+                            align: 'center',
+                        },
+                        b: {
+                            width: 1,
+                            height: 30,
+                            borderWidth: 1,
+                            borderColor: '#234e6c',
+                            align: 'left'
+                        },
+                    }
+                }
+            }
+        }]
+    };
+
+    var colorArr=["#218de0", "#01cbb3", "#85e647", "#5d5cda", "#05c5b0", "#c29927"];
+    var colorAlpha=['rgba(60,170,211,0.05)','rgba(1,203,179,0.05)','rgba(133,230,71,0.05)','rgba(93,92,218,0.05)','rgba(5,197,176,0.05)','rgba(194,153,39,0.05)']
+    option4 = {
+        // backgroundColor:"#090e36",
+        grid: {
+            left: '14%',
+            top: '100%',
+            bottom: 10,
+            right: 20,
+            containLabel: true
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b} : {c} ({d}%)"
+        },
+        legend: {
+            show:false
+        },
+
+        polar: {},
+        angleAxis: {
+            interval: 1,
+            type: 'category',
+            data: [],
+            z: 10,
+            axisLine: {
+                show: false,
+                lineStyle: {
+                    color: "#0B4A6B",
+                    width: 1,
+                    type: "solid"
+                },
+            },
+            axisLabel: {
+                interval: 0,
+                show: true,
+                color: "#0B4A6B",
+                margin: 8,
+                fontSize: 16
+            },
+        },
+        radiusAxis: {
+            min: 20,
+            max: 120,
+            interval: 20,
+            axisLine: {
+                show: false,
+                lineStyle: {
+                    color: "#0B3E5E",
+                    width: 1,
+                    type: "solid"
+                },
+            },
+            axisLabel: {
+                formatter: '{value} %',
+                show: false,
+                padding: [0, 0, 20, 0],
+                color: "#0B3E5E",
+                fontSize: 16
+            },
+            splitLine: {
+                lineStyle: {
+                    color: "#07385e",
+                    width: 2,
+                    type: "dashed"
+                }
+            }
+        },
+        calculable: true,
+        series: [ {
+            stack: 'a',
+            type: 'pie',
+            radius: '80%',
+            roseType: 'radius',
+            zlevel:10,
+            startAngle: 100,
+            label: {
+                normal: {
+                    formatter: [ '{b|{b}}','{d|{d}%}'].join('\n'),
+                    rich: {
+                        b: {
+                            color: '#3bd2fe',
+                            fontSize: 14,
+                            lineHeight: 20
+                        },
+                        d: {
+                            color: '#d0fffc',
+                            fontSize: 14,
+                            height: 20
+                        },
+                    },
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: true,
+                    length: 10,
+                    length2: 25,
+                    lineStyle: {
+                        color: '#0096b1'
+
+                    }
+                },
+                emphasis: {
+                    show: false
+                }
+            },
+            data: [{
+                value: 260450,
+                name: 'N95口罩',
+                itemStyle: {
+                    borderColor: colorArr[0],
+                    borderWidth:2,
+                    shadowBlur: 20,
+                    shadowColor: "#41a8f8",
+                    shadowOffsetx: 25,
+                    shadowOffsety: 20,
+                    color:colorAlpha[0]
+                }
+            },
+                {
+                    value: 145000,
+                    name: '酒精',
+                    itemStyle: {
+                        borderColor: colorArr[1],
+                        borderWidth:2,
+                        shadowBlur: 20,
+                        shadowColor: colorArr[1],
+                        shadowOffsetx: 25,
+                        shadowOffsety: 20,
+                        color:colorAlpha[1]
+                    }
+                },
+                {
+                    value: 74770,
+                    name: '防护服',
+                    itemStyle: {
+                        borderColor: colorArr[2],
+                        borderWidth:2,
+                        shadowBlur: 20,
+                        shadowColor: colorArr[2],
+                        shadowOffsetx: 25,
+                        shadowOffsety: 20,
+                        color:colorAlpha[2]
+                    }
+                },
+                {
+                    value: 57203,
+                    name: '氧气罐',
+                    itemStyle: {
+                        borderColor: colorArr[3],
+                        borderWidth:2,
+                        shadowBlur: 20,
+                        shadowColor: colorArr[3],
+                        shadowOffsetx: 25,
+                        shadowOffsety: 20,
+                        color:colorAlpha[3]
+                    }
+                },
+                {
+                    value: 44255,
+                    name: '84消毒液',
+                    itemStyle: {
+                        borderColor: colorArr[4],
+                        borderWidth:2,
+                        shadowBlur: 20,
+                        shadowColor: colorArr[4],
+                        shadowOffsetx: 25,
+                        shadowOffsety: 20,
+                        color:colorAlpha[4]
+                    }
+                },
+                {
+                    value: 42288,
+                    name: '呼吸面罩',
+                    itemStyle: {
+                        borderColor: colorArr[5],
+                        borderWidth:2,
+                        shadowBlur: 20,
+                        shadowColor: colorArr[5],
+                        shadowOffsetx: 25,
+                        shadowOffsety: 20,
+                        color:colorAlpha[5]
+                    }
+                }
+            ]
+        }, ]
+    }
+
+    var geoCoordMap = {
+
+        '尼日利亚': [-4.388361, 11.186148],
+        '美国': [-118.24311, 34.052713],
+        '香港邦泰': [114.195466, 22.282751],
+        '美国芝加哥': [-87.801833, 41.870975],
+        '加纳库': [-4.62829, 7.72415],
+        '英国曼彻斯特': [-1.657222, 51.886863],
+        '德国汉堡': [10.01959, 54.38474],
+        '哈萨克斯坦阿拉木图': [45.326912, 41.101891],
+        '俄罗斯伊尔库茨克': [89.116876, 67.757906],
+        '巴西': [-48.678945, -10.493623],
+        '埃及达米埃塔': [31.815593, 31.418032],
+        '西班牙巴塞罗纳': [2.175129, 41.385064],
+        '柬埔寨': [104.88659, 11.545469],
+        '意大利': [9.189948, 45.46623],
+        '乌拉圭蒙得维的亚': [-56.162231, -34.901113],
+        '莫桑比克马普托': [32.608571, -25.893473],
+        '阿尔及利亚阿尔及尔': [3.054275, 36.753027],
+        '阿联酋迪拜': [55.269441, 25.204514],
+        '匈牙利布达佩斯': [17.108519, 48.179162],
+        '澳大利亚悉尼': [150.993137, -33.675509],
+        '美国加州': [-121.910642, 41.38028],
+        '澳大利亚': [144.999416, -37.781726],
+        '墨西哥': [-99.094092, 19.365711],
+        '加拿大': [-123.023921, 49.311753]
+    };
+
+    var AData = [
+        [{
+            name: '尼日利亚'
+        }, {
+            name: '尼日利亚',
+            value: 30000
+        }],
+       /* [{
+            name: '加纳库'
+        }, {
+            name: '加纳库',
+            value: 30000
+        }],*/
+        [{
+            name: '美国'
+        }, {
+            name: '美国',
+            value: 100000
+        }],
+        [{
+            name: '澳大利亚'
+        }, {
+            name: '澳大利亚',
+            value: 30000
+        }],
+        [{
+            name: '柬埔寨'
+        }, {
+            name: '柬埔寨',
+            value: 40000
+        }],
+        [{
+            name: '意大利'
+        }, {
+            name: '意大利',
+            value: 80000
+        }],
+        [{
+            name: '巴西'
+        }, {
+            name: '巴西',
+            value: 30000
+        }]
+    ];
+
+
+
+    var planePath = 'path://M.6,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705';
+
+    var convertData = function(data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var dataItem = data[i];
+            var fromCoord = geoCoordMap[dataItem[0].name];
+            var toCoord = geoCoordMap[dataItem[1].name];
+            if (fromCoord && toCoord) {
+                res.push([{
+                    coord: fromCoord
+                }, {
+                    coord: toCoord
+                }]);
+            }
+        }
+        return res;
+    };
+
+    // var color = ['#3ed4ff', '#ffa022', '#a6c84c'];
+    var color = ['red', 'yellow', '#a6c84c'];
+    function worldMapPointColor(dataNum){
+        debugger
+        if(dataNum >= 100000){
+            return color[0];
+        }else if(dataNum >= 50000){
+            return color[1];
+        }else{
+            return color[2];
+        }
+    }
+
+    var Yearseries = [];
+    [
+        ['A类型', AData],
+    ].forEach(function(item, i) {
+
+        Yearseries.push({
+            name: item[0] + ' Top10',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b} {@[2]}',
+                    fontSize:14
+                }
+            },
+            symbolSize: function(val) {
+                return val[2] / 2000;
+            },
+            itemStyle: {
+                normal: {
+                    color: worldMapPointColor(item[1][i][1].value)
+                }
+            },
+            data: item[1].map(function(dataItem) {
+                return {
+                    name: dataItem[1].name,
+                    value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                };
+            })
+        });
+    });
+
+
+/*
+    AData.forEach(function(item, i) {
+
+        Yearseries.push({
+            name: item[1].name,
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            zlevel: 2,
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b} {@[2]}',
+                    fontSize:14
+                }
+            },
+            symbolSize: function(val) {
+                return val[2] / 2000;
+            },
+            itemStyle: {
+                normal: {
+                    color: worldMapPointColor(item[1].value)
+                }
+            },
+            data: {
+                name: item[1].name,
+                value: geoCoordMap[item[1].name].concat([item[1].value];
+            }
+           /!* data: item[1].map(function(dataItem) {
+                return {
+                    name: dataItem[1].name,
+                    value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                };
+            })*!/
+        });*/
+// });
+
+    option5 = {
+        // backgroundColor: '#080a20',
+        /* title: {
+             text: '全球防疫物资需求分布',
+             // subtext: '2020',
+             left: 'center',
+             textStyle: {
+                 color: '#fff'
+             }
+         },*/
+        grid: {
+            // left:'15%',
+            // top: '20%',
+            // bottom: '20%',
+
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            top: 'bottom',
+            left: 'right',
+            data: ['北京 Top10', '上海 Top10', '广州 Top10'],
+            textStyle: {
+                color: '#fff'
+            },
+            selectedMode: 'single'
+        },
+        // visualMap: {
+        //     show: true,
+        //     min: 0,
+        //     max: 200,
+        //     left: 'left',
+        //     top: 'bottom',
+        //     text: ['高', '低'], // 文本，默认为数值文本
+        //     calculable: true,
+        //     seriesIndex: [1],
+        //     inRange: {
+        //         // color: ['#3B5077', '#031525'] // 蓝黑
+        //         // color: ['#ffc0cb', '#800080'] // 红紫
+        //         // color: ['#3C3B3F', '#605C3C'] // 黑绿
+        //         // color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
+        //         // color: ['#23074d', '#cc5333'] // 紫红
+        //         color: ['#00467F', '#A5CC82'] // 蓝绿
+        //         // color: ['#1488CC', '#2B32B2'] // 浅蓝
+        //         // color: ['#00467F', '#A5CC82'] // 蓝绿
+        //         // color: ['#00467F', '#A5CC82'] // 蓝绿
+        //         // color: ['#00467F', '#A5CC82'] // 蓝绿
+        //         // color: ['#00467F', '#A5CC82'] // 蓝绿
+        //
+        //     }
+        // },
+        geo: {
+            map: 'world',
+            label: {
+                emphasis: {
+                    show: false
+                }
+            },
+            zoom:1.2,
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#132937',
+                    borderColor: '#0692a4'
+                },
+                emphasis: {
+                    areaColor: '#0b1c2d'
+                }
+            }
+        },
+        series: Yearseries
+    };
+
+
+
+
+
+    option7 = {
+        title: {
+            text: '本周防疫物资供需关系',
+            top: '-2%',
+            left: 'center',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        grid: {
+            top: '25%',
+            right: '5%',
+            left: '10%',
+            bottom: '15%'
+
+        },
+        dataZoom: {
+            show: false,
+            start: 0,
+            end: 100
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            // show:false,
+            data: ['N95口罩', '酒精', '防护服'],//, '氧气罐', '84消毒液', '呼吸面罩'
+            top: '8%',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            nameTextStyle: {
+                color: 'red',
+                fontSize: 10,
+                textShadowColor: '#000',
+                textShadowOffsetY: 2
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+
+        },
+        series: [
+
+            {
+                name: 'N95口罩',
+                type: 'line',
+                data: [1, 1.2, 1.5, 1.3, -1.2, -1.3, -1.0],
+                // symbol:'none',  //这句就是去掉点的
+                smooth:true,  //这句就是让曲线变平滑的
+            },
+            {
+                name: '酒精',
+                type: 'line',
+                data: [1, 1.3, 1.5, 1.5, -1.2, -1.3, -0.5],
+                smooth:true,  //这句就是让曲线变平滑的
+            },
+            {
+                name: '防护服',
+                type: 'line',
+                data: [0.5, 0.2, 0.5, 0.3, -0.8, -1.1, -1],
+                smooth:true,  //这句就是让曲线变平滑的
+
+            },
+
+            /*{
+                name: '氧气罐',
+                type: 'line',
+                data: [1.3, 1.2, 0.8, 0.6, 0.9, 1.0, 1.0],
+                smooth:true,  //这句就是让曲线变平滑的
+
+            },
+
+            {
+                name: '84消毒液',
+                type: 'line',
+                data: [1.3, 1.2, 0.8, 1.2, 1.6, 1.4, 1.5],
+                smooth:true,  //这句就是让曲线变平滑的
+
+
+            },
+            {
+                name: '呼吸面罩',
+                type: 'line',
+                data: [0.7, 0.5, 0.3, 0.6, 0.9, 1.2, 1.0],
+                smooth:true,  //这句就是让曲线变平滑的
+
+
+            }*/
+        ]
+    };
+
+
+    option8 = {
+        title: {
+            text: '本周全球各国防疫物资供需关系',
+            top: '-2%',
+            left: 'center',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        grid: {
+            top: '20%',
+            right: '5%',
+            left: '10%',
+            bottom: '15%'
+
+        },
+        dataZoom: {
+            show: false,
+            start: 0,
+            end: 100
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            // show:false,
+            data: ['美', '意大利', '俄罗斯'], //, '澳大利亚', '法国', '英国'
+            top: '8%',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            nameTextStyle: {
+                color: 'red',
+                fontSize: 10,
+                textShadowColor: '#000',
+                textShadowOffsetY: 2
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+
+        },
+        series: [
+
+            {
+                name: '美',
+                type: 'line',
+                data: [1, 1.2, 1.5, 1.3, -1.2, -1.3, -1.0],
+                smooth:true,  //这句就是让曲线变平滑的
+
+            },
+            {
+                name: '意大利',
+                type: 'line',
+                data: [1.8, 0.1,0.5, 1.3, -1.2, -1.3, -1.0],
+                smooth:true,  //这句就是让曲线变平滑的
+
+            },
+            {
+                name: '俄罗斯',
+                type: 'line',
+                data: [0.1, 0.2, 0.3,0.2, -0.1, -0.2,-1.1],
+                smooth:true,  //这句就是让曲线变平滑的
+
+            }
+
+            // {
+            //     name: '澳大利亚',
+            //     type: 'line',
+            //     data: [0.1, 0.5, 0.7, 0.5, 1.1,1.6,0.3],
+            //     smooth:true,  //这句就是让曲线变平滑的
+            //
+            // },
+            //
+            // {
+            //     name: '法国',
+            //     type: 'line',
+            //     data: [1.1, 1.1, 1.5, 1.3, 1.2, 1.3, 1.0],
+            //     smooth:true,  //这句就是让曲线变平滑的
+            //
+            //
+            // },
+            // {
+            //     name: '英国',
+            //     type: 'line',
+            //     data: [1, 0.8, 0.6, 0.5, 1.3, 1.2, 1],
+            //     smooth:true,  //这句就是让曲线变平滑的
+            //
+            //
+            // }
+        ]
+    };
+
+    option9 = {
+        // backgroundColor: '#00265f',
+        title: {
+            top: '1%',
+            left: 'center',
+            text: '全省防疫物资供应企业库存情况',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            top: '21%',
+            right: '5%',
+            left: '10%',
+            bottom: '15%'
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['广信药业', '齐灵药业', '沧海医药', '康宝医药', '瑞泰医药', '庐乐医疗器械', '仁和药业'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        }],
+        yAxis: [{
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+        }],
+        series: [{
+            type: 'bar',
+            data: [480, 450, 430, 403, 365, 328, 296],
+            barWidth: '10px',
+            itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(0,244,255,1)' // 0% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: 'rgba(0,77,167,1)' // 100% 处的颜色
+                    }], false),
+                    barBorderRadius: [30, 30, 30, 30],
+                    shadowColor: 'rgba(0,160,221,1)',
+                    shadowBlur: 4,
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    lineHeight: 20,
+                    width: 60,
+                    height: 20,
+                    backgroundColor: 'rgba(0,160,221,0.1)',
+                    borderRadius: 200,
+                    position: ['-15', '-30'],
+                    distance: 1,
+                    formatter: [
+                        '    {d|●}',
+                        ' {a|{c}}     \n',
+                        '    {b|}'
+                    ].join(','),
+                    rich: {
+                        d: {
+                            color: '#3CDDCF',
+                        },
+                        a: {
+                            color: '#fff',
+                            align: 'center',
+                        },
+                        b: {
+                            width: 1,
+                            height: 30,
+                            borderWidth: 1,
+                            borderColor: '#234e6c',
+                            align: 'left'
+                        },
+                    }
+                }
+            }
+        }]
+    };
+
+    option10 = {
+        // backgroundColor: '#00265f',
+        title: {
+            top: '1%',
+            left: 'center',
+            text: '全省累计供应防疫物资分类情况',
+            textStyle: {
+                align: 'center',
+                color: '#4DCEF8',
+                fontSize: 12
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            top: '21%',
+            right: '5%',
+            left: '10%',
+            bottom: '15%'
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['N95口罩', '酒精', '防护服', '氧气罐', '84消毒液', '呼吸面罩', '检测试剂盒'],
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            },
+            axisLabel: {
+                margin: 10,
+                color: '#e2e9ff',
+                textStyle: {
+                    fontSize: 14
+                },
+            },
+        }],
+        yAxis: [{
+            axisLabel: {
+                formatter: '{value}',
+                color: '#e2e9ff',
+            },
+            axisLine: {
+                show: false
+            },
+            splitLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.12)'
+                }
+            }
+        }],
+        series: [{
+            type: 'bar',
+            data: [700, 650, 570, 533, 485, 428, 386],
+            barWidth: '10px',
+            itemStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgba(0,244,255,1)' // 0% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: 'rgba(0,77,167,1)' // 100% 处的颜色
+                    }], false),
+                    barBorderRadius: [30, 30, 30, 30],
+                    shadowColor: 'rgba(0,160,221,1)',
+                    shadowBlur: 4,
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    lineHeight: 20,
+                    width: 60,
+                    height: 20,
+                    backgroundColor: 'rgba(0,160,221,0.1)',
+                    borderRadius: 200,
+                    position: ['-15', '-30'],
+                    distance: 1,
+                    formatter: [
+                        '    {d|●}',
+                        ' {a|{c}}     \n',
+                        '    {b|}'
+                    ].join(','),
+                    rich: {
+                        d: {
+                            color: '#3CDDCF',
+                        },
+                        a: {
+                            color: '#fff',
+                            align: 'center',
+                        },
+                        b: {
+                            width: 1,
+                            height: 30,
+                            borderWidth: 1,
+                            borderColor: '#234e6c',
+                            align: 'left'
+                        },
+                    }
+                }
+            }
+        }]
+    };
+
+
+    /* 左上第1个图 */
+    function initChart1() {
+
+        var chart1 = echarts.init(document.getElementById('chart1'));
+        chart1.setOption(option1);
+    }
+    /* 左上第2个图 */
+    function initChart2() {
+
+        var chart2 = echarts.init(document.getElementById('chart2'));
+        chart2.setOption(option2);
+    }
+    /* 左上第3个图 */
+    function initChart3() {
+
+        var chart3 = echarts.init(document.getElementById('chart3'));
+        chart3.setOption(option3);
+    }
+    /* 左上第4个图 */
+    function initChart4() {
+
+        var chart4 = echarts.init(document.getElementById('chart4'));
+        chart4.setOption(option4);
+    }
+    /* 左上第3个图 */
+    function initChart5() {
+
+        var chart5 = echarts.init(document.getElementById('chart5'));
+        chart5.setOption(option5);
+    }
+
+    /* 左上第3个图 */
+    function initChart6() {
+        /**
+         此版本通过设置geoindex && seriesIndex: [1] 属性来实现geo和map共存，来达到hover散点和区域显示tooltip的效果
+
+         默认情况下，map series 会自己生成内部专用的 geo 组件。但是也可以用这个 geoIndex 指定一个 geo 组件。这样的话，map 和 其他 series（例如散点图）就可以共享一个 geo 组件了。并且，geo 组件的颜色也可以被这个 map series 控制，从而用 visualMap 来更改。
+         当设定了 geoIndex 后，series-map.map 属性，以及 series-map.itemStyle 等样式配置不再起作用，而是采用 geo 中的相应属性。
+
+         http://echarts.baidu.com/option.html#series-map.geoIndex
+
+         并且加了pin气泡图标以示数值大小
+         */
+        var myChart = echarts.init(document.getElementById('chart6'));
+        var jiangxi = "${request.contextPath}/statics/jiangxi.json";
+        var uploadedDataURL = "/asset/get/s/data-1509940365453-SkScnUTCW.json";
+        myChart.showLoading();
+        $.getJSON(jiangxi, function(geoJson) {
+            echarts.registerMap('jiangxi', geoJson);
+            myChart.hideLoading();
+            var geoCoordMap = {
+                '赣州市':[114.940278,25.85097],
+                '吉安市':[114.986373,27.111699],
+                '上饶市':[117.971185,28.44442],
+                '九江市':[115.992811,29.712034],
+                '抚州市':[116.358351,27.98385],
+                '宜春市':[114.391136,27.8043],
+                '南昌市':[115.892151,28.676493],
+                '景德镇市':[117.214664,29.29256],
+                '萍乡市':[113.852186,27.622946],
+                '鹰潭市':[117.033838,28.238638],
+                '新余市':[114.930835,27.810834],
+            }
+            var data = [
+                {name: '赣州市', value: 199},
+                {name: '吉安市', value: 39},
+                {name: '上饶市', value: 152},
+                {name: '九江市', value: 299},
+                {name: '抚州市', value: 89},
+                {name: '宜春市', value: 52},
+                {name: '南昌市', value: 9},
+                {name: '景德镇市', value: 352},
+                {name: '萍乡市', value: 99},
+                {name: '鹰潭市', value: 39},
+                {name: '新余市', value: 480},
+            ];
+            var max = 480, min = 9; // todo
+            var maxSize4Pin = 100, minSize4Pin = 20;
+
+            var convertData = function (data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var geoCoord = geoCoordMap[data[i].name];
+                    if (geoCoord) {
+                        res.push({
+                            name: data[i].name,
+                            value: geoCoord.concat(data[i].value)
+                        });
+                    }
+                }
+                return res;
+            };
+
+
+            option = {
+                /* title: {
+                     text: '江西省物资分布情况',
+                     subtext: '',
+                     x: 'center',
+                     textStyle: {
+                         color: '#ccc'
+                     }
+                 },*/
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        if(typeof(params.value)[2] == "undefined"){
+                            return params.name + ' : ' + params.value;
+                        }else{
+                            return params.name + ' : ' + params.value[2];
+                        }
+                    }
+                },
+
+                visualMap: {
+                    show: false,
+                    min: 0,
+                    max: 500,
+                    left: 'left',
+                    top: 'bottom',
+                    text: ['高', '低'], // 文本，默认为数值文本
+                    calculable: true,
+                    seriesIndex: [1],
+                    inRange: {
+                        // color: ['#3B5077', '#031525'] // 蓝黑
+                        // color: ['#ffc0cb', '#800080'] // 红紫
+                        // color: ['#3C3B3F', '#605C3C'] // 黑绿
+                        color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
+                        // color: ['#23074d', '#cc5333'] // 紫红
+                        // color: ['#00467F', '#A5CC82'] // 蓝绿
+                        // color: ['#1488CC', '#2B32B2'] // 浅蓝
+                        // color: ['#00467F', '#A5CC82'] // 蓝绿
+                        // color: ['#00467F', '#A5CC82'] // 蓝绿
+                        // color: ['#00467F', '#A5CC82'] // 蓝绿
+                        // color: ['#00467F', '#A5CC82'] // 蓝绿
+
+                    }
+                },
+                // toolbox: {
+                //     show: true,
+                //     orient: 'vertical',
+                //     left: 'right',
+                //     top: 'center',
+                //     feature: {
+                //             dataView: {readOnly: false},
+                //             restore: {},
+                //             saveAsImage: {}
+                //             }
+                // },
+                geo: {
+                    show: true,
+                    map: 'jiangxi',
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false,
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#031525',
+                            borderColor: '#3B5077',
+                        },
+                        emphasis: {
+                            areaColor: '#2B91B7',
+                        }
+                    }
+                },
+                series : [
+                    {
+                        name: 'credit_pm2.5',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        data: convertData(data),
+                        symbolSize: function (val) {
+                            return val[2] / 10;
+                        },
+                        label: {
+                            normal: {
+                                formatter: '{b}',
+                                position: 'right',
+                                show: true
+                            },
+                            emphasis: {
+                                show: true
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#05C3F9'
+                            }
+                        }
+                    },
+                    {
+                        type: 'map',
+                        map: 'jiangxi',
+                        geoIndex: 0,
+                        aspectScale: 0.75, //长宽比
+                        showLegendSymbol: false, // 存在legend时显示
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: false,
+                                textStyle: {
+                                    color: '#fff'
+                                }
+                            }
+                        },
+                        roam: true,
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#031525',
+                                borderColor: '#3B5077',
+                            },
+                            emphasis: {
+                                areaColor: '#2B91B7'
+                            }
+                        },
+                        animation: false,
+                        data: data
+                    },
+                    {
+                        name: '点',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        symbol: 'pin',
+                        symbolSize: function (val) {
+                            var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                            var b = minSize4Pin - a*min;
+                            b = maxSize4Pin - a*max;
+                            return a*val[2]+b;
+                        },
+                        label: {
+                            normal: {
+                                formatter: '{@[2]} 件',
+                                show: true,
+                                textStyle: {
+                                    color: '#fff',
+                                    fontSize: 9,
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#F62157', //标志颜色
+                            }
+                        },
+                        zlevel: 6,
+                        data: convertData(data),
+                    },
+                    {
+                        name: 'Top 5',
+                        type: 'effectScatter',
+                        coordinateSystem: 'geo',
+                        data: convertData(data.sort(function (a, b) {
+                            return b.value - a.value;
+                        }).slice(0, 5)),
+                        symbolSize: function (val) {
+                            return val[2] / 10;
+                        },
+                        showEffectOn: 'render',
+                        rippleEffect: {
+                            brushType: 'stroke'
+                        },
+                        hoverAnimation: true,
+                        label: {
+                            normal: {
+                                formatter: '{b}',
+                                position: 'right',
+                                show: true
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#05C3F9',
+                                shadowBlur: 10,
+                                shadowColor: '#05C3F9'
+                            }
+                        },
+                        zlevel: 1
+                    },
+
+                ]
+            };
+            myChart.setOption(option);
+        });
+
+
+
+    }
+
+
+
+
+    /* 左上第3个图 */
+    function initChart7() {
+
+        var chart7 = echarts.init(document.getElementById('chart7'));
+        chart7.setOption(option7);
+    }
+
+    /* 左上第3个图 */
+    function initChart8() {
+
+        var chart8 = echarts.init(document.getElementById('chart8'));
+        chart8.setOption(option8);
+    }
+    /* 左上第4个图 */
+    function initChart9() {
+
+        var chart9 = echarts.init(document.getElementById('chart9'));
+        chart9.setOption(option9);
+    }
+    /* 左上第4个图 */
+    function initChart10() {
+
+        var chart10 = echarts.init(document.getElementById('chart10'));
+        chart10.setOption(option10);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $(function(){
+        initChart1();
+        initChart2();
+        initChart3();
+        initChart4();
+        initChart5();
+        initChart6();
+
+
+
+        initChart7();
+        initChart8();
+        initChart9();
+        initChart10();
+
+    });
+
+
+
+
+    /* 右上角显示时间框 */
+    function p(s) {
+        return s < 10 ? '0' + s : s;
+    }
+    var num = 0;
+    var num_1 = 0;
+    function getNowTime() {
+        num++;
+        num_1++;
+        var myDate = new Date();
+        //获取当前年
+        var year = myDate.getFullYear();
+        //获取当前月
+        var month = myDate.getMonth() + 1;
+        //获取当前日
+        var date = myDate.getDate();
+        var h = myDate.getHours(); //获取当前小时数(0-23)
+        var m = myDate.getMinutes(); //获取当前分钟数(0-59)
+        var s = myDate.getSeconds();
+
+        /* 获取当前星期几 */
+        var dateWeek = myDate; //此处也可以写成 17/07/2014 一样识别    也可以写成 07-17-2014  但需要正则转换
+        var day = new Date(Date.parse(dateWeek)); //需要正则转换的则 此处为 ： var day = new Date(Date.parse(date.replace(/-/g, '/')));
+        var today = new Array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五',
+            '星期六');
+        var week = today[day.getDay()];
+
+        var now = year + '年' + p(month) + "月" + p(date) + "日" + " " + week
+            + " " + p(h) + ':' + p(m) + ":" + p(s);
+        $("#showTime").text(now);
+
+    }
+
+    window.onload = function() {
+        //定时器每秒调用一次getNowTime()
+        setInterval(function() {
+            getNowTime();
+        }, 1000);
+    }
+
+
+
+</script>
+
+<script>
+    function scroll_news(){
+        $(function(){
+            $('#dvmq li').eq(0).fadeOut('slow',function(){
+                //   alert($(this).clone().html());
+                //克隆:不用克隆的话，remove()就没了。
+                $(this).clone().appendTo($(this).parent()).fadeIn('slow');
+                $(this).remove();
+            });
+        });
+    }
+    setInterval('scroll_news()',2500);
+
+
+
+    function scroll_news1(){
+        $(function(){
+            $('#dvmq1 li').eq(0).fadeOut('slow',function(){
+                //   alert($(this).clone().html());
+                //克隆:不用克隆的话，remove()就没了。
+                $(this).clone().appendTo($(this).parent()).fadeIn('slow');
+                $(this).remove();
+            });
+        });
+    }
+    setInterval('scroll_news1()',2500);
+
+
+
+    function scroll_news2(){
+        $(function(){
+            $('#dvmq2 li').eq(0).fadeOut('slow',function(){
+                //   alert($(this).clone().html());
+                //克隆:不用克隆的话，remove()就没了。
+                $(this).clone().appendTo($(this).parent()).fadeIn('slow');
+                $(this).remove();
+            });
+        });
+    }
+    setInterval('scroll_news2()',2500);
+</script>
+
+</body>
+</html>
+
+

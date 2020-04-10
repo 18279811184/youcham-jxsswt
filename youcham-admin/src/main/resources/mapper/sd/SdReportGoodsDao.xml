@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sd.dao.SdReportGoodsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.sd.entity.SdReportGoodsEntity" id="sdReportGoodsMap">
+        <result property="id" column="ID"/>
+        <result property="goodsName" column="GOODS_NAME"/>
+        <result property="goodsNum" column="GOODS_NUM"/>
+        <result property="reportDataId" column="REPORT_DATA_ID"/>
+        <result property="remark" column="REMARK"/>
+        <result property="createId" column="CREATE_ID"/>
+        <result property="createName" column="CREATE_NAME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="updateId" column="UPDATE_ID"/>
+        <result property="updateName" column="UPDATE_NAME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="version" column="VERSION"/>
+        <result property="beDelete" column="BE_DELETE"/>
+    </resultMap>
+
+    <select id="queryReportByGoodsNames" resultType="String" parameterType="list">
+        select REPORT_DATA_ID from SD_REPORT_GOODS where BE_DELETE = 0 and
+        <foreach collection="list" item="item" open="(" close=")" separator="or">
+            GOODS_NAME like '%'||#{item}||'%'
+        </foreach>
+    </select>
+
+
+</mapper>

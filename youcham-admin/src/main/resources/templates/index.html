@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <#include "/header.html">
+    <title>学生选课系统</title>
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/main.css">
+    <!-- <link rel="icon" type="image/x-icon" href="${request.contextPath}/statics/favicon.ico"> -->
+  <style type="text/css">
+  	.navbar-nav>.notifications-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a, .navbar-nav>.tasks-menu>.dropdown-menu>li .menu>li>a{
+/*   		white-space:normal; */
+  	}
+  	.navbar-nav>.messages-menu>.dropdown-menu>li .menu>li>a>h4{
+	  	color: #616365;
+	    font-size: 14px;
+	    line-height: 18px;
+  	}
+  	
+  	.sidebar::-webkit-scrollbar {
+	    display: none;
+	}
+
+    main-header
+  	
+  </style>
+</head>
+<!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper" id="rrapp" v-cloak style="padding: 0px">
+        <header class="main-header">
+            <a href="javascript:void(0);" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">
+                    <b>三保</b>
+                </span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    <b>江西疫情防控“三保”物流信息云平台</b>
+                </span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div style="float:left;color:#fff;padding:15px 10px;">欢迎  {{user.legalPerson}}〔{{user.enterpriseName}}〕</div>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                       
+                         <li class="dropdown messages-menu">
+				            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				              <i class="fa fa-envelope-o"></i>
+				              <span class="label label-success" id="one">0</span>
+				            </a>
+				            <ul class="dropdown-menu" style="width: 400px">
+				              <li class="header">监督执纪</li>
+				              <li>
+				                <ul class="menu" id="jdzj">
+				                </ul>
+				              </li>
+				              <li class="footer" ><a onclick="laytc('modules/ins/insclue3.html')" href="#">查看更多</a></li>
+				            </ul>
+				          </li>
+              
+            		   	<li>
+                            <a href="index1.html">
+                            <i class="fa fa-tachometer"></i> &nbsp;切换主题</a>
+                        </li>
+				          
+                        <li>
+                            <a href="javascript:;" @click="updatePassword">
+                                <i class="fa fa-lock"></i> &nbsp;修改密码</a>
+                        </li>
+                        <li>
+                            <a onclick="logout()" >
+                                <i class="fa fa-sign-out"></i> &nbsp;退出系统</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- =============================================== -->
+
+        <aside class="main-sidebar">
+            <section class="sidebar" style="overflow-x: hidden;overflow-y: scroll;height:calc(100vh - 50px)">
+                <ul class="sidebar-menu">
+                    <li class="header">导航菜单</li>
+
+                    <!-- vue生成的菜单 -->
+                    <menu-item :item="item" v-for="item in menuList"></menu-item>
+                </ul>
+            </section>
+        </aside>
+        
+        <div class="content-wrapper">
+            <section class="content-header">
+                <ol class="breadcrumb" id="nav_title" style="position:static;float:none;">
+                    <li class="active">
+                        <i class="fa fa-home" style="font-size:20px;position:relative;top:2px;left:-3px;"></i> &nbsp;
+                        <a href="#" @click="$('#myIframe').attr('src','main.html')">首页</a>
+                    </li>
+                    <li class="active">{{navTitle}}</li>
+                </ol>
+            </section>
+
+            <section class="content" style="background:#f1f4f5;">
+                <iframe id="myIframe" scrolling="yes" frameborder="0" style="width:100%;min-height:200px;overflow:visible;border-radius:5px;"
+                    :src="main"></iframe>
+            </section>
+        </div>
+
+<!--        <footer class="main-footer" style="text-align:right;padding-right:10px;">-->
+<!--            2019 &nbsp;&copy;&nbsp; 版权所有：江西省商务厅-->
+<!--            &lt;!&ndash;<a href="http://www.youcham.com/" target="_blank">&ndash;&gt;-->
+<!--                &lt;!&ndash;<img src="http://www.youcham.com/statics/images/logo_f.png" height="12px" alt="言臣科技" data-pin-nopin="true">&ndash;&gt;-->
+<!--            &lt;!&ndash;</a>&ndash;&gt;-->
+<!--        </footer>-->
+
+        <div class="control-sidebar-bg"></div>
+
+        <!-- 修改密码 -->
+        <div id="passwordLayer" style="display: none;">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">账号</div>
+                        <span class="label label-success" style="vertical-align: bottom;">{{user.username}}</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">原密码</div>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" v-model="password" placeholder="原密码" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">新密码</div>
+                        <div class="col-sm-10">
+                            <input id="newPassword" type="password" class="form-control" v-model="newPassword" placeholder="新密码" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- ./wrapper -->
+
+
+
+    <script src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+    <script src="${request.contextPath}/statics/libs/vue.min.js"></script>
+    <script src="${request.contextPath}/statics/libs/router.js"></script>
+    <script src="${request.contextPath}/statics/libs/bootstrap.min.js"></script>
+    <script src="${request.contextPath}/statics/libs/app.js"></script>
+    <script src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+    <script src="${request.contextPath}/statics/js/index.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/js/core.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/js/cipher-core.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/js/mode-ecb.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/js/tripledes.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    
+    var userCenterApi = "http://218.87.46.162:8888/user-center";
+
+    /* $(function(){
+    	var token;
+    console.log(document.cookie);	
+    token = document.cookie;
+    $("#token").text(token);
+    }) */
+
+    function logout(){
+    	 $.ajax({
+    			type: "post",
+    		    url: userCenterApi+"/api/clear_cookie",
+    		    dataType:"jsonp",
+    		    jsonp:"callback",
+    		    success: function(r){
+    		    	console.log(r);
+    		    	 location.href = 'logout';
+    		    			    	
+    			}
+    		}); 
+    	 
+    	 location.href = 'logout';
+    }
+    
+    </script>
+</body>
+
+</html>

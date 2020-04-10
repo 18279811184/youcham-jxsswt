@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+</head>
+<body>
+<script>
+	$(function() {
+		$(".col-sm-2").addClass("right_0");
+	});
+</script>
+
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group" style="padding-bottom: 30px">
+				<div class="col-sm-4" style="width: 200px">
+					<input type="text" class="form-control" v-model="q.username" @keyup.enter="query" placeholder="用户账号">
+				</div>
+				<div class="col-sm-4" style="width: 200px">
+					<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="姓名">
+				</div>
+				<div class="col-sm-4" style="width: 200px">
+					<select class="selectpicker show-tick" title="级别" v-model="q.areaLevel" style="100%">
+						<option value="0">省级</option>
+						<option value="1">市级</option>
+						<option value="2">县级</option>
+					</select>
+				</div>
+			</div>
+			<!--<div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="姓名">
+			</div>
+			<div class="form-group col-sm-2">
+				<select class="selectpicker show-tick" title="级别" v-model="q.areaLevel">
+					<option value="0">省级</option>
+					<option value="1">市级</option>
+					<option value="2">县级</option>
+				</select>
+			</div>-->
+			<a class="btn btn-blue" @click="query">查询</a>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a class="btn btn-success" @click="verifySubmit"><i class="fa fa-pencil-square-o"></i>&nbsp;审核</a>
+			<a class="btn btn-info" @click="addUserMenuType"><i class="fa "></i>&nbsp;用户系统类型</a>&nbsp;
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+	<div id="addLayer" v-show="!showList" class="">
+		<form id="ajaxForm" class="form-horizontal" style="width:100%;" method="post">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">用户账号</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.username" name="username"
+						   placeholder="用户账号"/>
+				</div>
+
+				<div class="col-sm-2 control-label">密码</div>
+				<div class="col-sm-4">
+					<input type="password" class="form-control" v-model="sysUser.password" placeholder="密码"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">姓名</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.name" name="email" placeholder="姓名"/>
+				</div>
+				<!--<div class="col-sm-2 control-label">邮箱</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.email" name="email" placeholder="邮箱"/>
+				</div>-->
+
+				<div class="col-sm-2 control-label">统一社会信用代码</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.creditCode" name="creditCode"
+						   placeholder="统一社会信用代码"/>
+				</div>
+			</div>
+			<!--<div class="form-group">-->
+				<!--<div class="col-sm-2 control-label">企业名称</div>-->
+				<!--<div class="col-sm-4">-->
+					<!--<input type="text" class="form-control" v-model="sysUser.enterpriseName" name="enterpriseName"-->
+						   <!--placeholder="企业名称"/>-->
+				<!--</div>-->
+
+				<!--<div class="col-sm-2 control-label">企业简称</div>-->
+				<!--<div class="col-sm-4">-->
+					<!--<input type="text" class="form-control" v-model="sysUser.abbreviation" name="abbreviation"-->
+						   <!--placeholder="企业简称"/>-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="form-group">
+				<div class="col-sm-2 control-label">法人证件</div>
+				<div class="col-sm-4">
+					<select v-select2 required="required" class="form-text" style="width:100%;" name="mainType"
+							v-model="sysUser.mainType">
+						<option value="" selected>请选择法人证件类型</option>
+						<option value="01">身份证</option>
+						<option value="02">护照</option>
+						<option value="03">台湾同胞来往内地通行证</option>
+						<option value="04">港澳居民来往内地通行证</option>
+						<option value="05">外国人居留证</option>
+					</select>
+				</div>
+				<div class="col-sm-2 control-label">法人证件号</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.mainCard" name="mainCard"
+						   placeholder="法人证件号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">企业电话</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.enterpriseTel" name="enterpriseTel"
+						   placeholder="企业电话"/>
+				</div>
+
+				<div class="col-sm-2 control-label">联系人</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.legalPerson" name="legalPerson"
+						   placeholder="法人代表"/>
+				</div>
+
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">常用联系人</div>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" v-model="sysUser.topContacts" name="topContacts"
+						   placeholder="常用联系人"/>
+				</div>
+
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">级别</div>
+				<div class="col-sm-10 pt7">
+					<div class="icheck-primary d-inline">
+						<input type="radio" name="areaLevel" value="0" v-model="sysUser.areaLevel" @change="getAreaLevel($event)"
+							   id="isRegister">
+						<label for="isRegister">省级
+						</label>
+					</div>
+					<div class="icheck-primary d-inline">
+						<input type="radio" name="areaLevel" value="1" v-model="sysUser.areaLevel" @change="getAreaLevel($event)"
+							   id="isRegister1">
+						<label for="isRegister1">市级
+						</label>
+					</div>
+					<div class="icheck-primary d-inline">
+						<input type="radio" name="areaLevel" value="2" v-model="sysUser.areaLevel" @change="getAreaLevel($event)"
+							   id="isRegister2">
+						<label for="isRegister2">县（区）级
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">省</div>
+				<div class="col-sm-4" v-if="sysUser.areaLevel == 0">
+					<select class="selectpicker show-tick" data-live-search="true" data-width="100%" v-model="sysUser.province">
+						<option :value="jiangxi">全省</option>
+					</select>
+				</div>
+				<div class="col-sm-4" v-if="sysUser.areaLevel == 1">
+					<select class="selectpicker show-tick" data-live-search="true"
+							data-width="100%" v-model="sysUser.city" title="市" required="required"
+							data-none-results-text="没有找到噢 :(" data-size="6" >
+						<option v-for="item in cityList" :value="item.id"> {{item.name}}</option>
+					</select>
+				</div>
+				<div class="col-sm-4" v-if="sysUser.areaLevel == 2">
+					<select class="selectpicker show-tick" data-live-search="true"
+							data-width="100%" v-model="sysUser.city" title="市" required="required"
+							data-none-results-text="没有找到噢 :(" data-size="6"  @change="getCountyList">
+						<option v-for="item in cityList" :value="item.id"> {{item.name}}</option>
+					</select>
+				</div>
+				<div class="col-sm-4" v-if="sysUser.areaLevel == 2">
+					<select  class="selectpicker show-tick" data-live-search="true" data-width="100%"
+							 required="required" v-model="sysUser.county" id="county" data-size="6"
+							 data-none-results-text="没有找到噢 :("
+							 title="县">
+						<option v-for="item in countyList" :value="item.id">{{item.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">角色</div>
+				<div class="col-sm-10">
+					<label v-for="role in roleList" class="checkbox-inline">
+						<input type="checkbox" :value="role.roleId" v-model="sysUser.roleIdList">{{role.roleName}}
+					</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-2 control-label">状态</div>
+				<div class="col-sm-4">
+					<label class="radio-inline">
+						<input type="radio" name="status" value="0" v-model="sysUser.status"/> 禁用
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="status" value="1" v-model="sysUser.status"/> 正常
+					</label>
+				</div>
+			</div>
+		</form>
+	</div>
+    
+    <div id="setRole" v-show="!showList" class="">
+    	<div class="form-group">
+			<div class="col-sm-2 control-label">角色</div>
+			<div class="col-sm-10">
+				<label v-for="role in roleList" class="checkbox-inline">
+					<input type="checkbox" :value="role.roleId" v-model="sysUser.roleIdList">{{role.roleName}}
+				</label>
+			</div>
+		</div>
+    </div>
+
+	<div id="userMenuTypes" style="display: none;">
+		<div class="form-group">
+			<div class="col-sm-2 control-label">系统</div>
+			<div class="col-sm-10">
+				<label v-for="userMenuTypes in userMenuTypes" class="checkbox-inline">
+					<input type="checkbox" :value="userMenuTypes.value" v-model="userMenuType">{{userMenuTypes.description}}
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="${request.contextPath}/statics/js/core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/cipher-core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/mode-ecb.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/tripledes.js" charset="utf-8"></script>
+<script src="${request.contextPath}/statics/js/modules/sys/sysuser.js?_${.now?long}"></script>
+</body>
+</html>

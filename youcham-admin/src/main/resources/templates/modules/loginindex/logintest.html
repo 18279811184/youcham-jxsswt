@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://118.89.17.229:8080/inspect/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+			<#include "/header.html">
+		<title>用户登录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="shortcut icon" href="http://118.89.17.229:8080/inspect/image/ico.png" type="image/x-icon">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/bootstrap.responsive.min.css">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/jquery.popover.min.css">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/jquery.gritter.css">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/uniform.css">
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/unicorn.main.css">
+        <link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/unicorn.login.css">
+        <link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/login/inspect.login.css">
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="/inspect/javascript/plugs/respond.js"></script>
+		<![endif]-->
+	</head>
+	<body style="cursor: url(&quot;http://118.89.17.229:8080/inspect/image/blue.cur.ico&quot;), auto;">
+        <div class="main-bg">
+        	<div class="header">
+	        	<img class="logo" src="${request.contextPath}/statics/css/login/logo.png" alt="图片丢失">
+	        	<div class="link-item">
+					<ul id="lanmuUl">
+						<style>
+							@media screen and (max-width: 1366px) {
+							    .link-item {
+							       	padding-left: 200px;
+							    }
+							}
+							
+							@media screen and (max-width: 1024px) {
+							    .link-item {
+							       	padding-left: 0px;
+							    }
+							}
+							
+							.link-item ul li{width:170px}
+						</style>
+		                <li><a href="http://localhost/inspect/steady/html/inform/20180312/1000000949014234.html" target="_blank"><img src="${request.contextPath}/statics/css/login/icon.depart.png" alt="图片丢失" style="margin-top:-6px;"><span class="title">组织机构</span></a></li><li><a href="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000000316154733&amp;column_name=%E5%85%9A%E7%BA%AA%E6%B3%95%E8%A7%84&amp;column_parent=null" target="_blank"><img src="${request.contextPath}/statics/css/login/icon.rule.png" alt="图片丢失" style="margin-top:-6px;"><span class="title">党纪法规</span></a></li><li><a href="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000002030644410&amp;column_name=%E8%AD%A6%E9%92%9F%E9%95%BF%E9%B8%A3&amp;column_parent=null" target="_blank"><img src="${request.contextPath}/statics/css/login/icon.warn.png" alt="图片丢失" style="margin-top:-6px;"><span class="title">警钟长鸣</span></a></li><li><a href="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000001585344164&amp;column_name=%E5%B7%A5%E4%BD%9C%E5%8A%A8%E6%80%81&amp;column_parent=null" target="_blank"><img src="${request.contextPath}/statics/css/login/icon.inform.png" alt="图片丢失" style="margin-top:-6px;"><span class="title">工作动态</span></a></li><li><a href="http://118.89.17.229:8080/inspect/inform.jsp?column_id=1000001861542884&amp;column_name=%E5%AD%A6%E4%B9%A0%E5%9B%AD%E5%9C%B0&amp;column_parent=null" target="_blank"><img src="${request.contextPath}/statics/css/login/icon.stuty.png" alt="图片丢失" style="margin-top:-6px;"><span class="title">学习园地</span></a></li><li id="beforLi">
+		                	<a href="http://localhost:8080/youcham-admin/modules/loginindex/indexjy.html" target="_blank"><img src="${request.contextPath}/statics/css/login/icon.suggestion.png" alt="图片丢失" style="margin-top:-6px;">
+		                    	<span class="title">
+		                    		意见建议
+		                    	</span>
+		                    </a>
+		                </li>
+					</ul>
+		        </div>
+        	</div>
+        	<div id="loginbox" style="height: 270px; margin-top: 102.167px;">  
+	            <form id="loginform" class="form-vertical" style="opacity: 1; z-index: 200;">
+					<p><b style="font-size:14px;">用户登录</b></p>
+	                <div class="control-group">
+	                    <div class="controls">
+	                        <div class="input-prepend">
+	                            <span class="add-icon"><i class="icon icon-user"></i></span>
+	                            <input type="text" name="" maxlength="20" id="login_name" style="font-weight:bold;height:40px;" onclick="clearInput(this);" onblur="checkButton();" onkeyup="checkButton();" autocomplete="off" placeholder="用户账号">
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <div class="controls">
+	                        <div class="input-prepend">
+	                            <span class="add-icon"><i class="icon icon-lock"></i></span>
+	                            <input type="password" style="display:none">
+	                            <input type="password" name="" maxlength="20" id="login_password" style="font-weight:bold;height:40px;" onclick="clearInput(this);" onblur="checkButton();" onkeyup="checkButton();" autocomplete="new-password" placeholder="用户密码">
+	                        </div>
+	                    </div>
+	                </div>
+					<div class="control-group" style="display:none;">
+	                    <div class="controls">
+	                        <div class="input-prepend">
+	                            <span class="add-icon"><i class="icon icon-barcode"></i></span>
+	                            <input type="text" name="" maxlength="4" id="login_code" style="font-weight:bold;height:40px;ime-mode:disabled;text-transform:uppercase;" onblur="checkButton();" onkeyup="checkButton();" autocomplete="off" placeholder="验证码">
+	                        </div>
+	                    </div>
+	                </div>
+                    <span id="message" style="color:red;"><b></b></span>
+	                <div class="actions-group" style="padding-top: 0px;">
+	                	<span class="pull-left" style="display:none;"><a href="http://118.89.17.229:8080/inspect/#" onclick="showRecover();return false;" class="flip-link">找回密码</a></span>
+	                    <span><input type="button" onclick="loginSystem();" id="login_in" class="btn btn-primary" value="登录" style="font-weight:bold;width:250px;height:40px;" disabled="disabled"></span>
+	                </div>
+				</form>
+				<form id="logoutform" class="form-vertical" style="opacity: 0.01; display: block; z-index: 100;">
+					<p><b style="font-size:14px;">当前用户已登录</b></p>
+					<div class="control-group">
+	                    <div class="controls">
+	                        <div class="input-prepend">
+	                            <span style="color:red;">
+	                            	<b style="font-size:20px;">
+	                            		
+	                            		
+	                            			
+	                            		
+	                            		<input type="hidden" name="" value="0" id="login_user">
+	                            	</b>
+	                            </span>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="actions-group" style="padding-top: 0px;">
+	                    <span class="pull-left">
+	                    	<a href="http://118.89.17.229:8080/inspect/home" class="flip-link">
+	                    		返回主页
+	                    	</a>
+	                    </span>
+	                    <span class="pull-right"><input type="button" onclick="openLogout();" class="btn btn-primary" value="注销" style="font-weight:bold;"></span>
+	                </div>
+	            </form>
+	        	<form id="recoverform" class="form-vertical" style="opacity: 0.01; display: block; z-index: 100;">
+					<p><b style="font-size:14px;">请输入手机号码</b></p>
+					<div class="control-group">
+	                    <div class="controls">
+	                        <div class="input-prepend">
+	                            <span class="add-icon"><i class="icon-envelope"></i></span>
+	                            <input type="text" name="" maxlength="11" id="login_phone" style="font-weight:bold;height:40px;" autocomplete="off" placeholder="手机号码">
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="actions-group" style="padding-top: 0px;">
+	                    <span class="pull-left"><a href="http://118.89.17.229:8080/inspect/#" onclick="showLogin();return false;" class="flip-link">返回登录</a></span>
+	                    <span class="pull-right"><input type="button" class="btn btn-primary" value="找回" style="font-weight:bold;" disabled="disabled"></span>
+	                </div>
+	            </form>
+	        </div>
+			<div class="footer">
+				2018&nbsp;©&nbsp;版权所有：江西出入境检验检疫局<br>技术支持：言臣科技
+			</div>
+        </div>
+        
+<input type="hidden" name="" value="010001" id="public_exponent">
+<input type="hidden" name="" value="00d7501d223c09265591e32576a4ae06989c0917e44232f52321977f3909c0c0136104eed16199ccdb487e786181a6701eb6452d93ab9e99fbe14b93a6d4817b245c73a7d9d556a42bb887e3483187c62d07961dbc033fac1a7f9f13fe56e138c7a41acc309ce9bca74a540c29d8928f126cdaf38c55a654409d93a04feb9b85c9" id="public_modulus">
+<div id="goout" class="modal hide">
+	<div class="modal-header">
+		<button data-dismiss="modal" class="close" type="button">×</button>
+		<h3>请注意！</h3>
+	</div>
+	<div class="modal-body">
+		<p>确定退出系统吗？<img src="${request.contextPath}/statics/css/login/question.png" style="float:right;" alt="图片丢失"></p>
+	</div>
+	<div class="modal-footer">
+		<a class="btn btn-primary" href="http://118.89.17.229:8080/inspect/#" onclick="logout();return false;">确定</a>
+		<a data-dismiss="modal" class="btn" href="http://118.89.17.229:8080/inspect/#" onclick="return false;">取消</a>
+	</div>
+</div>
+        
+<div id="charge" class="modal hide">
+	<div class="modal-header">
+		<h3>请注意！</h3>
+	</div>
+	<div class="modal-body">
+		<p id="charge_message"></p>
+	</div>
+</div>
+		<script type="text/javascript" src="./用户登录_files/jquery.min.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/jquery.uniform.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/jquery.ui.custom.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/jquery.placeholder.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/jquery.popover.min.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/jquery.gritter.min.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/bootstrap.min.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/unicorn.login.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/security.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/index.common.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/login.validate.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/logout.data.js.下载"></script>
+		<script type="text/javascript" src="./用户登录_files/user.login.js.下载"></script>
+	
+</body></html>

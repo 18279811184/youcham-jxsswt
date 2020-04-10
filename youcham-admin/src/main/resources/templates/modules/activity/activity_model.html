@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>流程定义列表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input  type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+			<a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新建</a>
+			<a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			<a class="btn btn-blue" @click="deployment">部署</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+    
+     <div id="addLayer" v-show="!showList" class="">
+        <form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="model.name" placeholder="名称" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">标识</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="model.key" placeholder="标识" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">描述</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"
+							v-model="model.category" placeholder="描述" />
+					</div>
+				</div>
+		</form>
+	  </div>			
+    
+</div>
+
+<script type="text/javascript">
+
+$(function () {
+    $("#jqGrid").jqGrid({
+        url: baseURL + 'activity/getModel',
+        datatype: "json",
+        colModel: [			
+			{ label: 'ID', name: 'Id',  width: 150, key: true},
+			{ label: '名称', name: 'name',  width: 180 }, 			
+			{ label: '标识', name: 'key',  width: 180 }, 			
+			{ label: '信息', name: 'metaInfo',  width: 180 }, 			
+			{ label: '操作', name: 'diagramResourceName',  width: 80, formatter: function(value, options, row){
+				return "<a onclick='wopen(\""+row.Id+"\")'>在线设计</a>";
+			}}, 
+        ],
+		viewrecords: true,
+        height: 385,
+        rowNum: 10,
+		rowList : [10,30,50],
+        rownumbers: true, 
+        rownumWidth: 25, 
+        autowidth:true,
+//         shrinkToFit:false,   
+		autoScroll: true,
+        multiselect: true,
+        pager: "#jqGridPager",
+        jsonReader : {
+            root: "page.list",
+            page: "page.currPage",
+            total: "page.totalPage",
+            records: "page.totalCount"
+        },
+        prmNames : {
+            page:"page", 
+            rows:"limit", 
+            order: "order"
+        },
+        gridComplete:function(){
+        	//隐藏grid底部滚动条
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        }
+    });
+    
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		q:{},
+		model:{}
+	},
+	methods: {
+		query: function () {
+			vm.reload(true);
+		},
+		add:function(){
+			vm.title = "新增";
+			vm.hdGoods = {};
+			vm.addLayer();
+		},
+		deployment:function(){
+			vm.title = "部署";
+			var id = getSelectedRow();
+			if(id == null){
+				return ;
+			}
+			confirm('确定要部署该流程？', function(){
+				$.ajax({
+					type: "POST",
+				    url: baseURL + "/models/"+id+"/deployment",
+                    contentType: "application/json",
+				    data: JSON.stringify(id),
+				    success: function(r){
+				    	console.log(r);
+						if(r.status == true){
+							debugger;
+							if(r.ihave != ""){
+								alert(r.ihave, function(index){
+									$("#jqGrid").trigger("reloadGrid");
+								});
+							}else{
+								alert("操作成功", function(index){
+									$("#jqGrid").trigger("reloadGrid");
+								});
+							}
+							
+						}else{
+							alert(r.reason);
+						}
+					}
+				});
+			});
+		},
+		del:function(){
+			var id = getSelectedRow();
+			if(id == null){
+				return ;
+			}
+			
+			confirm('确定要删除选中的记录？', function(){
+				$.ajax({
+					type: "POST",
+				    url: baseURL + "activity/delModel",
+                    contentType: "application/json",
+				    data: JSON.stringify(id),
+				    success: function(r){
+						if(r.code == 0){
+							alert('操作成功', function(index){
+								$("#jqGrid").trigger("reloadGrid");
+							});
+						}else{
+							alert(r.msg);
+						}
+					}
+				});
+			});
+		},
+		reload: function (event) {
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                page:page,
+           		postData:{'name': vm.q.name}
+            }).trigger("reloadGrid");
+		},
+		startActivityDemo: function(){
+			$.get(baseURL+ "/hd/chargeFeesProcess/startActivityDemo");
+		},
+		addLayer: function(){
+            layer.open({
+                type: 1,
+                offset: '50px',
+                skin: 'layui-layer-molv',
+                title: vm.title,
+                area: ['550px', '420px'],
+                shade: 0.2,
+                shadeClose: false,
+                content: jQuery("#addLayer"),	
+                btn: ['确定', '取消'],
+                btn1: function (index) {
+                	layer.load();
+                	vm.saveOrUpdate();
+                }
+            });
+        },
+        saveOrUpdate: function (event) {
+			var url = vm.model.id == null ? "activity/save" : "activity/update";
+			console.log(JSON.stringify(vm.model));
+			$.ajax({
+				type: "POST",
+			    url: baseURL + url,
+                contentType: "application/json",
+			    data: JSON.stringify(vm.model),
+			    success: function(r){
+			    	layer.closeAll("loading");
+			    	if(r.code === 0){
+			    		layer.closeAll();
+						alert('操作成功', function(index){
+							$("#jqGrid").trigger("reloadGrid");
+						});
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
+		}
+	},
+	mounted : function() {
+	},
+	created :function(){
+		
+	}
+});
+
+
+function wopen(id){
+	window.open("../../statics/plugins/activity/modeler.html?modelId="+id)
+	
+}
+function wdc(id){
+	
+}
+</script>
+
+</body>
+</html>

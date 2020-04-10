@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sys.dao.SysDeptDao">
+	
+	<select id="queryDetpIdList" resultType="String">
+		select dept_id from sys_dept where parent_id = #{value} 
+	</select>
+	<!-- 查询出部门登记并去重 -->
+	<select id="queryDetpLevel" resultType="io.youcham.modules.sys.entity.SysDeptEntity">
+		select *, count(distinct level) from sys_dept group by level
+	</select>
+	<!-- 根据部门等级查询出该等级下的所有部门 -->
+	<select id="queryDetp" resultType="io.youcham.modules.sys.entity.SysDeptEntity">
+		select * from sys_dept where level = #{value} and del_flag = 0
+	</select>
+	
+	  <!--新增文件-->
+	<insert  id="insertdept"  useGeneratedKeys="true" keyProperty="deptId" parameterType="io.youcham.modules.sys.entity.SysDeptEntity"> 
+		  insert into sys_dept (name,order_num,level,code,sys_code)
+ 		 values (#{name},#{orderNum},#{level},#{code},#{sysCode})
+	</insert>
+	<update  id="updatedept"   parameterType="io.youcham.modules.sys.entity.SysDeptEntity"> 
+		  update  sys_dept set name = #{name},order_num = #{orderNum},level =#{level},code = #{code},sys_code = #{sysCode},del_flag = #{delFlag},status = #{status}
+		  where dept_id = #{deptId}
+ 		
+	</update>
+	
+	<select id="sysdept" resultType="io.youcham.modules.sys.entity.SysDeptEntity">
+		select * from sys_dept where dept_id = #{id}
+	</select>
+
+</mapper>

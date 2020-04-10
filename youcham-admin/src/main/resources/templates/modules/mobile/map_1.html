@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>江西疫情防控“三保”物流信息云平台</title>
+    <#include "/header.html">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/css/all-skins.min.css">
+    <style type="text/css">
+        body {
+            background: url(../../statics/images/background.png);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            -moz-background-size: 100% 100%;
+            position: absolute;
+            overflow-x:hidden;
+            overflow-y:hidden;
+        }
+
+
+        .border {
+            border: 0px solid red;
+        }
+
+        .shengti {
+            width: 100%;
+            height: 100%;
+
+        }
+
+        #biaoti{
+            width: 100%;
+            height: 10%;
+            color: #ffffff;
+            font-size: 40px;
+            text-align: center;
+            line-height: 100px;
+        }
+
+        #SJmap {
+            width: 100%;
+            height: 90%;
+        }
+
+        #zhuzi {
+            width: 11%;
+            height: 45.5%;
+            border:0px solid red;
+            position: absolute;
+            left: 59%;
+            bottom: 7%;
+            z-index: 9;
+        }
+
+        .float_left{
+            width:100%;
+            height: 30%;
+            margin-top: 7px;
+        }
+    </style>
+</head>
+<body>
+<div class="shengti">
+    <div id="biaoti">江西省国际航空货运线路监控中心</div>
+
+    <div id="SJmap" class="border"></div>
+
+    <div id="zhuzi">
+        <div class="panel panel-info float_left" style="color: #ccc; background: transparent;border-color: #438be4;margin-bottom:0px;">
+            <div class="panel-heading" style="color: #409eff;background-color: transparent; border-color: #438be4;text-align: center;">
+                已开通航线
+            </div>
+            <div id="dvmq" class="panel-body" style="height: 8.5vh;font-size: 12px;padding-top: 0; padding-bottom: 0;overflow-y:hidden;">
+                <div style="text-align: center;height: 95%;margin-top: 1%">南昌&nbsp;&nbsp;=&nbsp;&nbsp;烈日<br/>中国国航<br/>每周3班</div>
+                <div style="text-align: center;height: 95%;margin-top: 1%">南昌&nbsp;=&nbsp;俄罗斯&nbsp;=&nbsp;烈日<br/>俄罗斯空桥<br/>每周6班</div>
+            </div>
+        </div>
+      <div class="panel panel-info float_left" style="color: #ccc; background: transparent;border-color: #438be4;margin-bottom:0px;">
+          <div class="panel-heading" style="color: #409eff;background-color: transparent; border-color: #438be4;text-align: center;">
+              筹备中航线
+          </div>
+          <div id="dvmq1" class="panel-body" style="height: 8.5vh;font-size: 12px;padding-top: 0; padding-bottom: 0;overflow-y:hidden;">
+              <div style="text-align: center;height: 95%;margin-top: 7px;">2020年4月13日开通<br/>南昌&nbsp;&nbsp;=&nbsp;&nbsp;首尔</div>
+              <div style="text-align: center;height: 95%;margin-top: 7px;">2020年4月13日开通<br/>南昌&nbsp;&nbsp;=&nbsp;&nbsp;大阪</div>
+              <div style="text-align: center;height: 95%;margin-top: 7px;">2020年4月13日开通<br/>南昌&nbsp;&nbsp;=&nbsp;&nbsp;阿姆斯特丹</div>
+              <div style="text-align: center;height: 95%;margin-top: 7px;">2020年4月15日开通<br/>南昌&nbsp;&nbsp;=&nbsp;&nbsp;洛杉矶</div>
+              <div style="text-align: center;height: 95%;margin-top: 7px;">2020年4月20日开通<br/>南昌&nbsp;&nbsp;=&nbsp;&nbsp;法兰克林</div>
+          </div>
+        </div>
+        <div class="panel panel-info float_left" style="color: #ccc; background: transparent;border-color: #438be4;margin-bottom:0px;">
+            <div class="panel-heading" style="color: #409eff;background-color: transparent; border-color: #438be4;text-align: center;">
+                规划中航线
+            </div>
+            <div id="dvmq2" class="panel-body" style="height: 8.5vh;font-size: 12px;padding-top: 0; padding-bottom: 0;overflow-y:hidden;">
+                <div style="text-align: center;height: 70%;margin-top: 10%;">南昌&nbsp;&nbsp;=&nbsp;&nbsp;俄罗斯</div>
+                <div style="text-align: center;height: 70%;margin-top: 10%;">南昌&nbsp;&nbsp;=&nbsp;&nbsp;澳大利亚</div>
+                <div style="text-align: center;height: 70%;margin-top: 10%;">南昌&nbsp;&nbsp;=&nbsp;&nbsp;法国</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="${request.contextPath}/statics/plugins/echart/echarts.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/echart/macarons.js"></script>
+<script src="${request.contextPath}/statics/js/world-zh.js"></script>
+
+
+<script type="text/javascript">
+
+   /* // 实例
+    var chartZ = echarts.init(document.getElementById('zhuzi'));
+
+    var years = ['航班（次）', '进港（吨）', '出港（吨）'];
+    var strsome = ['江西发往各国航班36次', '江西进港各国货物6900.89吨', '江西出港各国货物5745.429吨'];
+    var jdData = [
+        ['比利时', '法  国', '德  国', '韩  国', '日  本', '俄罗斯（规）', '以色列（规）', '美国（筹）', '大  阪', '法兰克林', '澳大利亚（规）',],
+        ['比利时', '法  国', '德  国', '韩  国', '日  本', '俄罗斯（规）', '以色列（规）', '美国（筹）', '大  阪', '法兰克林', '澳大利亚（规）',],
+        ['比利时', '法  国', '德  国', '韩  国', '日  本', '俄罗斯（规）', '以色列（规）', '美国（筹）', '大  阪', '法兰克林', '澳大利亚（规）',],]
+    var data = [
+        [7, 5, 3, 5, 4, 1, 1, 2, 2, 3, 3],
+        [100, 700, 800, 489, 800, 700, 600, 500, 300, 500, 600],
+        [700, 100, 300, 735, 450, 364, 456, 852, 741, 369, 258],
+    ];
+
+    optionZ = {
+        baseOption: {
+            timeline: {
+                data: years,
+                show:false,//是否显示时间轴组件
+                axisType: 'category',
+                autoPlay: false,//是否自动播放
+                playInterval: 5000,
+                left: '5%',
+                right: '10%',
+                bottom: '0%',
+                width: '90%',
+                //  height: null,
+                label: {
+                    normal: {
+                        textStyle: {
+
+                            color: '#0099ff',
+                        }
+                    },
+                    emphasis: {
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                symbolSize: 10,
+                lineStyle: {
+                    color: '#555'
+                },
+                checkpointStyle: {
+                    borderColor: '#777',
+                    borderWidth: 2
+                },
+                controlStyle: {
+                    showNextBtn: true,
+                    showPrevBtn: true,
+                    normal: {
+                        color: '#0099ff',
+                        borderColor: '#0099ff'
+                    },
+                    emphasis: {
+                        color: '#aaa',
+                        borderColor: '#aaa'
+                    }
+                },
+
+            },
+
+            tooltip: {
+                'trigger': 'axis'
+            },
+            calculable: true,
+            grid: {
+                left: '8%',
+                right: '2%',
+                bottom: '6%',
+                top: '0%',
+                containLabel: true
+            },
+            label: {
+                normal: {
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
+            },
+            yAxis: [{
+                offset: '15',
+                'type': 'category',
+                data: '',
+                nameTextStyle: {
+                    color: '#fff'
+                },
+                axisLabel: {
+                    //rotate:45,
+                    textStyle: {
+                        fontSize: 12,
+                        color: '#0099ff',
+                    },
+                    interval: 0
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#333'
+                    },
+                },
+                splitLine: {
+                    show: false,
+                    lineStyle: {
+                        color: '#333'
+                    }
+                },
+
+            }],
+            xAxis: [{
+                'type': 'value',
+                'name': '',
+
+                splitNumber: 8,
+                nameTextStyle: {
+                    color: '#333'
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#333'
+                    }
+                },
+                axisLabel: {
+                    formatter: '{value} '
+                },
+                splitLine: {
+                    show: false,
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                },
+            }],
+
+            animationDurationUpdate: 2000,
+            animationEasingUpdate: 'quinticInOut'
+        },
+        options: []
+    };
+
+    var colorType =  ['#2BD54D', '#ffa022', '#46bee9'];//绿色，蓝色，黄色
+    for (var n = 0; n < years.length; n++) {
+
+        var res = [];
+        //alert(jdData.length);
+        for (j = 0; j < data[n].length; j++) {
+            res.push({
+                name: jdData[n][j],
+                value: data[n][j]
+            });
+
+        }
+
+        res.sort(function (a, b) {
+            return b.value - a.value;
+        }).slice(0, 6);
+
+        res.sort(function (a, b) {
+            return a.value - b.value;
+        });
+        var res1 = [];
+        var res2 = [];
+        //console.log(res);
+        for (t = 0; t < res.length; t++) {
+            res1[t] = res[t].name;
+            res2[t] = res[t].value;
+        }
+        optionZ.options.push({
+            title: {
+                text: strsome[n],
+                right: '0%',
+                bottom: '11%',
+                textStyle: {
+                    fontSize: 15,
+                    color: colorType[n],
+                }
+            },
+            yAxis: {
+                data: res1,
+            },
+            series: [{
+                'name': '',
+                'type': 'bar',
+                markLine: {
+                    label: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: 'red',
+                            width: 3
+                        }
+                    },
+                },
+                barWidth: '50%',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'inside',
+                        formatter: '{c}'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: colorType[n]
+                    }
+                },
+                data: res2
+            }],
+        });
+    }
+    chartZ.setOption(optionZ);*/
+
+
+    /* 中间地图部分 */
+    var geoCoordMapSj = {
+        '江西': [115.853662, 28.714548],
+        '比利时': [4.347479, 50.855116],
+        '法国（规）': [2.34023, 48.885212],
+        '德国（筹）': [13.376696, 52.542139],
+        '韩国（筹）': [126.92812, 37.624909],
+        '日本（筹）': [139.649969, 35.807511],
+        '俄罗斯（规）': [37.61616,55.761336],
+        '以色列（规）': [35.231631, 31.793752],
+        '美国（筹）': [283.005591,38.914373],
+        '大阪': [135.421102, 34.628892],
+        '法兰克福': [8.681911, 50.114156],
+        '澳大利亚（规）': [151.209296,-33.85515],
+        '荷兰（筹）': [4.895149,52.377672],
+    };
+
+    var AData = [//绿色
+        [{
+            name: '江西'
+        }, {
+            name: '江西',
+            value: 100
+        }],
+
+        [{
+            name: '江西'
+        }, {
+            name: '比利时',
+            value: 100
+        }],
+    ];
+
+    var BData = [//蓝色
+        [{
+            name: '江西'
+        }, {
+            name: '日本（筹）',
+            value: 100
+        }],
+        [{
+            name: '江西'
+        }, {
+            name: '美国（筹）',
+            value: 100
+        }],
+        [{
+            name: '江西'
+        }, {
+            name: '韩国（筹）',
+            value: 100
+        }],
+        [{
+            name: '江西'
+        }, {
+            name: '德国（筹）',
+            value: 100
+        }],
+        [{
+            name: '江西'
+        }, {
+            name: '荷兰（筹）',
+            value: 100
+        }],
+    ];
+
+    var CData = [//黄色
+        [{
+            name: '法国（规）'
+        }, {
+            name: '法国（规）',
+            value: 100
+        }],
+        [{
+            name: '澳大利亚（规）'
+        }, {
+            name: '澳大利亚（规）',
+            value: 100
+        }],
+        [{
+            name: '以色列（规）'
+        }, {
+            name: '以色列（规）',
+            value: 100
+        }],
+        [{
+            name: '俄罗斯（规）'
+        }, {
+            name: '俄罗斯（规）',
+            value: 100
+        }],
+    ];
+
+    var feiji = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+
+    var convertDataSj = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var dataItem = data[i];
+            var fromCoord = geoCoordMapSj[dataItem[0].name];
+            var toCoord = geoCoordMapSj[dataItem[1].name];
+            if (fromCoord && toCoord) {
+                res.push([{
+                    coord: fromCoord
+                }, {
+                    coord: toCoord
+                }]);
+            }
+        }
+        return res;
+    };
+
+    var color_1 = ['#00ff00', '#46bee9', '#ffa022'];//绿色，蓝色，黄色
+    var sudu = [3, 10, 10];
+    var wandu = [0.1, 0, 0.1];
+    var Yearseries = [];
+    [
+        ['已开通（1）', AData],
+        ['筹备中（4）', BData],
+        ['规划中（4）', CData],
+    ].forEach(function (item, i) {
+        Yearseries.push({
+                name: item[0],
+                type: 'lines',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: sudu[i], //箭头指向速度，值越小速度越快
+                    trailLength: 0.1, //特效尾迹长度[0,1]值越大，尾迹越长重
+                    symbol: 'arrow', //箭头图标
+                    symbolSize: 4, //图标大小
+                    color: '#fff',//颜色
+                },
+                lineStyle: {
+                    type: 'dashed',
+                    normal: {
+                        width: wandu[i], //尾迹线条宽度
+                        opacity: 0.5, //尾迹线条透明度
+                        curveness: 0.2, //尾迹线条曲直度
+                        color: color_1[i],//颜色
+                    }
+                },
+                data: convertDataSj(item[1])
+            }, {
+                name: item[0],
+                type: 'lines',
+                zlevel: 2,
+                effect: {
+                    show: true,
+                    period: sudu[i],
+                    trailLength: 0,
+                    symbol: feiji,
+                    symbolSize: 15
+                },
+                lineStyle: {
+                    type: 'dashed',
+                    normal: {
+                        color: color_1[i],
+                        width: 1,
+                        opacity: 0.4,
+                        curveness: 0.2
+                    }
+                },
+                data: convertDataSj(item[1])
+            }, {
+                name: item[0],
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                rippleEffect: { //涟漪特效
+                    period: 5, //动画时间，值越小速度越快
+                    brushType: 'stroke', //波纹绘制方式 stroke, fill
+                    scale: 3 //波纹圆环最大限制，值越大波纹越大
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right', //显示位置
+                        offset: [0, 0], //偏移设置
+                        formatter: function (params) {//圆环显示文字
+                            return params.data.name;
+                        },
+                        fontSize: 12
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                symbolSize: function (val) {
+                    return val[2] / 8;//圆环大小
+                },
+                itemStyle: {
+                    normal: {
+                        color: color_1[i]
+                    }
+                },
+                data: item[1].map(function (dataItem) {
+                    return {
+                        name: dataItem[1].name,
+                        value: geoCoordMapSj[dataItem[1].name].concat([dataItem[1].value])
+                    };
+                })
+            }
+        );
+    });
+
+    optionSj = {
+        // 标题
+        /*title: [{
+            id: 'title1',
+            text: "江西省国际航空货运线路监控中心",
+            left: '32%',
+            top: '2%',
+            textStyle: {
+                color: '#fff',
+                fontSize: 40
+            }
+        }],*/
+        legend: {
+            data: ['已开通（1）', '筹备中（4）', '规划中（4）'],
+            left: '55%',
+            top: '93%',
+            textStyle: {
+                color: "#fff"
+            },
+            itemWidth: 12,
+            itemHeight: 10,
+            // itemGap: 35
+        },
+        geo: {
+            zoom:1.2,
+            map: 'world',
+            label: {
+                emphasis: {
+                    show: false
+                }
+            },
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#132937',
+                    borderColor: '#0692a4'
+                },
+                emphasis: {
+                    areaColor: '#0b1c2d'
+                }
+            }
+        },
+        series: Yearseries
+    };
+    // 实例
+    var chartSj = echarts.init(document.getElementById('SJmap'));
+    chartSj.setOption(optionSj);
+
+    // 添加事件
+    chartSj.on('click', function (params) {
+        console.log(params);
+    })
+
+   function scroll_news(){
+       $(function(){
+           $('#dvmq div').eq(0).fadeOut('slow',function(){
+               //   alert($(this).clone().html());
+               //克隆:不用克隆的话，remove()就没了。
+               $(this).clone().appendTo($(this).parent()).fadeIn('slow');
+               $(this).remove();
+           });
+       });
+   }
+   setInterval('scroll_news()',2500);
+
+   function scroll_news1(){
+       $(function(){
+           $('#dvmq1 div').eq(0).fadeOut('slow',function(){
+               //   alert($(this).clone().html());
+               //克隆:不用克隆的话，remove()就没了。
+               $(this).clone().appendTo($(this).parent()).fadeIn('slow');
+               $(this).remove();
+           });
+       });
+   }
+   setInterval('scroll_news1()',2500);
+
+   function scroll_news2(){
+       $(function(){
+           $('#dvmq2 div').eq(0).fadeOut('slow',function(){
+               //   alert($(this).clone().html());
+               //克隆:不用克隆的话，remove()就没了。
+               $(this).clone().appendTo($(this).parent()).fadeIn('slow');
+               $(this).remove();
+           });
+       });
+   }
+   setInterval('scroll_news2()',2500);
+
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.commn.dao.CustomercodeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.commn.entity.CustomercodeEntity" id="customercodeMap">
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="dist" column="DIST"/>
+    </resultMap>
+
+	<select id="getOwnerCode"  resultType="io.youcham.modules.commn.entity.CustomercodeEntity">
+		select * from CUSTOMERCODE order by CODE
+	</select>
+</mapper>

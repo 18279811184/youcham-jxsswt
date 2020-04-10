@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.ins.dao.SysFiletableDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.youcham.modules.ins.entity.SysFiletableEntity" id="sysFiletableMap">
+        <result property="id" column="id"/>
+        <result property="fileXh" column="file_xh"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileType" column="file_type"/>
+        <result property="fileRemark" column="file_remark"/>
+        <result property="fileCreatid" column="file_creatid"/>
+        <result property="fileCreatedate" column="file_createdate"/>
+        <result property="beDelete" column="be_delete"/>
+    </resultMap>
+
+     <!--新增文件-->
+	<insert  id="insertfile"  useGeneratedKeys="true" keyProperty="id" parameterType="io.youcham.modules.ins.entity.SysFiletableEntity"> 
+		  insert into sys_filetable (file_xh,file_name,file_type,file_remark,file_creatid,file_createdate,file_url,file_realname)
+ 		 values (#{fileXh},#{fileName},#{fileType},#{fileRemark},#{fileCreatid},#{fileCreatedate},#{fileUrl},#{fileRealname})
+	</insert>
+
+     <!--新增文件-->
+	<update   id="updatemark"  parameterType="java.util.Map"> 
+		 update sys_filetable set file_remark = #{mark}
+		 where id in 
+     	<foreach collection="ids" index="index" item="item"  open="("  
+            separator="," close=")" >  
+        #{item} 
+      </foreach> 
+      
+
+     
+		  
+	</update >
+
+</mapper>

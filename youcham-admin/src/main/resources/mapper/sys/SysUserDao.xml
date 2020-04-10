@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sys.dao.SysUserDao">
+	
+	<!-- 查询用户的所有权限 -->
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+			LEFT JOIN sys_menu m on rm.menu_id = m.menu_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 查询用户的所有菜单ID --> 
+	<select id="queryAllMenuId" resultType="String">
+		select distinct rm.menu_id from sys_user_role ur 
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id 
+		where ur.user_id = #{userId}
+	</select>
+	
+	<!-- 根据用户名和姓名查询id --> 
+	<select id="queryUserByup"  resultType="String">
+		select sur.user_id from sys_user sur where sur.username = #{username} and sur.name=#{name} 
+	</select>
+	<!-- 根据用户名和姓名查询id --> 
+	<select id="queryUserByEntity"  resultType="io.youcham.modules.sys.entity.SysUserEntity">
+		select * from sys_user sur where 1=1 
+		  <if test="name != null and name != '' and name != 'null'" >
+			 and sur.name= #{name}
+			 </if>
+			  <if test="username != null and username != '' and username != 'null'" >
+			 and sur.username= #{username}
+			 </if>
+			   <if test="creditCode != null and creditCode != '' and creditCode != 'null'" >
+			 and sur.creditCode= #{creditCode}
+			 </if>
+			 
+	</select>
+	<!-- 根据部门查询用户 --> 
+	<select id="queryUserByDept"  resultType="io.youcham.modules.sys.entity.SysUserEntity">
+		select * from sys_user sur where sur.dept_id=#{deptId} and user_type=0 and sur.status =1
+	</select>
+	<!-- 查询需要导出的用户 --> 
+	<select id="queryUserByIndex" parameterType="java.util.Map"  resultType="io.youcham.modules.sys.entity.SysUserLsEntity">
+			SELECT suser.username,suser.name,suser.email,sdept.name as deptname,suser.user_type,suser.mobile 
+			from sys_user suser LEFT JOIN sys_dept sdept on suser.dept_id = sdept.dept_id 
+			WHERE del_flag = '0'  
+			<if test="username != null and username != '' and username != 'null'" >
+			and suser.username LIKE   CONCAT(CONCAT('%',#{username},'%'))
+			 </if>
+			  <if test="name != null and name != '' and name != 'null'" >
+			 and suser.name LIKE CONCAT(CONCAT('%',#{name},'%'))
+			 </if>
+			 <if test="userType != null and userType != '' and userType != 'null'" >
+			 and suser.user_type = #{userType}
+			 </if>  
+			
+	</select>
+	
+	<select id="queryAbb" parameterType="java.util.Map"  resultType="java.util.Map">
+			SELECT DISTINCT ABBREVIATION FROM SYS_USER where 1=1 
+			<if test="abbreviation != null and abbreviation != '' and abbreviation != 'null'" >
+				and ABBREVIATION like '%' || #{abbreviation} || '%'
+			</if>
+	</select>
+
+	<select id="queryDb2" resultType="Map">
+		select * from jxdx
+
+	</select>
+
+</mapper>

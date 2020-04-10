@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>出口信息金额汇总表</title>
+    <#include "/header.html">
+
+    <style>
+        .wangyun{
+            width:80%;
+            display: inline-block;
+        }
+        .pipen{
+            width:56%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+
+            <!--<div class="form-group col-sm-2">
+                <input name="startDate" type="text" id="test1">
+                <input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+            </div>-->
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="queryDate">时间</label>
+                    <input v-model="q.queryDate" name="queryDate" type="text" class="form-control" id="queryDate">
+                </div>
+                <div class="form-group">
+                    <label for="auditFlag">审核状态</label>
+                    <select  v-model="q.auditFlag" class="form-control" id="auditFlag" name="auditFlag">
+                        <!--<option value="-1">全查</option>-->
+                        <option value="0">未审核</option>
+                        <option value="1">市级已通过</option>
+                        <option value="2">省级已通过</option>
+                        <option value="3">市级未通过</option>
+                        <option value="4">省级未通过</option>
+                    </select>
+                    <!-- <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">-->
+                </div>
+
+                <div class="form-group">
+
+                    <select id="firstLevelParent" v-select2="" class="form-control" v-model="q.city" style="width:100px"
+                            @change="getTwoLevelCitys">
+                        <option value="">请选择市</option>
+                        <option v-for="item in firstLevelCitys" :value="item">{{item}}</option>
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <select id="twoLevelParent" v-select2="" class="form-control" v-model="q.area" style="width:250px">
+                        <option value="">请选择区</option>
+                        <option v-for="item in twoLevelCitys" :value="item">{{item}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>企业名称</label>
+                    <input  v-model="q.enterpriseName" id="enterpriseName"  name="enterpriseName" type="text" class="form-control" placeholder="企业名称">
+                </div>
+                <a class="btn btn-blue" @click="query">查询</a>
+
+                <!-- <a class="btn btn-blue" @click="query">查询</a>-->
+                <br><br><br>
+            </form>
+
+
+
+
+            <#if shiro.hasPermission("wmyj:wmyjinfo:save")>
+            <a class="btn btn-info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+        </#if>
+        <#if shiro.hasPermission("wmyj:wmyjinfo:update")>
+        <a class="btn btn-warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+    </#if>
+    <#if shiro.hasPermission("wmyj:wmyjinfo:delete")>
+    <a class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+</#if>
+<#if shiro.hasPermission("wmyj:wmyjinfo:audit")>
+<a class="btn btn-success" @click="passCheck"><i class="fa fa-check-square-o"></i>&nbsp;审核通过</a>
+</#if>
+
+<#if shiro.hasPermission("wmyj:wmyjinfo:audit")>
+<a class="btn btn-danger" @click="noPassCheck"><i class="fa fa-times-circle"></i>&nbsp;审核不通过</a>
+</#if>
+<a class="btn btn-info" @click="exportExcel"><i class="fa fa-file-excel-o"></i>&nbsp;导出</a>
+<a class="btn btn-info" @click="importExcel"><i class="fa fa-file-excel-o"></i>&nbsp;导入</a>
+</div>
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+</div>
+
+<div id="importLayer" v-show="showImport" class="">
+    <form id="ajaxFormimportLayer" class="form-horizontal" style="width:100%;">
+
+        <hr />
+
+        <div class="form-group" v-show="showImport">
+            <div class="col-sm-3 control-label">模板导入</div>
+            <div class="col-sm-4">
+                <input type="file" id="importExcelfile" >
+            </div>
+        </div>
+
+        <div class="form-group" v-show="showImport">
+            <div class="col-sm-3 control-label">
+                <a href="../../statics/template/wmyj_importData.xls">模板下载</a>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div id="addLayer" v-show="!showList" class="">
+
+
+
+    <form id="ajaxForm" class="form-horizontal" style="width: 100%">
+
+
+
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">企业代码<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control pipen required" v-model="wmyjInfo.enterpriseCode" name="enterpriseCode" placeholder="企业代码"  />
+                <a class="btn btn-default" @click="autoFill">匹配</a>
+            </div>
+            <!--<div class="col-sm-1">
+
+            </div>-->
+            <div class="col-sm-2 control-label">企业名称<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required" v-model="wmyjInfo.enterpriseName" name="enterpriseName" placeholder="企业名称"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">所属单位代码<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required" v-model="wmyjInfo.unitCode" name="unitCode" placeholder="所属单位代码"/>
+            </div>
+            <div class="col-sm-2 control-label">报出日期<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun" v-model="wmyjInfo.dateIn" name="dateIn" placeholder="报出日期" readonly/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">本月预计出口额<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.monthAmount" name="monthAmount" placeholder="本月预计出口额"/>(万美元)
+            </div>
+
+            <div class="col-sm-2 control-label">上年本月出口额<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.yearAmount" name="yearAmount" placeholder="上年本月出口额"/>(万美元)
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">高新技术产品<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.newtelAmount" name="newtelAmount" placeholder="高新技术产品"/>(万美元)
+            </div>
+            <div class="col-sm-2 control-label">机电产品<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.elecAmount" name="elecAmount" placeholder="机电产品"/>(万美元)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">农产品及其深加工产品<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.farmAmount" name="farmAmount" placeholder="农产品及其深加工产品"/>(万美元)
+            </div>
+            <div class="col-sm-2 control-label">有色金属<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.metalAmount" name="metalAmount" placeholder="有色金属"/>(万美元)
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">纺织服装<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.weaveAmount" name="weaveAmount" placeholder="纺织服装"/>(万美元)
+            </div>
+            <div class="col-sm-2 control-label">轻工产品<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.lightinduAmount" name="lightinduAmount" placeholder="轻工产品"/>(万美元)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">钢材和铁合金<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.steelAmount" name="steelAmount" placeholder="钢材和铁合金"/>(万美元)
+            </div> <div class="col-sm-2 control-label">医药化工<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.medicineAmount" name="medicineAmount" placeholder="医药化工"/>(万美元)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">建材<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.materialsAmount" name="materialsAmount" placeholder="建材"/>(万美元)
+            </div>  <div class="col-sm-2 control-label">其他产品<span style="color: red;font-size: 14px">&nbsp;&nbsp;*</span></div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun required number" v-model="wmyjInfo.otherAmount" name="otherAmount" placeholder="其他产品"/>(万美元)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">订单情况</div>
+            <div class="col-sm-4">
+                <select v-model="wmyjInfo.orderFlag" name="orderFlag" class="form-control wangyun">
+                    <option value="1">订单增加</option>
+                    <option value="0">订单持平</option>
+                    <option value="-1">订单减少</option>
+
+                </select>
+
+            </div>
+            <!-- <input type="text" class="form-control" v-model="wmyjInfo.orderFlag" name="orderFlag" placeholder="订单情况"/>-->
+
+            <div class="col-sm-2 control-label">价格走势</div>
+
+            <!--<input type="text" class="form-control" v-model="wmyjInfo.priceFlag" name="priceFlag" placeholder="价格走势"/>
+           -->
+            <div class="col-sm-4">
+                <select v-model="wmyjInfo.priceFlag" name="priceFlag" class="form-control wangyun">
+                    <option value="1">价格上涨</option>
+                    <option value="0">价格持平</option>
+                    <option value="-1">价格减少</option>
+
+                </select>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">存在的问题</div>
+            <div class="col-sm-4">
+                <textarea v-model="wmyjInfo.questions" name="questions" class="form-control wangyun" rows="3"></textarea>
+                <!-- <input type="text" class="form-control" v-model="wmyjInfo.questions" name="questions" placeholder="存在的问题"/>-->
+            </div><div class="col-sm-2 control-label">有关建议和意见</div>
+            <div class="col-sm-4">
+                <textarea class="form-control wangyun" v-model="wmyjInfo.suggest" name="suggest" rows="3"></textarea>
+                <!--<input type="text" class="form-control" v-model="wmyjInfo.suggest" name="suggest" placeholder="有关建议和意见"/>-->
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">联系人</div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun" v-model="wmyjInfo.contact" name="contact" placeholder="联系人"/>
+            </div><div class="col-sm-2 control-label">联系电话</div>
+            <div class="col-sm-4">
+                <input type="text" class="form-control wangyun" v-model="wmyjInfo.telephone" name="telephone" placeholder="联系电话"/>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/wmyj/wmyjinfo.js?_${.now?long}"></script>
+</body>
+</html>

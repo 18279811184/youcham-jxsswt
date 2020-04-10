@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Windows 用户</Author>
+  <LastAuthor>V</LastAuthor>
+  <Created>2014-11-03T07:08:07Z</Created>
+  <LastSaved>2019-12-17T07:20:01Z</LastSaved>
+  <Version>16.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>10368</WindowHeight>
+  <WindowWidth>23040</WindowWidth>
+  <WindowTopX>32767</WindowTopX>
+  <WindowTopY>32767</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s41" ss:Name="常规_Sheet1">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s64">
+   <Alignment ss:Vertical="Bottom"/>
+  </Style>
+  <Style ss:ID="s65" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="仿宋_GB2312" x:CharSet="134" x:Family="Modern" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s66" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="仿宋_GB2312" x:CharSet="134" x:Family="Modern" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s67" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="仿宋_GB2312" x:CharSet="134" x:Family="Modern" ss:Bold="1"/>
+   <NumberFormat ss:Format="0.00_);[Red]\(0.00\)"/>  <!--格式化数字-->
+  </Style>
+  <Style ss:ID="s83" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Times New Roman" x:Family="Roman" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s84" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s85" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s87" ss:Parent="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="20" ss:Bold="1"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s64" ss:DefaultColumnWidth="48.6"
+   ss:DefaultRowHeight="14.4">
+   <Row ss:Height="25.8">
+    <Cell ss:MergeAcross="16" ss:StyleID="s87"><Data ss:Type="String">按规模分类项目统计表</Data></Cell>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:Index="21" ss:StyleID="s41"/>
+   </Row>
+   <Row ss:Height="15.600000000000001">
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:MergeAcross="5" ss:StyleID="s85"><Data ss:Type="String">${name}</Data></Cell>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:MergeAcross="1" ss:StyleID="s84"/>
+    <Cell ss:StyleID="s41"/>
+    <Cell ss:MergeAcross="1" ss:StyleID="s84"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="24">
+    <Cell ss:MergeDown="1" ss:StyleID="s65"><Data ss:Type="String">单位</Data></Cell>
+    <Cell ss:StyleID="s66"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>总投资额<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:MergeAcross="2" ss:StyleID="s83"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>2000<Font html:Face="仿宋_GB2312"
+        x:CharSet="134" x:Family="Modern">万元</Font><Font>&#45;&#45;&#45;-</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">亿元</Font></B></ss:Data></Cell>
+    <Cell ss:MergeAcross="2" ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>亿元以上<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>含亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:MergeAcross="2" ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>亿元<Font html:Face="Times New Roman"
+        x:Family="Roman">(</Font><Font>含亿元</Font><Font html:Face="Times New Roman"
+        x:Family="Roman">)&#45;&#45;&#45;-5</Font><Font>亿元</Font></B></ss:Data></Cell>
+    <Cell ss:MergeAcross="2" ss:StyleID="s83"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>5<Font html:Face="仿宋_GB2312"
+        x:CharSet="134" x:Family="Modern">亿元</Font><Font>(</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">含</Font><Font>5</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">亿元</Font><Font>)&#45;&#45;&#45;-10</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">亿元</Font></B></ss:Data></Cell>
+    <Cell ss:MergeAcross="2" ss:StyleID="s83"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>10<Font html:Face="仿宋_GB2312"
+        x:CharSet="134" x:Family="Modern">亿元</Font><Font>(</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">含</Font><Font>10</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">亿元</Font><Font>)</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">以上</Font></B></ss:Data></Cell>
+    <Cell ss:MergeAcross="2" ss:StyleID="s83"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>20<Font html:Face="仿宋_GB2312"
+        x:CharSet="134" x:Family="Modern">亿元</Font><Font>(</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">含</Font><Font>20</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">亿元</Font><Font>)</Font><Font
+        html:Face="仿宋_GB2312" x:CharSet="134" x:Family="Modern">以上</Font></B></ss:Data></Cell>
+   </Row>
+   <Row ss:Height="25.2">
+    <Cell ss:Index="2" ss:StyleID="s65"><Data ss:Type="String">合计</Data></Cell>
+    <Cell ss:Index="4" ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同项目<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>个</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同引资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同项目<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>个</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同引资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同项目<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>个</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同引资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同项目<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>个</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同引资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同项目<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>个</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同引资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同项目<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>个</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>合同引资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+    <Cell ss:StyleID="s65"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40"><B>实际进资<Font
+        html:Face="Times New Roman" x:Family="Roman">(</Font><Font>亿元</Font><Font
+        html:Face="Times New Roman" x:Family="Roman">)</Font></B></ss:Data></Cell>
+   </Row>
+   <#list dataList as item>
+   <Row ss:AutoFitHeight="0" ss:Height="30">
+    <Cell ss:StyleID="s67"><Data ss:Type="String">${item.cell0}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell1}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell2}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell3}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell4}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell5}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell6}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell7}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell8}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell9}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell10}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell11}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell12}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell13}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell14}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell15}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell16}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell17}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell18}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell19}</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="Number">${item.cell20}</Data></Cell>
+   </Row>
+  </#list>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>7</ActiveRow>
+     <ActiveCol>3</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="14.4">
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="14.4">
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

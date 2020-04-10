@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文件表</title>
+	<#include "/header.html">
+	<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/plugins/webuploader/css/webuploader.css" />
+	<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/plugins/webuploader/css/demo.css">
+		
+	<style>
+		#uploader .placeholder{
+			background-image: none;
+		}
+	</style>
+	
+</head>
+<body>
+
+
+<div id="filesc" style="padding:10px;">
+	   
+	<span id="getidall" style="display: none"></span>
+	
+	<div class="page-container">
+
+		<div id="uploader" class="wu-example">
+			<div class="queueList">
+				<div id="picker" class="placeholder" style="min-height: 180px;padding-top: 60px">
+					<div id="filePicker" class="webuploader-container">
+						<div class="webuploader-pick">点击选择文件</div>
+						<div id="rt_rt_1cd40hvg519nd9rtduu3qmp161"
+							style="position: absolute; top: 0px; left: 448px; width: 168px; height: 44px; overflow: hidden; bottom: auto; right: auto;">
+							<input type="file" name="file"
+								class="webuploader-element-invisible"
+								multiple="multiple" accept="image/*"><label
+								style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+						</div>
+					</div>
+					<p>或将文件拖到这里</p>
+				</div>
+				<ul class="filelist" style="display: none;"></ul>
+			</div>
+			<div class="statusBar element-invisible" style="">
+				<div class="progress" style="display: none;">
+					<span class="text">0%</span> <span class="percentage"
+						style="width: 0%;"></span>
+				</div>
+				<div class="info">共0张（0B），已上传0张</div>
+				<div class="btns">
+					<div id="filePicker2" class="webuploader-container">
+						<div class="webuploader-pick">继续添加</div>
+						<div id="rt_rt_1cd40hvg9cme5m38qi1tn4nl26"
+							style="position: absolute; top: 0px; left: 10px; width: 94px; height: 42px; overflow: hidden; bottom: auto; right: auto;">
+							<input type="file" name="file"
+								class="webuploader-element-invisible"
+								multiple="multiple" accept="image/*"><label
+								style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label>
+						</div>
+					</div>
+					<div class="uploadBtn state-pedding">开始上传</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div style="padding: 0px 20px">
+		<textarea id="mark" name="mark" value="" style="border: 1px dashed #d2d6de;width: 100%" placeholder="请输入备注"></textarea>
+	</div>
+	
+</div>
+
+<!-- 文件上传域-->
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/webuploader/js/webuploader.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/webuploader/js/mywebupload.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>江西省商务厅统一政务服务平台（一期）系统</title>
+	<meta name="renderer" content="webkit">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">	
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">	
+	<meta name="apple-mobile-web-app-capable" content="yes">	
+	<meta name="format-detection" content="telephone=no">	
+	<!-- <link rel="icon" type="image/x-icon" href="${request.contextPath}/statics/favicon.ico"> -->
+	<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+	<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/index1.css">
+	<style type="text/css">
+		/*header left */
+		.layui-layout-admin .header-demo { 
+   			 border-bottom-color: #0bb2d4;
+		}
+		.header {
+		    background: #0bb2d4;
+		    height: 50px;
+		}
+		.layui-layout-admin .layui-header{
+			border-bottom: none;
+		}
+		
+		.header-demo .logo{
+			top:0px;
+			left:0px;
+		}
+		.admin-logo-box{
+			height: 50px;
+			width:230px;
+		}
+		/*header right */
+		.header ul.larry-header-item{
+			height: 50px;
+			color: #fff;
+		}
+		.header-demo .layui-nav .layui-nav-item{
+			line-height: 50px;
+		}
+		
+		.header-demo .layui-nav .layui-nav-item a {
+	    	color: #fff;
+	    }
+		.layui-nav-bar{
+			display: none;
+		}
+ 	    .larry-side-menu{ 
+ 	    	background: none; 
+ 	    	left:230px;
+ 	    } 
+ 	    .larry-side-menu:hover{ 
+ 	    	background: rgba(0,0,0,0.1); 
+     		color: #f6f6f6; 
+ 	    } 
+ 	    .header ul.larry-header-item .layui-this{
+ 	    	background: none;	
+ 	    }
+	    /*header menu left */
+	    .layui-layout-admin .layui-side {
+	    	top:50px;
+	    }
+	    .layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this>a, .layui-nav-tree .layui-this>a:hover{
+	    	background: #4E5465;
+	    }
+	    
+	    .layui-layout-admin .layui-side,.layui-side-scroll,.layui-nav-tree{
+	    	width: 230px;
+	    }
+	    .layui-body{
+	    	left:230px;
+	    }
+	    .layui-nav-tree .layui-nav-more{
+	    	right:20px;
+	    }
+	    .layui-nav-tree li.layui-nav-item a i{
+	    	width: 20px;
+	    	text-align: center;
+	    }
+	    /*header content*/
+	    .layui-layout-admin .layui-body {
+		    top: 40px;
+		}
+		.layui-tab-card>.layui-tab-title{
+			background-color: #fff;
+		}
+		.larry-iframe{
+			border-radius:3px;
+		}
+		.larry-tab-box>.layui-tab-title .layui-this{
+			color: #303133;
+   			 background-color: #f5f7fa;
+		}
+		
+		.layui-tab-title .layui-this:after{
+		    position: absolute;
+		    bottom: 0;
+		    left: 0;
+		    top: auto;
+		    content: "";
+		    width: 100%;
+		    height: 2px;
+		    background-color: #0bb2d4
+		}
+		.larry-tab-box>.layui-tab-title{
+			border-bottom:none;
+		}
+		body .layui-layout-admin .layui-larry-foot{
+			background: #fff;
+		}
+		.layui-tab-card{
+			border:none;
+		}
+	</style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" id="layui_layout">
+	<!-- 顶部区域 -->
+	<div class="layui-header header header-demo">
+		<div class="layui-main" style="margin: 0px">
+		    <!-- logo区域 -->
+			<div class="admin-logo-box">
+				<a class="logo" href="javascript:;" style="font-size: 20px;text-align: center;overflow: hidden;display: block;width: 100%;">选课系统</a>
+				<div id="larry-side-menu" class="larry-side-menu">
+					<i class="fa fa-bars" aria-hidden="true"></i>
+				</div>
+				<div class="larry-side-menu" style="left:270px" @click="reflashIfr">
+					<i class="fa fa-refresh" aria-hidden="true"></i>
+				</div>
+			</div>
+            <!-- 右侧导航 -->
+            <ul class="layui-nav larry-header-item">
+           		<li class="layui-nav-item">欢迎 〔{{user.enterpriseName}}〕</li>
+                <li class="layui-nav-item"><a href="index.html"><i class="fa fa-tachometer"></i> &nbsp;切换主题</a></li>
+				<li class="layui-nav-item"><a href="javascript:;" @click="updatePassword"><i class="fa fa-lock"></i> &nbsp;修改密码</a></li>
+       			<li class="layui-nav-item"><a onclick="logout()" ><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+            </ul>
+		</div>
+	</div>
+	<!-- 左侧侧边导航开始 -->
+	<div class="layui-side layui-side-bg layui-larry-side" id="larry-side">
+        <div class="layui-side-scroll" id="larry-nav-side" lay-filter="side">
+		<!-- 左侧菜单 -->
+		<ul class="layui-nav layui-nav-tree">
+			<menu-item :item="item" v-for="item in menuList"></menu-item>
+		</ul>
+	    </div>
+	</div>
+
+	<!-- 左侧侧边导航结束 -->
+	<!-- 右侧主体内容 -->
+	<div class="layui-body" id="larry-body" style="bottom: 0;border-left: none;background: #f2f2f2">
+		<div class="layui-tab layui-tab-card larry-tab-box" id="larry-tab" lay-filter="main-tab" lay-allowclose="true">
+			<ul class="layui-tab-title">
+				<li class="layui-this" id="admin-home" style="margin-left:10px;min-width:30px"><i class="fa fa-home"></i><em></em></li>
+			</ul>
+			<div class="layui-tab-content" style="min-height: 150px; ">
+				<div class="layui-tab-item layui-show">
+					<iframe class="larry-iframe" data-id='0' src="main.html"></iframe>
+				</div>
+			</div>
+		</div>
+
+        
+	</div>
+	<!-- 底部区域 -->
+<!--	<div class="layui-footer layui-larry-foot" id="larry-footer">-->
+<!--		<div class="layui-mian" style="text-align:right;padding-right:10px;">-->
+<!--		    2019&nbsp;&copy;&nbsp;版权所有：江西省商务厅-->
+<!--&lt;!&ndash; 		   <a href="http://www.youcham.com/" target="_blank"> &ndash;&gt;-->
+<!--&lt;!&ndash;                 <img src="http://www.youcham.com/statics/images/logo_f.png" height="12px" alt="言臣科技" data-pin-nopin="true"> &ndash;&gt;-->
+<!--&lt;!&ndash;             </a> &ndash;&gt;-->
+<!--		</div>-->
+<!--	</div>-->
+	
+	<!-- 修改密码 -->
+	<div id="passwordLayer" style="display: none;">
+	
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+		    	<label class="layui-form-label">账号</label>
+		    	<label class="layui-form-label laber-account">{{user.username}}</label>
+			</div>
+			<div class="layui-form-item">
+		    	<label class="layui-form-label">原密码</label>
+		    	<div class="layui-input-inline">
+		    		<input type="password" v-model="password" placeholder="原密码" autocomplete="off" class="layui-input">
+		    	</div>
+			</div>
+			<div class="layui-form-item">
+		    	<label class="layui-form-label">新密码</label>
+		    	<div class="layui-input-inline">
+		    		<input id="newPassword" type="password" v-model="newPassword" placeholder="新密码" autocomplete="off" class="layui-input">
+		    	</div>
+			</div>
+		</form>
+	</div>
+	<input type="hidden" id="token">
+</div>
+
+<script type="text/javascript" src="${request.contextPath}/statics/libs/jquery.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/libs/vue.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/index1.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/cipher-core.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/mode-ecb.js" charset="utf-8"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/js/tripledes.js" charset="utf-8"></script>
+<script type="text/javascript">
+var userCenterApi = "http://218.87.46.162:8888/user-center";
+
+/* $(function(){
+	var token;
+console.log(document.cookie);	
+token = document.cookie;
+$("#token").text(token);
+}) */
+
+function logout(){
+	 $.ajax({
+			type: "post",
+		    url: userCenterApi+"/api/clear_cookie",
+		    dataType:"jsonp",
+		    jsonp:"callback",
+		    success: function(r){
+		    	console.log(r);
+		    	 location.href = 'logout';
+		    			    	
+			}
+		}); 
+	 
+	 location.href = 'logout';
+}
+</script>
+</body>
+</html>

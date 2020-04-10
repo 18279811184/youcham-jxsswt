@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>流程实例列表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" class="margin-padding15" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        	<div class="form-group col-sm-2">
+				<input  type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="名称">
+			</div>
+			<a class="btn btn-blue" @click="query">查询</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$(function () {
+    $("#jqGrid").jqGrid({
+        url: baseURL + 'activity/getProcessInstances',
+        datatype: "json",
+        colModel: [			
+			{ label: '流程实例ID', name: 'processInstanceId',  width: 80, key: true},
+// 			{ label: '名称', name: 'name',  width: 180 }, 			
+// 			{ label: '标识', name: 'description',  width: 180 }, 			
+			{ label: '定义ID', name: 'definitionId',  width: 180 }, 			
+			{ label: '定义Key', name: 'definitionKey',  width: 180 }, 
+			{ label: '开始时间', name: 'startTime',  width: 180 }, 	
+			{ label: '是否挂起', name: 'isSuspended',  width: 80, formatter: function(value, options, row){
+				return value ? "<span class='label label-warning'>是</span>"
+						: "<span class='label label-success'>否</span>";
+			}},
+			{ label: 'xml', name: 'resourceName',  width: 80, formatter: function(value, options, row){
+				return "<a href='../../activity/resource/process-instance?type=xml&pid="+encodeURIComponent(row.processInstanceId)+"' target='_blank'>查看</a>";
+			}}, 			
+			{ label: '图片', name: 'diagramResourceName',  width: 80, formatter: function(value, options, row){
+				return "<a href='javascript:;' onclick='vm.openImage(\"image\",\""+encodeURIComponent(row.processInstanceId)+"\")' target='_blank'>查看</a>";
+			}},
+			{ label: '操作', width: 80 ,formatter:function(value,option,row){
+				var html = "";
+				html += "<a href='javascript:;' onclick='vm.deleteApply(\""+row.processInstanceId+"\")'>删除</a>";
+				return html;
+			}}
+        ],
+		viewrecords: true,
+        height: 385,
+        rowNum: 10,
+		rowList : [10,30,50],
+        rownumbers: true, 
+        rownumWidth: 25, 
+        autowidth:true,
+//         shrinkToFit:false,   
+		autoScroll: true,
+        multiselect: false,
+        pager: "#jqGridPager",
+        jsonReader : {
+            root: "page.list",
+            page: "page.currPage",
+            total: "page.totalPage",
+            records: "page.totalCount"
+        },
+        prmNames : {
+            page:"page", 
+            rows:"limit", 
+            order: "order"
+        },
+        gridComplete:function(){
+        	//隐藏grid底部滚动条
+        	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
+        }
+    });
+    
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		q:{}
+	},
+	methods: {
+		query: function () {
+			vm.reload(true);
+		},
+		reload: function (event) {
+			var page = $("#jqGrid").jqGrid('getGridParam','page');
+			$("#jqGrid").jqGrid('setGridParam',{ 
+                page:page,
+           		postData:{'name': vm.q.name}
+            }).trigger("reloadGrid");
+		},
+		deleteApply: function(id){
+        	confirm('确定要删除选中的记录？', function(){
+				$.ajax({
+					type: "POST",
+				    url: baseURL + "activity/deleteInstance",
+				    data: {"id": id},
+				    success: function(r){
+						if(r.code == 0){
+							alert('操作成功', function(index){
+								$("#jqGrid").trigger("reloadGrid");
+							});
+						}else{
+							alert("删除失败，该申请已有流程记录");
+						}
+					}
+				});
+			});
+        },
+        openImage:function(type,pid){
+			parent.layer.open({
+				type: 2,
+                offset: '50px',
+                title: "流程示意图",
+//                 skin: 'layui-layer-molv',
+                area: ['90%', '87%'],
+                shade: 0.2,
+                shadeClose: false,
+                content : "activity/resource/process-instance?type="+type+"&pid="+pid
+               
+			});
+		}
+	},
+	mounted : function() {
+	},
+	created :function(){
+		
+	}
+});
+
+
+
+
+</script>
+
+</body>
+</html>

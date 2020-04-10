@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.youcham.modules.sys.dao.SysDictDao">
+    <!-- 查询字典 -->
+   <select id="getdiclist"  resultType="io.youcham.modules.sys.entity.SysDictEntity"> 
+		select *  from sys_dict t
+		 where t.del_flag = '0'
+		 and t.type = #{type}
+	</select>
+
+
+	<select id="listByNation" resultType="io.youcham.modules.sys.entity.SysDictEntity">
+		select * from sys_dict where type = 'nation' and del_flag=0 order by order_num
+	</select>
+	<select id="listByPost" resultType="io.youcham.modules.sys.entity.SysDictEntity">
+		select * from sys_dict where type = #{post} and del_flag=0
+	</select>
+	<select id="listByPoliticaloutlook" resultType="io.youcham.modules.sys.entity.SysDictEntity">
+		select * from sys_dict where type = 'politicaloutlook' and del_flag=0
+	</select>
+
+
+	<select id="getMaxOrderNum" resultType="String">
+		select max(order_num) from sys_dict where del_flag = 0 and parent_id = #{parentId}
+	</select>
+	
+	<update id="updateOrderNum">
+		update sys_dict set order_num = order_num+1 where id &lt;&gt; #{id} and order_num &gt;= #{orderNum} and parent_id = #{parentId}
+	</update>
+
+</mapper>
